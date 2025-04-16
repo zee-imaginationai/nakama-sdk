@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.madratzz.scriptableobject.architecture": "0.0.1",
+    "com.madratzz.scriptableobject.event.variables": "0.0.1",
+    "com.madratzz.scriptableobject.eventsystem.core": "0.0.1",
+    "com.madratzz.scriptableobject.variables.database": "0.0.3",
+    "com.madratzz.scriptableobject.variables.extensions": "0.0.1",
+    "com.madratzz.utilities.extensions": "0.0.1",
+    "com.madratzz.utilities.unity.alwaysstartfromscenezero": "0.0.1",
     "com.unity.collab-proxy": "2.7.1",
     "com.unity.ide.rider": "3.0.34",
     "com.unity.ide.visualstudio": "2.0.22",
@@ -41,5 +48,15 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Hazel Mobile Packages",
+      "url": "http://167.86.67.197:4873",
+      "scopes": [
+        "com.madratzz",
+        "com.kazmi"
+      ]
+    }
+  ]
 }

@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6962209433235323528
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3943791805235679050}
+  - component: {fileID: 7369084967410794694}
+  m_Layer: 0
+  m_Name: ApplicationFlowController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3943791805235679050
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962209433235323528}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7369084967410794694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6962209433235323528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a54eeea5874db0428a3419745cf3c0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UISpawner: {fileID: 0}
+  StateMachine: {fileID: 11400000, guid: c86b329c06f2d58459c44e4e04dbd022, type: 2}
+  MainMenuTransition: {fileID: 11400000, guid: c1b2972c13d658d4a8685413751cf06d, type: 2}
+  GotoMainMenu: {fileID: 11400000, guid: 54e79aba91444f14aa1e6e6c4da644b0, type: 2}
+  GameStateTransition: {fileID: 11400000, guid: 295249d9c08336d4297d4b814212a4a5,
+    type: 2}
+  NormalGameState: {fileID: 11400000, guid: dc4a47176d648b046b10a395cdad1a9d, type: 2}
+  GameLevel: {fileID: 11400000, guid: 592dc6a83eefa3f419642ff59c907124, type: 2}
+  GotoGame: {fileID: 11400000, guid: d15872395875ce544b84241bb60a2ece, type: 2}
+  LevelComplete: {fileID: 11400000, guid: aed7f303aa3e4ba4c9d7ee62a8bc5fb1, type: 2}
+  LevelFail: {fileID: 11400000, guid: a0dfa670371b8cb4ca8ef3f675789e38, type: 2}
+  AppPausedTime: {fileID: 11400000, guid: d18c07f79bb2bf24f86a7495440189de, type: 2}
+  AppPaused: {fileID: 11400000, guid: 990d7bd74af20bb4eb77e48368092269, type: 2}
+  AppResumed: {fileID: 11400000, guid: d5a2767561399e04fb1f0f66733b69aa, type: 2}
+  ResumeGameViewClose: {fileID: 11400000, guid: 36bd67bc73a574e65902c8d76390e303,
+    type: 2}
+  ResumeGameViewOnAppResumeViewClose: {fileID: 11400000, guid: b08c839d4bcaa4f4a826b56589021285,
+    type: 2}
+  OpenViewClose: {fileID: 11400000, guid: 7e4717bad72048b4a8ab9dce22f6a7af, type: 2}

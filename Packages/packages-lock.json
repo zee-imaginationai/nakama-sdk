@@ -1,5 +1,100 @@
 {
   "dependencies": {
+    "com.madratzz.scriptableobject.architecture": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.eventsystem.extensions": "0.0.1",
+        "com.madratzz.scriptableobject.statemachine.core": "0.0.1",
+        "com.madratzz.scriptableobject.time.machine": "0.0.1",
+        "com.madratzz.scriptableobject.variables": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.event.variables": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.eventsystem.core": "0.0.1",
+        "com.madratzz.scriptableobject.variables": "0.0.1",
+        "com.madratzz.scriptableobject.variables.database": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.eventsystem.core": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.eventsystem.extensions": {
+      "version": "0.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.eventsystem.core": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.statemachine.core": {
+      "version": "0.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.time.machine": {
+      "version": "0.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.eventsystem.core": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.variables": {
+      "version": "0.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.variables.database": {
+      "version": "0.0.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.variables": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.variables.extensions": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.utilities.extensions": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.variables": "0.0.1",
+        "com.madratzz.scriptableobject.variables.database": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.utilities.unity.alwaysstartfromscenezero": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://167.86.67.197:4873"
+    },
     "com.unity.burst": {
       "version": "1.8.19",
       "depth": 1,

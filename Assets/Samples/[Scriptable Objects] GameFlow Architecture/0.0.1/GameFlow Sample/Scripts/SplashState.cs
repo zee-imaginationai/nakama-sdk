@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Threading;
+using FPSCommando.SocialFeature.Cloud;
 using ProjectCore.Application;
 using ProjectCore.Events;
 using ProjectCore.StateMachine;
@@ -31,15 +33,40 @@ namespace ProjectCore.Application
         [NonSerialized] private bool socialKitInitialize = false;
         [NonSerialized] private float TimeoutTime = 3;
 
+        [SerializeField] private NakamaSystem NakamaSystem;
+        
         private ApplicationFlowController applicationFlowController;
-
+        
+        private CancellationTokenSource _cancellationTokenSource;
 
         public override IEnumerator Init(IState listener)
         {
             yield return base.Init(listener);
             
             SceneLoadingProgress.SetValue(0);
-          
+
+            var task = NakamaSystem.Initialize(TaskUtil.RefreshToken(ref _cancellationTokenSource));
+            
+            float timeStarted = Time.time;
+            while (true)
+            {
+                float timeElapsed = Time.time - timeStarted;
+                if (timeElapsed > 10)
+                {
+                    _cancellationTokenSource.Cancel();
+                    break;
+                }
+
+                if (task.IsCompleted || task.IsFaulted || task.IsCanceled)
+                {
+                    break;
+                }
+                yield return new WaitForEndOfFrame();
+            }
+
+            
+            Debug.LogError($"Task : {task.Status}");
+            
             socialKitInitialize = false;
             
             //TODO: Initialize GA and FB

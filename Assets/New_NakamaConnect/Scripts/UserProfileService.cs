@@ -8,6 +8,7 @@ using UnityEngine;
 namespace FPSCommando.SocialFeature
 {
     [CreateAssetMenu(fileName = "UserProfileService", menuName = "FPSCommando/SocialFeature/UserProfileService")]
+    [InlineEditor]
     public class UserProfileService : ScriptableObject
     {
         [SerializeField] private NakamaServer NakamaServer;

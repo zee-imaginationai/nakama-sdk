@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: caab7fa2ea7bf4656ac16bab7ab7832c, type: 3}
-  m_Name: v_Email
+  m_Script: {fileID: 11500000, guid: a9c685ad76e0b4103a09e2175d1699e7, type: 3}
+  m_Name: v_EmailLoggedIn
   m_EditorClassIdentifier: 
-  Value: 
-  DefaultValue: zee@imaginationai.net
+  Value: 0
+  DefaultValue: 0
   ResetToDefaultOnPlay: 1
-  Key: Email
+  Key: EmailLoggedIn

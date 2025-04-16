@@ -23,10 +23,12 @@ namespace FPSCommando.SocialFeature.Cloud
 
         [SerializeField] private DBInt GameLevel;
         
-        [SerializeField] private bool AuthWithDeviceID;
+        [SerializeField] private DBBool IsEmailLoggedIn;
 
         [SerializeField] private DBString Email;
         [SerializeField] private DBString Password;
+        
+        private CancellationTokenSource _cancellationTokenSource;
 
         public async Task Initialize(CancellationToken token)
         {
@@ -35,7 +37,7 @@ namespace FPSCommando.SocialFeature.Cloud
             
             Debug.LogError("[Nakama System] FB Not Logged In");
 
-            if (AuthWithDeviceID)
+            if (!IsEmailLoggedIn)
             {
                 await NakamaServer.AuthenticateWithDeviceID(token);
             }
@@ -46,11 +48,32 @@ namespace FPSCommando.SocialFeature.Cloud
         }
 
         [Button]
+        private async void UnlinkWithEmail()
+        {
+            await NakamaServer.UnlinkWithEmail(Email, Password);
+            await NakamaServer.AuthenticateWithDeviceID(TaskUtil.RefreshToken(ref _cancellationTokenSource));
+        }
+
+        [Button]
+        private async void UnlinkWithDeviceID()
+        {
+            await NakamaServer.UnlinkWithDeviceID();
+        }
+
+        [Button]
         private async void SyncWithEmail(string email, string password)
         {
-            await NakamaServer.SyncWithEmail(email, password);
+            await NakamaServer.SyncWithEmail(email, password, UpdateEmailLogin);
             Email.SetValue(email);
             Password.SetValue(password);
+            await SaveUserData();
+
+            return;
+
+            void UpdateEmailLogin(bool status)
+            {
+                IsEmailLoggedIn.SetValue(status);
+            }
         }
 
         private async void OnNakamaServerConnected()
@@ -88,9 +111,14 @@ namespace FPSCommando.SocialFeature.Cloud
             {
                 // Here no data is received from the server.
                 // Update data on server from Local storage.
-                var userProgressString = DBManager.GetJsonData();
-                await UserProfileService.SaveUserData(userProgressString);
+                await SaveUserData();
             }
+        }
+
+        private async Task SaveUserData()
+        {
+            var userProgressString = DBManager.GetJsonData();
+            await UserProfileService.SaveUserData(userProgressString);
         }
     }
 }

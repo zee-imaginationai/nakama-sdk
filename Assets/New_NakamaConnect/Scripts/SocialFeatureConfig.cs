@@ -1,12 +1,14 @@
 using System;
 using Nakama;
 using ProjectCore.Variables;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using String = System.String;
 
 namespace FPSCommando.SocialFeature.Cloud.Internal
 {
     [CreateAssetMenu(fileName = "SocialFeatureConfig", menuName = "FPSCommando/SocialFeature/SocialFeatureConfig")]
+    [InlineEditor]
     public class SocialFeatureConfig : ScriptableObject
     {
         [SerializeField] private DBString UdidString;

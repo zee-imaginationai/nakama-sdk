@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 // using Facebook.Unity;
 using Nakama;
 using ProjectCore.Events;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using String = ProjectCore.Variables.String;
 
 namespace FPSCommando.SocialFeature.Cloud.Internal
 {
     [CreateAssetMenu(fileName = "NakamaServer", menuName = "FPSCommando/SocialFeature/Cloud/NakamaServer")]
+    [InlineEditor]
     public class NakamaServer : ScriptableObject
     {
         [SerializeField] private String AuthToken;
@@ -102,16 +104,51 @@ namespace FPSCommando.SocialFeature.Cloud.Internal
             }
         }*/
 
-        public async Task SyncWithEmail(string email, string password)
+        public async Task SyncWithEmail(string email, string password, Action<bool> callback = null)
         {
+            Debug.Log("[Nakama] Syncing with email ID");
             try
             {
                 await Client.LinkEmailAsync(Session, email, password, SocialFeatureConfig.GetRetryConfiguration());
+                Debug.Log("[Nakama] Synced with email ID: " + email);
+                callback?.Invoke(true);
             }
             catch (ApiResponseException e)
             {
-                Console.WriteLine(e);
-                throw;
+                Debug.Log("[Nakama] Failed to sync with email ID: " + e.Message);
+                callback?.Invoke(false);
+            }
+        }
+
+        public async Task UnlinkWithDeviceID()
+        {
+            Debug.Log("[Nakama] Unlinking with device ID");
+            var deviceID = SocialFeatureConfig.GetDeviceUdid();
+
+            try
+            {
+                await Client.UnlinkDeviceAsync(Session, deviceID, SocialFeatureConfig.GetRetryConfiguration());
+                Debug.Log("[Nakama] Unlinked with device ID: " + deviceID);
+            }
+            catch (ApiResponseException e)
+            {
+                Debug.Log("[Nakama] Failed to unlink with device ID: " + e.Message);
+            }
+
+        }
+
+        public async Task UnlinkWithEmail(string email, string password)
+        {
+            Debug.Log("[Nakama] Unlinking with email ID");
+            try
+            {
+                var account = await Client.GetAccountAsync(Session, SocialFeatureConfig.GetRetryConfiguration());
+                await Client.UnlinkEmailAsync(Session, email, password, SocialFeatureConfig.GetRetryConfiguration());
+                Debug.Log("[Nakama] Unlinked with email ID: " + email);
+            }
+            catch (ApiResponseException e)
+            {
+                Debug.Log("[Nakama] Failed to unlink with email ID: " + e.Message);
             }
         }
 
@@ -126,9 +163,8 @@ namespace FPSCommando.SocialFeature.Cloud.Internal
 
                 await Socket.ConnectAsync(Session, true, 10);
 
-                NakamaServerConnected.Invoke();
-
                 Debug.Log("[Nakama] Authenticated with email ID: " + email);
+                NakamaServerConnected.Invoke();
             }
             catch (Exception ex)
             {

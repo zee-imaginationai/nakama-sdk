@@ -17,6 +17,6 @@ MonoBehaviour:
     type: 2}
   UserProfileService: {fileID: 11400000, guid: bb55b3d578b14c942a3336a1a66f0d67, type: 2}
   GameLevel: {fileID: 11400000, guid: 592dc6a83eefa3f419642ff59c907124, type: 2}
-  AuthWithDeviceID: 0
-  Email: {fileID: 0}
-  Password: {fileID: 0}
+  IsEmailLoggedIn: {fileID: 11400000, guid: 0d1d285442f2b734ab296bb38619c360, type: 2}
+  Email: {fileID: 11400000, guid: c06695d98b5986f468e85168b7c4a971, type: 2}
+  Password: {fileID: 11400000, guid: f15c4f6e2fb2fa640910d2dea9e67059, type: 2}

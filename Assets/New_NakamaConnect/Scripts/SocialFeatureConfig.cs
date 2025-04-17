@@ -12,6 +12,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
     public class SocialFeatureConfig : ScriptableObject
     {
         [SerializeField] private DBString UdidString;
+        [SerializeField] private DBBool IsAppearOnline;
         
         public GeneralSettings GeneralSettings;
         public ServicesSettings ServicesSettings;
@@ -31,6 +32,8 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         private const int LOCAL_SERVER_PORT = 7350;
         private const string LOCAL_SERVER_KEY = "defaultkey";
 
+        public bool CanAppearOnline() => IsAppearOnline.GetValue();
+        
         public string GetDeviceUdid()
         {
             if (UdidString.GetValue() == String.Empty)

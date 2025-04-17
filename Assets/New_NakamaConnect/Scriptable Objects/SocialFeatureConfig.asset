@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SocialFeatureConfig
   m_EditorClassIdentifier: 
   UdidString: {fileID: 11400000, guid: 3521b928274325442b6697663fa041d0, type: 2}
+  IsAppearOnline: {fileID: 0}
   GeneralSettings:
     Environment: 1
     EnableSocialKit: 1

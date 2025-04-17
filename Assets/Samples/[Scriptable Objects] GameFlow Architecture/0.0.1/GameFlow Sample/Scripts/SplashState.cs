@@ -21,7 +21,7 @@ namespace ProjectCore.Application
         
        /* [SerializeField] private FullScreenAd InterstitialAd;
         [SerializeField] private FullScreenAd RewardedAd;*/
-        /*[SerializeField] private IAPStore IAPStore;*/
+        /*[SerializeField] private IAPStore IAPStopanel-3-32re;*/
 
         [SerializeField] private int SceneIndex;
         [SerializeField] private Float SceneLoadingProgress;

@@ -15,3 +15,4 @@ MonoBehaviour:
   PausesPreviousState: 0
   PrefabName: MainMenuView
   GotoGameEvent: {fileID: 11400000, guid: d15872395875ce544b84241bb60a2ece, type: 2}
+  NakamaSystem: {fileID: 11400000, guid: 65bc8d0481130584fbc0bd65da8eaf2a, type: 2}

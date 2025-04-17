@@ -115,14 +115,13 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             {
                 Debug.Log("[Nakama] Failed to unlink with device ID: " + e.Message);
             }
-
         }
 
         #endregion
 
         #region EmailAuth
 
-        public async Task SyncWithEmail(string email, string password, Action<bool> callback = null)
+        public async Task LinkWithEmail(string email, string password, Action<bool> callback = null)
         {
             Debug.Log("[Nakama] Syncing with email ID");
             try
@@ -133,7 +132,13 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             }
             catch (ApiResponseException e)
             {
-                Debug.Log("[Nakama] Failed to sync with email ID: " + e.Message);
+                Debug.LogError($"[Nakama] Failed to sync with email ID: m:{e.Message} c:{e.GrpcStatusCode}");
+                if (e.GrpcStatusCode == 6)
+                {
+                    
+                    await AuthenticateWithEmail(email, password, TaskUtil.RefreshToken(ref _cancellationTokenSource));
+                    return;
+                }
                 callback?.Invoke(false);
             }
         }
@@ -148,6 +153,15 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
                     canceller: token);
 
                 await Socket.ConnectAsync(Session, true, 10);
+
+                var account = await Client.GetAccountAsync(Session);
+
+                var enu = account.Devices.GetEnumerator();
+                
+                while (enu.MoveNext())
+                {
+                    Debug.Log("[Nakama] Device: " + enu.Current);
+                }
 
                 Debug.Log("[Nakama] Authenticated with email ID: " + email);
                 NakamaServerConnected.Invoke();
@@ -170,6 +184,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             Debug.Log("[Nakama] Unlinking with email ID");
             try
             {
+                await ValidateSession();
                 var account = await Client.GetAccountAsync(Session, SocialFeatureConfig.GetRetryConfiguration());
                 await Client.UnlinkEmailAsync(Session, email, password, SocialFeatureConfig.GetRetryConfiguration());
                 Debug.Log("[Nakama] Unlinked with email ID: " + email);

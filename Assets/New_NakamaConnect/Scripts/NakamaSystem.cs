@@ -61,9 +61,9 @@ namespace ProjectCore.SocialFeature.Cloud
         }
 
         [Button]
-        private async void SyncWithEmail(string email, string password)
+        public async void SyncWithEmail(string email, string password)
         {
-            await NakamaServer.SyncWithEmail(email, password, UpdateEmailLogin);
+            await NakamaServer.LinkWithEmail(email, password, UpdateEmailLogin);
             Email.SetValue(email);
             Password.SetValue(password);
             await SaveUserData();

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: v_EmailLoggedIn
   m_EditorClassIdentifier: 
   Value: 0
-  DefaultValue: 0
+  DefaultValue: 1
   ResetToDefaultOnPlay: 1
   Key: EmailLoggedIn

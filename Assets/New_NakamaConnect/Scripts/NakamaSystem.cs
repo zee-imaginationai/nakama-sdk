@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 // using Facebook.Unity;
-using FPSCommando.SocialFeature.Cloud.Internal;
 using Nakama;
 using ProjectCore.Events;
 using ProjectCore.Variables;
@@ -84,6 +83,13 @@ namespace ProjectCore.SocialFeature.Cloud
             // First Read Data in our Desired format. Which is User Progress.
             
             var data = await UserProfileService.GetUserData();
+
+            if (data == null)
+            {
+                Debug.LogError("[Nakama System] No Data Received");
+                return;
+            }
+            
             var storageObjects = (IApiStorageObjects) data;
             
             // Check if there is any data received in the request.
@@ -124,7 +130,7 @@ namespace ProjectCore.SocialFeature.Cloud
     }
 }
 
-namespace FPSCommando.SocialFeature
+namespace ProjectCore.SocialFeature
 {
     [CreateAssetMenu(fileName = "UserProfile", menuName = "FPSCommando/SocialFeature/UserProfile")]
     public class UserProfile : ScriptableObject
@@ -138,6 +144,6 @@ namespace FPSCommando.SocialFeature
     }
 }
 
-namespace FPSCommando.SocialFeature
+namespace ProjectCore.SocialFeature
 {
 }

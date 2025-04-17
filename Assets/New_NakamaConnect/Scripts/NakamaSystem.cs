@@ -8,10 +8,11 @@ using Nakama;
 using ProjectCore.Events;
 using ProjectCore.Variables;
 using Nakama.TinyJson;
+using ProjectCore.SocialFeature.Cloud.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace FPSCommando.SocialFeature.Cloud
+namespace ProjectCore.SocialFeature.Cloud
 {
     [CreateAssetMenu(fileName = "NakamaSystem", menuName = "FPSCommando/SocialFeature/Cloud/NakamaSystem")]
     public class NakamaSystem : ScriptableObject

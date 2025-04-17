@@ -9,7 +9,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using String = ProjectCore.Variables.String;
 
-namespace FPSCommando.SocialFeature.Cloud.Internal
+namespace ProjectCore.SocialFeature.Cloud.Internal
 {
     [CreateAssetMenu(fileName = "NakamaServer", menuName = "FPSCommando/SocialFeature/Cloud/NakamaServer")]
     [InlineEditor]

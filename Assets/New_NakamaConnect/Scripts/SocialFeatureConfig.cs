@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using String = System.String;
 
-namespace FPSCommando.SocialFeature.Cloud.Internal
+namespace ProjectCore.SocialFeature.Cloud.Internal
 {
     [CreateAssetMenu(fileName = "SocialFeatureConfig", menuName = "FPSCommando/SocialFeature/SocialFeatureConfig")]
     [InlineEditor]

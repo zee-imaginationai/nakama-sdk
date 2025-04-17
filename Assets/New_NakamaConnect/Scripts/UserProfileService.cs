@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FPSCommando.SocialFeature.Cloud.Internal;
 using Nakama;
+using ProjectCore.SocialFeature.Cloud.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace FPSCommando.SocialFeature
+namespace ProjectCore.SocialFeature
 {
     [CreateAssetMenu(fileName = "UserProfileService", menuName = "FPSCommando/SocialFeature/UserProfileService")]
     [InlineEditor]

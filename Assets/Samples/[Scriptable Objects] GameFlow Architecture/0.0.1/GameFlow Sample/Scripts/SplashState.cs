@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
-using FPSCommando.SocialFeature.Cloud;
+using ProjectCore.SocialFeature.Cloud;
 using ProjectCore.Application;
 using ProjectCore.Events;
 using ProjectCore.StateMachine;

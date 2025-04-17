@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace FPSCommando.SocialFeature.Cloud.Internal
+namespace ProjectCore.SocialFeature.Cloud.Internal
 {
     [CreateAssetMenu(fileName = "FacebookService", menuName = "FPSCommando/SocialFeature/Cloud/FacebookService")]
     public class FacebookService : ScriptableObject

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caab7fa2ea7bf4656ac16bab7ab7832c, type: 3}
   m_Name: v_Email
   m_EditorClassIdentifier: 
-  Value: 
+  Value: zee@imaginationai.net
   DefaultValue: zee@imaginationai.net
-  ResetToDefaultOnPlay: 1
+  ResetToDefaultOnPlay: 0
   Key: Email

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caab7fa2ea7bf4656ac16bab7ab7832c, type: 3}
   m_Name: v_DeviceID
   m_EditorClassIdentifier: 
-  Value: 
+  Value: 5be6b6fae15de3fde371cf7216741e5338fc680f
   DefaultValue: 
   ResetToDefaultOnPlay: 1
   Key: DeviceID

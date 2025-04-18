@@ -28,9 +28,15 @@ public class MainMenuState : State
         yield return base.Exit();
     }
 
-    public void EmailSyncNakama(string email, string password)
+    public async void EmailSyncNakama(string email, string password)
     {
-        NakamaSystem.SyncWithEmail(email, password);
+        var status = await NakamaSystem.SyncWithEmail(email, password);
+        _mainMenuView.ShowErrorText(status);
+    }
+
+    public void LogoutNakama()
+    {
+        NakamaSystem.UnlinkWithEmail();
     }
 
     public void GotoGame()

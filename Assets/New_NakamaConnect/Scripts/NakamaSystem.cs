@@ -48,10 +48,29 @@ namespace ProjectCore.SocialFeature.Cloud
         }
 
         [Button]
-        private async void UnlinkWithEmail()
+        public async void UnlinkWithEmail()
         {
-            await NakamaServer.UnlinkWithEmail(Email, Password);
+            var task = NakamaServer.UnlinkWithEmail(Email, Password, OnUnlinkEmail);
+            await task;
+            if (task.IsFaulted) return;
+            
+            Email.SetValue(string.Empty);
+            Password.SetValue(string.Empty);
+            
             await NakamaServer.AuthenticateWithDeviceID(TaskUtil.RefreshToken(ref _cancellationTokenSource));
+            
+            return;
+            
+            void OnUnlinkEmail(bool status)
+            {
+                IsEmailLoggedIn.SetValue(!status);
+            }
+        }
+
+        [Button]
+        private async void AuthenticateWithEmail()
+        {
+            await NakamaServer.AuthenticateWithEmail(Email, Password, TaskUtil.RefreshToken(ref _cancellationTokenSource));
         }
 
         [Button]
@@ -61,14 +80,21 @@ namespace ProjectCore.SocialFeature.Cloud
         }
 
         [Button]
-        public async void SyncWithEmail(string email, string password)
+        public async Task<string> SyncWithEmail(string email, string password)
         {
-            await NakamaServer.LinkWithEmail(email, password, UpdateEmailLogin);
+            var status = await NakamaServer.LinkWithEmail(email, password, UpdateEmailLogin);
+
+            if (!IsEmailLoggedIn)
+            {
+                return status;
+            }
+            
             Email.SetValue(email);
             Password.SetValue(password);
+            
             await SaveUserData();
 
-            return;
+            return status;
 
             void UpdateEmailLogin(bool status)
             {

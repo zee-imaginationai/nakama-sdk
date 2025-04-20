@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Nakama;
 using ProjectCore.Events;
@@ -20,10 +18,14 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         [SerializeField] private GameEvent NakamaServerConnected;
 
         [SerializeField] private SocialFeatureConfig SocialFeatureConfig;
+        
+        [SerializeField] private bool DebugMode;
 
         public IClient Client { get; private set; }
         public ISocket Socket { get; private set; }
         public ISession Session { get; private set; }
+        public IApiAccount Account { get; private set; }
+        public IApiUser User => Account?.User;
 
         public void Initialize()
         {
@@ -58,63 +60,68 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             
             Socket.Connected += () =>
             {
-                Debug.Log("[Nakama] Socket Connected");
+                Print("[Nakama] Socket Connected");
             };
             
             Socket.Closed += () =>
             {
-                Debug.Log("[Nakama] Socket Disconnected");
+                Print("[Nakama] Socket Disconnected");
             };
         }
 
         #region DeviceIdAuth
 
-        public async Task<ISession> AuthenticateWithDeviceID(CancellationToken cancellationToken)
+        public async Task<ISession> AuthenticateWithDeviceID()
         {
-            Debug.Log("[Nakama] Authenticating with device ID");
+            Print("[Nakama] Authenticating with device ID");
             var deviceID = SocialFeatureConfig.GetDeviceUdid();
+
+            if (Session != null) await KillSession(Session);
             
             try
             {
                 Session = await Client.AuthenticateDeviceAsync(deviceID,
-                    retryConfiguration: SocialFeatureConfig.GetRetryConfiguration(),
-                    canceller: cancellationToken);
+                    retryConfiguration: SocialFeatureConfig.GetRetryConfiguration());
 
                 await Socket.ConnectAsync(Session, SocialFeatureConfig.CanAppearOnline(), 10);
+                await UpdateAccount();
 
                 NakamaServerConnected.Invoke();
 
-                Debug.Log("[Nakama] Authenticated with device ID: " + deviceID);
+                Print("[Nakama] Authenticated with device ID: ",deviceID);
 
                 return Session;
             }
             catch (Exception ex)
             {
-                if (ex is ApiResponseException)
-                {
-                    Debug.LogError("[Nakama] Failed to authenticate with device ID: " + ex.Message);
-                }
-                else if (ex is OperationCanceledException)
-                {
-                    Debug.LogError("[Nakama] Connection TimedOut");
-                }
+                Print("[Nakama] Failed to authenticate with device ID: ",ex.Message, LogType.Error);
                 return null;
             }
         }
 
-        public async Task UnlinkWithDeviceID()
+        public async Task LinkWithDeviceID()
         {
-            Debug.Log("[Nakama] Unlinking with device ID");
+            Print("[Nakama] Linking with device ID");
+            var deviceID = SocialFeatureConfig.GetDeviceUdid();
+            await Client.LinkDeviceAsync(Session, deviceID, SocialFeatureConfig.GetRetryConfiguration());
+            Print("[Nakama] Linked with device ID: ",deviceID);
+        }
+
+        public async Task UnlinkWithDeviceID(Action<bool, ApiResponseException> callback = null)
+        {
+            Print("[Nakama] Unlinking with device ID");
             var deviceID = SocialFeatureConfig.GetDeviceUdid();
 
             try
             {
                 await Client.UnlinkDeviceAsync(Session, deviceID, SocialFeatureConfig.GetRetryConfiguration());
-                Debug.Log("[Nakama] Unlinked with device ID: " + deviceID);
+                Print("[Nakama] Unlinked with device ID: ", deviceID);
+                callback?.Invoke(true, null);
             }
             catch (ApiResponseException e)
             {
-                Debug.Log("[Nakama] Failed to unlink with device ID: " + e.Message);
+                Print("[Nakama] Failed to unlink with device ID: ", e.Message);
+                callback?.Invoke(false, e);
             }
         }
 
@@ -122,108 +129,58 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
 
         #region EmailAuth
 
-        public async Task<string> LinkWithEmail(string email, string password, Action<bool> callback)
+        public async Task LinkWithEmail(string email, string password, Action<bool, ApiResponseException> callback = null)
         {
-            Debug.Log("[Nakama] Syncing with email ID");
+            Print("[Nakama] Syncing with email ID");
             try
             {
                 await Client.LinkEmailAsync(Session, email, password, SocialFeatureConfig.GetRetryConfiguration());
-                await UnlinkWithDeviceID();
-                Debug.Log("[Nakama] Synced with email ID: " + email);
-                callback?.Invoke(true);
-                return "Account Synced";
+                Print("[Nakama] Synced with email ID: " + email);
+                callback?.Invoke(true, null);
             }
             catch (ApiResponseException e)
             {
-                Debug.LogError($"[Nakama] Failed to sync with email ID: m:{e.Message} c:{e.GrpcStatusCode}");
-                await AuthenticateWithDeviceID(TaskUtil.RefreshToken(ref _cancellationTokenSource));
-                callback?.Invoke(false);
-                return e.Message;
+                Print($"[Nakama] Failed to sync with email ID: m:{e.Message} c:{e.GrpcStatusCode}");
+                callback?.Invoke(false, e);
             }
         }
         
-        public async Task LinkWithDevice()
+        public async Task AuthenticateWithEmail(string email, string password, Action<bool, ApiResponseException> callback = null)
         {
-            Debug.Log("[Nakama] Linking with device ID");
-            var deviceID = SocialFeatureConfig.GetDeviceUdid();
-            await Client.LinkDeviceAsync(Session, deviceID, SocialFeatureConfig.GetRetryConfiguration());
-            Debug.Log("[Nakama] Linked with device ID: " + deviceID);
-        }
-
-        public async Task AuthenticateWithEmail(string email, string password, CancellationToken token)
-        {
-            Debug.Log("[Nakama] Authenticating with email ID");
+            Print("[Nakama] Authenticating with email ID");
+            if (Session != null) await KillSession(Session);
             try
             {
-                /*ISession tempSession = null; 
-                if (Session != null)
-                {
-                    tempSession = Session;
-                }*/
-                
                 Session = await Client.AuthenticateEmailAsync(email, password, create: false,
-                    retryConfiguration: SocialFeatureConfig.GetRetryConfiguration(),
-                    canceller: token);
-
+                    retryConfiguration: SocialFeatureConfig.GetRetryConfiguration());
                 await Socket.ConnectAsync(Session, true, 10);
 
-                var account = await Client.GetAccountAsync(Session);
+                await UpdateAccount();
 
-                /*if (account.Devices.ToList().Count > 0)
-                {
-                    await Client.DeleteAccountAsync(tempSession, SocialFeatureConfig.GetRetryConfiguration());
-                }*/
-
-                var user = account.User;
-
-                var devices = account.Devices.ToList();
-
-                if (devices.All(device => device.Id != SocialFeatureConfig.GetDeviceUdid()))
-                {
-                    await LinkWithDevice();
-                    Debug.Log("[Nakama] Linked with device ID: " + SocialFeatureConfig.GetDeviceUdid());
-                }
-                
-                Debug.LogError("[Nakama] User: " + user.Id);
-                Debug.LogError("[Nakama] Email: " + account.Email);
-
-                var enu = account.Devices.GetEnumerator();
-                
-                while (enu.MoveNext())
-                {
-                    Debug.Log("[Nakama] Device: " + enu.Current);
-                }
-
-                Debug.Log("[Nakama] Authenticated with email ID: " + email);
+                Print("[Nakama] Authenticated with email ID: " ,email);
                 NakamaServerConnected.Invoke();
             }
-            catch (Exception ex)
+            catch (ApiResponseException ex)
             {
-                if (ex is ApiResponseException)
-                {
-                    Debug.LogError("[Nakama] Failed to authenticate with email ID: " + ex.Message);
-                }
-                else if (ex is OperationCanceledException)
-                {
-                    Debug.LogError("[Nakama] Connection TimedOut");
-                }
+                Print("[Nakama] Failed to authenticate with email ID: " ,ex.Message, LogType.Error);
+                callback?.Invoke(false, ex);
             }
         }
 
-        public async Task UnlinkWithEmail(string email, string password, Action<bool> callback = null)
+        public async Task UnlinkWithEmail(string email, string password, Action<bool, ApiResponseException> callback = null)
         {
-            Debug.Log("[Nakama] Unlinking with email ID");
+            Print("[Nakama] Unlinking with email ID");
             try
             {
                 await ValidateSession();
                 await Client.UnlinkEmailAsync(Session, email, password, SocialFeatureConfig.GetRetryConfiguration());
-                Debug.Log("[Nakama] Unlinked with email ID: " + email);
-                callback?.Invoke(true);
+                Print("[Nakama] Unlinked with email ID: ", email);
+                callback?.Invoke(true, null);
             }
             catch (ApiResponseException e)
             {
-                Debug.Log("[Nakama] Failed to unlink with email ID: " + e.Message);
-                callback?.Invoke(false);
+                Print("[Nakama] Failed to unlink with email ID: " ,e.Message, LogType.Error);
+                callback?.Invoke(false, e);
             }
         }
 
@@ -231,18 +188,72 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
 
         #region Helper Functions
 
-        private CancellationTokenSource _cancellationTokenSource;
+        public async Task KillSession(ISession session)
+        {
+            try
+            {
+                await Client.SessionLogoutAsync(session);
+            }
+            catch (ApiResponseException e)
+            {
+                Print("[Nakama] Failed to kill session: ", e.Message);
+            }
+        }
+        
+        public async Task DeleteAccount()
+        {
+            try
+            {
+                await Client.DeleteAccountAsync(Session, SocialFeatureConfig.GetRetryConfiguration());
+                Print("[Nakama] Deleted account]");
+            }
+            catch (ApiResponseException e)
+            {
+                Print("[Nakama] Failed to delete account: ", e.Message, LogType.Error);
+            }
+            await KillSession(Session);
+        }
+
+        private void Print(string message, string extraInfo = "", LogType logType = LogType.Log)
+        {
+            if (!DebugMode) return;
+            switch (logType)
+            {
+                case LogType.Log:
+                    Debug.Log(string.Concat(message, extraInfo));
+                    break;
+                case LogType.Error:
+                    Debug.LogError(string.Concat(message, extraInfo));
+                    break;
+                case LogType.Warning:
+                    Debug.LogWarning(string.Concat(message, extraInfo));
+                    break;
+            }
+        }
+
+        private async Task UpdateAccount()
+        {
+            try
+            {
+                Account = await Client.GetAccountAsync(Session);
+                Print("[Nakama Account Fetched: ", User.Id);
+            }
+            catch (ApiResponseException e)
+            {
+                Print("[Nakama] Failed to get account ID: ", e.Message);
+            }
+        }
 
         public async Task<bool> ValidateSession(bool forceSync = false)
         {
             if (Session == null)
             {
-                Debug.LogError("[Nakama] Session is Invalid!!");
+                Print("[Nakama] Session is Invalid!!", logType: LogType.Error);
 
                 Session = Nakama.Session.Restore(AuthToken, RefreshToken);
                 if (Session == null)
                 {
-                    Debug.LogError("[Nakama] Failed to restore session");
+                    Print("[Nakama] Failed to restore session", logType: LogType.Error);
                     return false;
                 }
                 var isValidSocket = await ValidateSocket();
@@ -251,12 +262,12 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
 
             if ((Session.IsExpired && Session.IsRefreshExpired) || forceSync)
             {
-                Debug.LogError("[Nakama] Session is Invalid!!");
+                Print("[Nakama] Session is Invalid!!", logType: LogType.Error);
                 try
                 {
                     if (forceSync)
                     {
-                        Session = await AuthenticateWithDeviceID(TaskUtil.RefreshToken(ref _cancellationTokenSource));
+                        Session = await AuthenticateWithDeviceID();
                     }
                     else
                     {
@@ -265,17 +276,17 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
 
                     if (Session != null) return await ValidateSocket();
                     
-                    Debug.LogError("[Nakama] Failed to refresh session");
+                    Print("[Nakama] Failed to refresh session", logType: LogType.Error);
                     return false;
                 }
                 catch (ApiResponseException ex)
                 {
-                    Debug.LogError("[Nakama] Failed to validate session: " + ex.Message);
+                    Print("[Nakama] Failed to validate session: ", ex.Message, LogType.Error);
                     return false;
                 }
             }
             
-            Debug.Log("[Nakama] Session is Valid!!");
+            Print("[Nakama] Session is Valid!!");
             SaveSession();
             return true;
         }
@@ -284,7 +295,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         {
             if (!Socket.IsConnected)
             {
-                Debug.LogError("[Nakama] Socket is Invalid!!");
+                Print("[Nakama] Socket is Invalid!!", logType: LogType.Error);
                 try
                 {
                     await Socket.ConnectAsync(Session, SocialFeatureConfig.CanAppearOnline());
@@ -292,11 +303,11 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
                 }
                 catch (ApiResponseException exception)
                 {
-                    Debug.LogError("[Nakama] Socket Connection Failed: " + exception.Message);
+                    Print("[Nakama] Socket Connection Failed: " ,exception.Message, LogType.Error);
                     return false;
                 }
             }
-            Debug.Log("[Nakama] Socket is Valid!!");
+            Print("[Nakama] Socket is Valid!!");
             return true;
         }
 
@@ -326,7 +337,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         public async Task DeleteUserDataAsync(StorageObjectId[] apiDeleteObjects)
         {
             await Client.DeleteStorageObjectsAsync(Session, apiDeleteObjects);
-            Debug.LogError("[Nakama] Deleted user data");
+            Print("[Nakama] Deleted user data");
         }
 
         #endregion
@@ -335,5 +346,12 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         {
             Socket?.CloseAsync();
         }
+    }
+
+    public enum LogType
+    {
+        Log,
+        Warning,
+        Error
     }
 }

@@ -18,3 +18,4 @@ MonoBehaviour:
     type: 2}
   SocialFeatureConfig: {fileID: 11400000, guid: eff7d0bb188063047ad906a94de806dd,
     type: 2}
+  DebugMode: 1

@@ -2,7 +2,8 @@ using ProjectCore.Events;
 using ProjectCore.StateMachine;
 using System;
 using System.Collections;
-using ProjectCore.SocialFeature.Cloud;
+using Nakama;
+using ProjectCore.SocialFeature.Cloud.Internal;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MainMenuState", menuName = "ProjectCore/State Machine/States/MainMenu State")]
@@ -12,7 +13,7 @@ public class MainMenuState : State
 
     [SerializeField] private GameEvent GotoGameEvent;
     [NonSerialized] private MainMenuView _mainMenuView;
-    [SerializeField] private NakamaSystem NakamaSystem;
+    [SerializeField] private CloudSyncSystem CloudSyncSystem;
     public override IEnumerator Execute()
     {
          base.Execute();
@@ -28,15 +29,39 @@ public class MainMenuState : State
         yield return base.Exit();
     }
 
-    public async void EmailSyncNakama(string email, string password)
+    public async void SignupWithEmail(string email, string password)
     {
-        var status = await NakamaSystem.SyncWithEmail(email, password);
-        _mainMenuView.ShowErrorText(status);
+        await CloudSyncSystem.SignupWithEmail(email, password, OnConnectionWithEmail);
     }
 
-    public void LogoutNakama()
+    public async void LoginWithEmail(string email, string password)
     {
-        NakamaSystem.UnlinkWithEmail();
+        await CloudSyncSystem.SigninWithEmail(email, password, OnConnectionWithEmail);
+    }
+
+    private void OnConnectionWithEmail(bool success, ApiResponseException exception)
+    {
+        if(success)
+            _mainMenuView.ShowErrorText("Sign In Success");
+        else
+        {
+            _mainMenuView.ShowErrorText(exception.Message);
+        }
+    }
+
+    public async void LogoutNakama()
+    {
+        await CloudSyncSystem.SignOutFromEmail(OnLogout);
+    }
+
+    private void OnLogout(bool success, ApiResponseException exception)
+    {
+        if(success)
+            _mainMenuView.ShowErrorText("Log Out Success");
+        else
+        {
+            _mainMenuView.ShowErrorText(exception.Message);
+        }
     }
 
     public void GotoGame()

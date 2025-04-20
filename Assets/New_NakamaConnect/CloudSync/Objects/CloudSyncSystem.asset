@@ -12,3 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81ac4c162ace4a178f06ba317b7aa3f6, type: 3}
   m_Name: CloudSyncSystem
   m_EditorClassIdentifier: 
+  NakamaServer: {fileID: 11400000, guid: d73e96a58160e1e4b80fe3e8d993c663, type: 2}
+  UserProfileService: {fileID: 11400000, guid: bb55b3d578b14c942a3336a1a66f0d67, type: 2}
+  IsEmailLoggedIn: {fileID: 11400000, guid: 0d1d285442f2b734ab296bb38619c360, type: 2}
+  Email: {fileID: 11400000, guid: c06695d98b5986f468e85168b7c4a971, type: 2}
+  Password: {fileID: 11400000, guid: f15c4f6e2fb2fa640910d2dea9e67059, type: 2}

@@ -30,9 +30,11 @@ public class CloudSyncPanel : MonoBehaviour
         RegisterButton.onClick.AddListener(OnRegisterButtonPressed);
         LoginButton.onClick.AddListener(OnLoginButtonPressed);
         LogOutButton.onClick.AddListener(OnLogOutButtonPressed);
-        EmailInputField.onSubmit.AddListener(OnEmailSubmit);
         CloseButton.onClick.AddListener(OnCloseButton);
-        PasswordInputField.onSubmit.AddListener(OnPasswordSubmit);
+        
+        EmailInputField.onValueChanged.AddListener(OnEmailSubmit);
+        PasswordInputField.onValueChanged.AddListener(OnPasswordSubmit);
+        
         SetErrorState(false);
     }
 
@@ -41,9 +43,11 @@ public class CloudSyncPanel : MonoBehaviour
         RegisterButton.onClick.RemoveListener(OnRegisterButtonPressed);
         LoginButton.onClick.RemoveListener(OnLoginButtonPressed);
         LogOutButton.onClick.RemoveListener(OnLogOutButtonPressed);
-        EmailInputField.onSubmit.RemoveListener(OnEmailSubmit);
         CloseButton.onClick.RemoveListener(OnCloseButton);
-        PasswordInputField.onSubmit.RemoveListener(OnPasswordSubmit);
+        
+        EmailInputField.onValueChanged.RemoveListener(OnEmailSubmit);
+        PasswordInputField.onValueChanged.RemoveListener(OnPasswordSubmit);
+        
         SetErrorState(false);
     }
 
@@ -54,7 +58,7 @@ public class CloudSyncPanel : MonoBehaviour
 
     private void OnLoginButtonPressed()
     {
-        
+        MainMenuState.LoginWithEmail(_email, _password);
     }
 
     private void UpdatePanel()
@@ -92,6 +96,6 @@ public class CloudSyncPanel : MonoBehaviour
 
     private void OnRegisterButtonPressed()
     {
-        MainMenuState.EmailSyncNakama(_email, _password);
+        MainMenuState.SignupWithEmail(_email, _password);
     }
 }

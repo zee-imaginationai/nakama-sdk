@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace ProjectCore.SocialFeature.Cloud
 {
-    [CreateAssetMenu(fileName = "NakamaSystem", menuName = "FPSCommando/SocialFeature/Cloud/NakamaSystem")]
+    [CreateAssetMenu(fileName = "NakamaSystem", menuName = "ProjectCore/SocialFeature/Cloud/NakamaSystem")]
     public class NakamaSystem : ScriptableObject
     {
         [SerializeField] private NakamaServer NakamaServer;
@@ -87,7 +87,7 @@ namespace ProjectCore.SocialFeature.Cloud
 
 namespace ProjectCore.SocialFeature
 {
-    [CreateAssetMenu(fileName = "UserProfile", menuName = "FPSCommando/SocialFeature/UserProfile")]
+    [CreateAssetMenu(fileName = "UserProfile", menuName = "ProjectCore/SocialFeature/UserProfile")]
     public class UserProfile : ScriptableObject
     {
         public string UserId;

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ProjectCore.SocialFeature.Cloud.Internal
 {
-    [CreateAssetMenu(fileName = "FacebookService", menuName = "FPSCommando/SocialFeature/Cloud/FacebookService")]
+    [CreateAssetMenu(fileName = "FacebookService", menuName = "ProjectCore/SocialFeature/Cloud/FacebookService")]
     public class FacebookService : ScriptableObject
     {
         /*public void Initialize()

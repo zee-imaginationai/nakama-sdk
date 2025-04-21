@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ProjectCore.SocialFeature
 {
-    [CreateAssetMenu(fileName = "UserProfileService", menuName = "FPSCommando/SocialFeature/UserProfileService")]
+    [CreateAssetMenu(fileName = "UserProfileService", menuName = "ProjectCore/SocialFeature/UserProfileService")]
     [InlineEditor]
     public class UserProfileService : ScriptableObject
     {

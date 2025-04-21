@@ -7,7 +7,7 @@ using String = System.String;
 
 namespace ProjectCore.SocialFeature.Cloud.Internal
 {
-    [CreateAssetMenu(fileName = "SocialFeatureConfig", menuName = "FPSCommando/SocialFeature/SocialFeatureConfig")]
+    [CreateAssetMenu(fileName = "SocialFeatureConfig", menuName = "ProjectCore/SocialFeature/SocialFeatureConfig")]
     [InlineEditor]
     public class SocialFeatureConfig : ScriptableObject
     {

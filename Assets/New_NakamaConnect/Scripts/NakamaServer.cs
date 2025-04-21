@@ -8,7 +8,7 @@ using String = ProjectCore.Variables.String;
 
 namespace ProjectCore.SocialFeature.Cloud.Internal
 {
-    [CreateAssetMenu(fileName = "NakamaServer", menuName = "FPSCommando/SocialFeature/Cloud/NakamaServer")]
+    [CreateAssetMenu(fileName = "NakamaServer", menuName = "ProjectCore/SocialFeature/Cloud/NakamaServer")]
     [InlineEditor]
     public class NakamaServer : ScriptableObject
     {

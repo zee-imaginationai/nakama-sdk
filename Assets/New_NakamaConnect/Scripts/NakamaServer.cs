@@ -80,11 +80,10 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             
             try
             {
-                Session = await Client.AuthenticateDeviceAsync(deviceID,
+                var session = await Client.AuthenticateDeviceAsync(deviceID,
                     retryConfiguration: SocialFeatureConfig.GetRetryConfiguration());
 
-                await Socket.ConnectAsync(Session, SocialFeatureConfig.CanAppearOnline(), 10);
-                await UpdateAccount();
+                await UpdateSession(session);
 
                 NakamaServerConnected.Invoke();
 
@@ -107,14 +106,16 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             Print("[Nakama] Linked with device ID: ",deviceID);
         }
 
-        public async Task UnlinkWithDeviceID(Action<bool, ApiResponseException> callback = null)
+        public async Task UnlinkWithDeviceID(ISession session = null, Func<bool, ApiResponseException, Task> callback = null)
         {
             Print("[Nakama] Unlinking with device ID");
             var deviceID = SocialFeatureConfig.GetDeviceUdid();
+            
+            session ??= Session;
 
             try
             {
-                await Client.UnlinkDeviceAsync(Session, deviceID, SocialFeatureConfig.GetRetryConfiguration());
+                await Client.UnlinkDeviceAsync(session, deviceID, SocialFeatureConfig.GetRetryConfiguration());
                 Print("[Nakama] Unlinked with device ID: ", deviceID);
                 callback?.Invoke(true, null);
             }
@@ -129,7 +130,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
 
         #region EmailAuth
 
-        public async Task LinkWithEmail(string email, string password, Action<bool, ApiResponseException> callback = null)
+        public async Task LinkWithEmail(string email, string password, Func<bool, ApiResponseException, Task> callback = null)
         {
             Print("[Nakama] Syncing with email ID");
             try
@@ -145,25 +146,23 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             }
         }
         
-        public async Task AuthenticateWithEmail(string email, string password, Action<bool, ApiResponseException> callback = null)
+        public async Task AuthenticateWithEmail(string email, string password, Func<bool, ApiResponseException, ISession, Task> callback = null)
         {
             Print("[Nakama] Authenticating with email ID");
-            if (Session != null) await KillSession(Session);
             try
             {
-                Session = await Client.AuthenticateEmailAsync(email, password, create: false,
+                var session = await Client.AuthenticateEmailAsync(email, password, create: false,
                     retryConfiguration: SocialFeatureConfig.GetRetryConfiguration());
-                await Socket.ConnectAsync(Session, true, 10);
-
-                await UpdateAccount();
 
                 Print("[Nakama] Authenticated with email ID: " ,email);
-                NakamaServerConnected.Invoke();
+                
+                callback?.Invoke(true, null, session);
+                // NakamaServerConnected.Invoke();
             }
             catch (ApiResponseException ex)
             {
                 Print("[Nakama] Failed to authenticate with email ID: " ,ex.Message, LogType.Error);
-                callback?.Invoke(false, ex);
+                callback?.Invoke(false, ex, null);
             }
         }
 
@@ -188,6 +187,13 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
 
         #region Helper Functions
 
+        public async Task UpdateSession(ISession session)
+        {
+            Session = session;
+            await Socket.ConnectAsync(Session, true, 10);
+            await UpdateAccount();
+        }
+
         public async Task KillSession(ISession session)
         {
             try
@@ -200,18 +206,19 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             }
         }
         
-        public async Task DeleteAccount()
+        public async Task DeleteAccount(ISession session = null)
         {
+            session ??= Session;
             try
             {
-                await Client.DeleteAccountAsync(Session, SocialFeatureConfig.GetRetryConfiguration());
+                await Client.DeleteAccountAsync(session, SocialFeatureConfig.GetRetryConfiguration());
                 Print("[Nakama] Deleted account]");
             }
             catch (ApiResponseException e)
             {
                 Print("[Nakama] Failed to delete account: ", e.Message, LogType.Error);
             }
-            await KillSession(Session);
+            await KillSession(session);
         }
 
         private void Print(string message, string extraInfo = "", LogType logType = LogType.Log)

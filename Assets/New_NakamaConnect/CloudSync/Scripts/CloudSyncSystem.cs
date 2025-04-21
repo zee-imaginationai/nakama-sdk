@@ -25,15 +25,14 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         public async Task SignupWithEmail(string email, string password, Action<bool, ApiResponseException> callback = null)
         {
             await NakamaServer.LinkWithEmail(email, password, Callback);
-            await UserProfileService.SaveUserData();
             return;
 
-            void Callback(bool success, ApiResponseException exception)
+            async Task Callback(bool success, ApiResponseException exception)
             {
-                IsEmailLoggedIn.SetValue(success);
-                Email.SetValue(email);
-                Password.SetValue(password);
                 callback?.Invoke(success, exception);
+                var signedIn = OnSignIn(success, email, password);
+                if (!signedIn) return;
+                await UserProfileService.SaveUserData();
             }
         }
 
@@ -41,45 +40,63 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         {
             if (IsConnectedWithMultipleDevices())
             {
-                await NakamaServer.UnlinkWithDeviceID(Callback);
-                await NakamaServer.AuthenticateWithDeviceID();
+                await NakamaServer.UnlinkWithDeviceID(callback: UnlinkWithDeviceCallback);
             }
             else
             {
                 await NakamaServer.UnlinkWithEmail(Email, Password, Callback);
             }
-
-            await OnSyncComplete();
             return;
 
+            async Task UnlinkWithDeviceCallback(bool success, ApiResponseException exception)
+            {
+                Callback(success, exception);
+                if (!success) return;
+                
+                await NakamaServer.AuthenticateWithDeviceID();
+                await UserProfileService.SaveUserData();
+            }
+            
             void Callback(bool success, ApiResponseException exception)
             {
+                callback?.Invoke(success, exception);
                 IsEmailLoggedIn.SetValue(!success);
+                if (!success) return;
+                
                 Email.SetValue(string.Empty);
                 Password.SetValue(string.Empty);
-                callback?.Invoke(success, exception);
             }
         }
-
+        
         [Button]
         public async Task SigninWithEmail(string email, string password, Action<bool, ApiResponseException> callback = null)
         {
-            object data = null;
-            if (IsConnectedWithOtherAccounts())
-            {
-                await NakamaServer.UnlinkWithDeviceID();
-            }
-            else
-            {
-                data = await UserProfileService.GetUserData();
-                await NakamaServer.DeleteAccount();
-            }
-            if (data != null) 
-                Debug.Log(((IApiStorageObjects) data).Objects?.ToList().FirstOrDefault()?.Value);
+            object data = await UserProfileService.GetUserData();
             
-            await NakamaServer.AuthenticateWithEmail(email, password, callback);
-            await OnSyncComplete();
-            await NakamaServer.LinkWithDeviceID();
+            await NakamaServer.AuthenticateWithEmail(email, password, Callback);
+            return;
+
+            async Task Callback(bool success, ApiResponseException exception, ISession session)
+            {
+                callback?.Invoke(success, exception);
+                var signedIn = OnSignIn(success, email, password);
+                if (!signedIn) return;
+                
+                if (IsConnectedWithOtherAccounts())
+                {
+                    await NakamaServer.UnlinkWithDeviceID();
+                }
+                else
+                {
+                    await NakamaServer.DeleteAccount();
+                }
+                if (data != null) 
+                    Debug.Log(((IApiStorageObjects) data).Objects?.ToList().FirstOrDefault()?.Value);
+                
+                await NakamaServer.UpdateSession(session);
+                await NakamaServer.LinkWithDeviceID();
+                await OnSyncComplete();
+            }
         }
 
         private async Task OnSyncComplete()
@@ -91,6 +108,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         {
             var account = NakamaServer.Account;
             var deviceCount = account.Devices.ToList().Count;
+            Debug.LogError("[CloudSync] Device Count: " + deviceCount);
             return deviceCount > 1;
         }
 
@@ -101,27 +119,16 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             return user.AppleId != null || user.GoogleId != null || user.GamecenterId != null || 
                    user.FacebookId != null || user.SteamId != null || user.FacebookInstantGameId != null || account.Email != null;
         }
-        
-        private async void OnUnlinkEmail(bool success, ApiResponseException exception)
+
+        private bool OnSignIn(bool success, string email, string password)
         {
-            if (success)
-            {
-                try
-                {
-                    await NakamaServer.UnlinkWithDeviceID();
-                }
-                catch (ApiResponseException e)
-                {
-                    
-                }
-            }
-            else
-            {
-                Debug.Log(exception.Message);
-            }
+            IsEmailLoggedIn.SetValue(success);
+            if (!success) return false;
+            Email.SetValue(email);
+            Password.SetValue(password);
+            return true;
         }
         
-
         #endregion
     }
 }

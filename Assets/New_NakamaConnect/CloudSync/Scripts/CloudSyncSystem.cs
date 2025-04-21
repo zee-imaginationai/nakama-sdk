@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ProjectCore.SocialFeature.Cloud.Internal
 {
-    [CreateAssetMenu(fileName = "CloudSyncSystem", menuName = "FPSCommando/SocialFeature/Cloud/CloudSyncSystem")]
+    [CreateAssetMenu(fileName = "CloudSyncSystem", menuName = "ProjectCore/SocialFeature/Cloud/CloudSyncSystem")]
     public class CloudSyncSystem : ScriptableObject
     {
         [SerializeField] private NakamaServer NakamaServer;
@@ -25,11 +25,14 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         public async Task SignupWithEmail(string email, string password, Action<bool, ApiResponseException> callback = null)
         {
             await NakamaServer.LinkWithEmail(email, password, Callback);
+            await UserProfileService.SaveUserData();
             return;
 
             void Callback(bool success, ApiResponseException exception)
             {
                 IsEmailLoggedIn.SetValue(success);
+                Email.SetValue(email);
+                Password.SetValue(password);
                 callback?.Invoke(success, exception);
             }
         }
@@ -45,6 +48,8 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             {
                 await NakamaServer.UnlinkWithEmail(Email, Password, Callback);
             }
+
+            await OnSyncComplete();
             return;
 
             void Callback(bool success, ApiResponseException exception)
@@ -69,9 +74,17 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
                 data = await UserProfileService.GetUserData();
                 await NakamaServer.DeleteAccount();
             }
-            if (data != null) Debug.Log(((IApiStorageObjects) data).Objects?.ToList().FirstOrDefault()?.Value);
+            if (data != null) 
+                Debug.Log(((IApiStorageObjects) data).Objects?.ToList().FirstOrDefault()?.Value);
+            
             await NakamaServer.AuthenticateWithEmail(email, password, callback);
+            await OnSyncComplete();
             await NakamaServer.LinkWithDeviceID();
+        }
+
+        private async Task OnSyncComplete()
+        {
+            await UserProfileService.SaveUserData();
         }
 
         private bool IsConnectedWithMultipleDevices()

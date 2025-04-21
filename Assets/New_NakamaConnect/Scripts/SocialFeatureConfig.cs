@@ -11,7 +11,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
     [InlineEditor]
     public class SocialFeatureConfig : ScriptableObject
     {
-        [SerializeField] private DBString UdidString;
+        [SerializeField] private CloudDBString UdidString;
         [SerializeField] private DBBool IsAppearOnline;
         
         public GeneralSettings GeneralSettings;

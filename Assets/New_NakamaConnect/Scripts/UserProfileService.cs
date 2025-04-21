@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Nakama;
 using ProjectCore.SocialFeature.Cloud.Internal;
+using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -11,8 +12,14 @@ namespace ProjectCore.SocialFeature
     public class UserProfileService : ScriptableObject
     {
         [SerializeField] private NakamaServer NakamaServer;
-        
+
         [Button]
+        public async Task SaveUserData()
+        {
+            var data = DBManager.GetJsonData();
+            await SaveUserData(data);
+        }
+        
         public async Task SaveUserData(string userData)
         {
             Debug.Log("[Nakama] [UserProfileService] Saving User Data");

@@ -17,3 +17,4 @@ MonoBehaviour:
   IsEmailLoggedIn: {fileID: 11400000, guid: 0d1d285442f2b734ab296bb38619c360, type: 2}
   Email: {fileID: 11400000, guid: c06695d98b5986f468e85168b7c4a971, type: 2}
   Password: {fileID: 11400000, guid: f15c4f6e2fb2fa640910d2dea9e67059, type: 2}
+  ConflictString: {fileID: 11400000, guid: b45d6dc2af04db54a954cd1b22cd66c6, type: 2}

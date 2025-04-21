@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Nakama;
+using Nakama.TinyJson;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -18,6 +20,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
 
         [SerializeField] private DBString Email;
         [SerializeField] private DBString Password;
+        [SerializeField] private CloudDBString ConflictString;
 
         #region EmailSyncRegion
         
@@ -32,7 +35,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
                 callback?.Invoke(success, exception);
                 var signedIn = OnSignIn(success, email, password);
                 if (!signedIn) return;
-                await UserProfileService.SaveUserData();
+                await OnSyncComplete();
             }
         }
 
@@ -71,8 +74,6 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         [Button]
         public async Task SigninWithEmail(string email, string password, Action<bool, ApiResponseException> callback = null)
         {
-            object data = await UserProfileService.GetUserData();
-            
             await NakamaServer.AuthenticateWithEmail(email, password, Callback);
             return;
 
@@ -90,17 +91,37 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
                 {
                     await NakamaServer.DeleteAccount();
                 }
-                if (data != null) 
-                    Debug.Log(((IApiStorageObjects) data).Objects?.ToList().FirstOrDefault()?.Value);
                 
                 await NakamaServer.UpdateSession(session);
                 await NakamaServer.LinkWithDeviceID();
-                await OnSyncComplete();
+                
+                object data = await UserProfileService.GetUserData();
+                if (data != null) 
+                    Debug.Log(((IApiStorageObjects) data).Objects?.ToList().FirstOrDefault()?.Value);
+
+                await OnSyncComplete(data);
             }
         }
 
-        private async Task OnSyncComplete()
+        private async Task OnSyncComplete(object data = null)
         {
+            if (data != null)
+            {
+                var progress = data as IApiStorageObjects;
+                var apiStorageObjects = progress?.Objects?.ToList().FirstOrDefault()?.Value;
+                var userProgress = apiStorageObjects.FromJson<Dictionary<string, object>>();
+                var conflictKey = ConflictString.GetKey();
+                if (userProgress[conflictKey] != null && (string)userProgress[conflictKey] != ConflictString.GetValue())
+                {
+                    Debug.LogError("[CloudSync] Conflict found\n" +
+                                   "User Progress: " + userProgress[conflictKey] + "\n" +
+                                   "Local Progress: " + ConflictString.GetValue());
+                }
+                else
+                {
+                    Debug.LogError("[CloudSync] No Conflict Found");
+                }
+            }
             await UserProfileService.SaveUserData();
         }
 

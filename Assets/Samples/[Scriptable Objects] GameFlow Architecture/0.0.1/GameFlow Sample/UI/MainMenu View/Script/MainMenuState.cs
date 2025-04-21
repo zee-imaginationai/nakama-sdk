@@ -3,6 +3,7 @@ using ProjectCore.StateMachine;
 using System;
 using System.Collections;
 using Nakama;
+using ProjectCore.SocialFeature;
 using ProjectCore.SocialFeature.Cloud.Internal;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ public class MainMenuState : State
     [SerializeField] private GameEvent GotoGameEvent;
     [NonSerialized] private MainMenuView _mainMenuView;
     [SerializeField] private CloudSyncSystem CloudSyncSystem;
+    [SerializeField] private UserProfileService UserProfileService;
+    [SerializeField] private CloudDBString ConflictString;
     public override IEnumerator Execute()
     {
          base.Execute();
@@ -27,6 +30,17 @@ public class MainMenuState : State
         yield return _mainMenuView.Hide(true);
         _mainMenuView = null;
         yield return base.Exit();
+    }
+
+    public string GetConflictString()
+    {
+        return ConflictString.GetValue();
+    }
+
+    public void UpdateConflictString(string value)
+    {
+        ConflictString.SetValue(value);
+        UserProfileService.SaveUserData();
     }
 
     public async void SignupWithEmail(string email, string password)

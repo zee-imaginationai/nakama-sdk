@@ -104,6 +104,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             var deviceID = SocialFeatureConfig.GetDeviceUdid();
             await Client.LinkDeviceAsync(Session, deviceID, SocialFeatureConfig.GetRetryConfiguration());
             Print("[Nakama] Linked with device ID: ",deviceID);
+            await UpdateAccount();
         }
 
         public async Task UnlinkWithDeviceID(ISession session = null, Func<bool, ApiResponseException, Task> callback = null)
@@ -137,6 +138,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             {
                 await Client.LinkEmailAsync(Session, email, password, SocialFeatureConfig.GetRetryConfiguration());
                 Print("[Nakama] Synced with email ID: " + email);
+                await UpdateAccount();
                 callback?.Invoke(true, null);
             }
             catch (ApiResponseException e)

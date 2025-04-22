@@ -21,6 +21,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         [SerializeField] private DBString Email;
         [SerializeField] private DBString Password;
         [SerializeField] private CloudDBString ConflictString;
+        [SerializeField] private MainMenuState MainMenuState;
 
         #region EmailSyncRegion
         
@@ -105,31 +106,58 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
 
         private async Task OnSyncComplete(object data = null)
         {
-            if (data != null)
+            var conflictData = await ResolveConflict(data);
+            
+            switch (conflictData.StorageType)
             {
-                var progress = data as IApiStorageObjects;
-                var apiStorageObjects = progress?.Objects?.ToList().FirstOrDefault()?.Value;
-                var userProgress = apiStorageObjects.FromJson<Dictionary<string, object>>();
-                var conflictKey = ConflictString.GetKey();
-                if (userProgress[conflictKey] != null && (string)userProgress[conflictKey] != ConflictString.GetValue())
-                {
-                    Debug.LogError("[CloudSync] Conflict found\n" +
-                                   "User Progress: " + userProgress[conflictKey] + "\n" +
-                                   "Local Progress: " + ConflictString.GetValue());
-                }
-                else
-                {
-                    Debug.LogError("[CloudSync] No Conflict Found");
-                }
+                case StorageType.Cloud:
+                    DBManager.LoadJsonData(conflictData.Data);
+                    break;
+                case StorageType.Local:
+                case StorageType.None:
+                default:
+                    await UserProfileService.SaveUserData();
+                    break;
             }
-            await UserProfileService.SaveUserData();
+            MainMenuState.UpdateButton();
         }
 
+        private async Task<ConflictData> ResolveConflict(object data = null)
+        {
+            if (data == null) return new ConflictData()
+            {
+                StorageType = StorageType.Local,
+                Data = null
+            };
+            
+            var progress = data as IApiStorageObjects;
+            var apiStorageObjects = progress?.Objects?.ToList().FirstOrDefault()?.Value;
+            var userProgress = apiStorageObjects.FromJson<Dictionary<string, object>>();
+            var conflictKey = ConflictString.GetKey();
+            if (userProgress[conflictKey] != null && (string)userProgress[conflictKey] != ConflictString.GetValue())
+            {
+                Debug.LogError("[CloudSync] Conflict found\n" +
+                               "User Progress: " + userProgress[conflictKey] + "\n" +
+                               "Local Progress: " + ConflictString.GetValue());
+                return new ConflictData(){
+                    StorageType = await MainMenuState.ResolveConflict(),
+                    Data = userProgress
+                };
+            }
+            Debug.LogError("[CloudSync] No Conflict Found");
+            return new ConflictData()
+            {
+                StorageType = StorageType.Local,
+                Data = null
+            };
+        }
+
+        [Button]
         private bool IsConnectedWithMultipleDevices()
         {
             var account = NakamaServer.Account;
             var deviceCount = account.Devices.ToList().Count;
-            Debug.LogError("[CloudSync] Device Count: " + deviceCount);
+            Debug.LogError("[CloudSync] Account: " + account.User.Id + " Device Count: " + deviceCount);
             return deviceCount > 1;
         }
 
@@ -151,5 +179,18 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         }
         
         #endregion
+    }
+
+    public struct ConflictData
+    {
+        public StorageType StorageType;
+        public Dictionary<string, object> Data;
+    }
+    
+    public enum StorageType
+    {
+        None,
+        Local,
+        Cloud
     }
 }

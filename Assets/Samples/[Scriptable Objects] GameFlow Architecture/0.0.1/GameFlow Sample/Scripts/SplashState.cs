@@ -4,6 +4,7 @@ using System.Threading;
 using ProjectCore.SocialFeature.Cloud;
 using ProjectCore.Application;
 using ProjectCore.Events;
+using ProjectCore.SocialFeature.Cloud.Internal;
 using ProjectCore.StateMachine;
 using ProjectCore.Variables;
 using UnityEngine;
@@ -34,6 +35,7 @@ namespace ProjectCore.Application
         [NonSerialized] private float TimeoutTime = 3;
 
         [SerializeField] private NakamaSystem NakamaSystem;
+        [SerializeField] private FacebookService FacebookService;
         
         private ApplicationFlowController applicationFlowController;
         
@@ -46,6 +48,8 @@ namespace ProjectCore.Application
             SceneLoadingProgress.SetValue(0);
 
             var task = NakamaSystem.Initialize(TaskUtil.RefreshToken(ref _cancellationTokenSource));
+            
+            var fbTask = FacebookService.Initialize();
             
             float timeStarted = Time.time;
             while (true)

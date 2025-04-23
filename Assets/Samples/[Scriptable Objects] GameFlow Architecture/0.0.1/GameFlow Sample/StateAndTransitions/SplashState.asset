@@ -19,3 +19,4 @@ MonoBehaviour:
   SdkLoadingProgress: {fileID: 11400000, guid: ea56fb68d1233d04e8fbb4d3bace4cae, type: 2}
   HideLoadingView: {fileID: 11400000, guid: 7d5d10c59fc144f8bbb3f57fd1dbd31d, type: 2}
   NakamaSystem: {fileID: 11400000, guid: 65bc8d0481130584fbc0bd65da8eaf2a, type: 2}
+  FacebookService: {fileID: 11400000, guid: 52faece16af9ec24b8cd730f522f3486, type: 2}

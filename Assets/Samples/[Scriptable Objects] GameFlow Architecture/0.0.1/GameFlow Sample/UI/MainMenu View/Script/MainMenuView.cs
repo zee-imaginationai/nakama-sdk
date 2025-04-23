@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ProjectCore.SocialFeature.Cloud.Internal;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class MainMenuView : UiPanelInAndOut
 {
@@ -15,11 +18,11 @@ public class MainMenuView : UiPanelInAndOut
     [SerializeField] private TextMeshProUGUI SyncConflictText;
 
     [SerializeField] private CloudSyncPanel CloudSyncPanel;
+    [SerializeField] private SyncConflictPanel SyncConflictPanel;
     
     [SerializeField] private MainMenuState MainMenuState;
     
     [SerializeField] private CloudDBString ConflictString;
-    
 
     private void OnEnable()
     {
@@ -27,6 +30,8 @@ public class MainMenuView : UiPanelInAndOut
         PlayButton.onClick.AddListener(OpenViewButtonPressed);
         EmailAuthButton.onClick.AddListener(OnEmailAuthButton);
         SyncConflictButton.onClick.AddListener(OnSyncConflictButtonPressed);
+
+        SyncConflictPanel.Hide();
         CloudSyncPanel.Hide();
     }
 
@@ -36,14 +41,32 @@ public class MainMenuView : UiPanelInAndOut
         EmailAuthButton.onClick.RemoveListener(OnEmailAuthButton);
         SyncConflictButton.onClick.RemoveListener(OnSyncConflictButtonPressed);
     }
+    
+    public async Task<StorageType> ShowSyncConflictPanel()
+    {
+        var storageType = await SyncConflictPanel.Show();
+        SyncConflictPanel.Hide();
+        return storageType;
+    }
 
     public override IEnumerator Show(bool isResumed)
     {
         yield return base.Show(isResumed);
-        
+        UpdateButton();
+    }
+
+    public void UpdateButton()
+    {
         string value = ConflictString.GetValue();
-        var color = _dictionary[value];
-        UpdateConflictButton(value, color);
+        try
+        {
+            var color = _dictionary[value];
+            UpdateConflictButton(value, color);
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
     }
 
     private void OpenViewButtonPressed()
@@ -87,13 +110,13 @@ public class MainMenuView : UiPanelInAndOut
         var randomColor = _colorDictionary.Keys.ElementAt(randomValue);
         var text = _colorDictionary[randomColor];
         UpdateConflictButton(text, randomColor);
-        MainMenuState.UpdateConflictString(text);
     }
 
     private void UpdateConflictButton(string text, Color color)
     {
         SyncConflictText.text = text;
         SyncConflictButton.image.color = color;
+        ConflictString.SetValue(text);
     }
 
     private void OnEmailAuthButton()

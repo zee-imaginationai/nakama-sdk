@@ -2,6 +2,7 @@ using ProjectCore.Events;
 using ProjectCore.StateMachine;
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using Nakama;
 using ProjectCore.SocialFeature;
 using ProjectCore.SocialFeature.Cloud.Internal;
@@ -16,7 +17,6 @@ public class MainMenuState : State
     [NonSerialized] private MainMenuView _mainMenuView;
     [SerializeField] private CloudSyncSystem CloudSyncSystem;
     [SerializeField] private UserProfileService UserProfileService;
-    [SerializeField] private CloudDBString ConflictString;
     public override IEnumerator Execute()
     {
          base.Execute();
@@ -31,18 +31,7 @@ public class MainMenuState : State
         _mainMenuView = null;
         yield return base.Exit();
     }
-
-    public string GetConflictString()
-    {
-        return ConflictString.GetValue();
-    }
-
-    public void UpdateConflictString(string value)
-    {
-        ConflictString.SetValue(value);
-        UserProfileService.SaveUserData();
-    }
-
+    
     public async void SignupWithEmail(string email, string password)
     {
         await CloudSyncSystem.SignupWithEmail(email, password, OnConnectionWithEmail);
@@ -52,6 +41,14 @@ public class MainMenuState : State
     {
         await CloudSyncSystem.SigninWithEmail(email, password, OnConnectionWithEmail);
     }
+
+    public async Task<StorageType> ResolveConflict()
+    {
+        var storageType = await _mainMenuView.ShowSyncConflictPanel();
+        return storageType;
+    }
+
+    public void UpdateButton() => _mainMenuView.UpdateButton();
 
     private void OnConnectionWithEmail(bool success, ApiResponseException exception)
     {

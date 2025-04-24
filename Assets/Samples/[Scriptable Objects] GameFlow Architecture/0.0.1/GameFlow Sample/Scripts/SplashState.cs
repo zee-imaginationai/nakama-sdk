@@ -46,34 +46,12 @@ namespace ProjectCore.Application
             yield return base.Init(listener);
             
             SceneLoadingProgress.SetValue(0);
-
-            var task = NakamaSystem.Initialize(TaskUtil.RefreshToken(ref _cancellationTokenSource));
-            
-            var fbTask = FacebookService.Initialize();
-            
-            float timeStarted = Time.time;
-            while (true)
-            {
-                float timeElapsed = Time.time - timeStarted;
-                if (timeElapsed > 10)
-                {
-                    _cancellationTokenSource.Cancel();
-                    break;
-                }
-
-                if (task.IsCompleted || task.IsFaulted || task.IsCanceled)
-                {
-                    break;
-                }
-                yield return new WaitForEndOfFrame();
-            }
-
-            
-            Debug.LogError($"Task : {task.Status}");
             
             socialKitInitialize = false;
-            
+
             //TODO: Initialize GA and FB
+            NakamaSystem.Initialize();
+            FacebookService.Initialize();
         }
 
         public override IEnumerator Execute()
@@ -90,12 +68,14 @@ namespace ProjectCore.Application
             
             yield return GameSceneLoading();
         }
+        
         private IEnumerator GameSceneLoading()
         {
             yield return new WaitForSeconds(5);
             _sceneLoadingOperation = SceneManager.LoadSceneAsync(SceneIndex, LoadSceneMode.Additive);
 
         }
+        
         public override IEnumerator Tick()
         {
             yield return base.Tick();
@@ -107,7 +87,6 @@ namespace ProjectCore.Application
             }
 
             SceneLoadingProgress.SetValue(1.0f);
-            
 
             Scene scene = SceneManager.GetSceneByBuildIndex(SceneIndex);
             SceneManager.SetActiveScene(scene);
@@ -132,6 +111,27 @@ namespace ProjectCore.Application
             }
 
             yield return new WaitUntil(() => SdkLoadingProgress.GetValue() >= 1.0f);
+            
+            var task = NakamaSystem.AuthenticateNakama(TaskUtil.RefreshToken(ref _cancellationTokenSource));
+            
+            timeStarted = Time.time;
+            while (true)
+            {
+                float timeElapsed = Time.time - timeStarted;
+                if (timeElapsed > 10)
+                {
+                    _cancellationTokenSource.Cancel();
+                    break;
+                }
+
+                if (task.IsCompleted || task.IsFaulted || task.IsCanceled)
+                {
+                    break;
+                }
+                yield return new WaitForEndOfFrame();
+            }
+            
+            Debug.LogError($"Task : {task.Status}");
 
             //artificial delay can be removed
             yield return waitForSeconds;

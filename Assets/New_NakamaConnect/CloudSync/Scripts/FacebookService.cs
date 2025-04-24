@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using ProjectCore.Events;
 #if FB
+using System.Threading.Tasks;
 using Facebook.Unity;
 #endif
 using ProjectCore.Variables;
@@ -17,7 +17,14 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         [SerializeField] private DBString FbAccessToken;
         [SerializeField] private DBBool FbLoggedIn;
         
-        public async Task Initialize()
+        [SerializeField] private Float SdkLoadingProgress;
+
+        [SerializeField] private GameEvent FacebookInitializedEvent;
+        [SerializeField] private GameEventWithBool FacebookConnectEvent;
+        
+        // link: https://developers.facebook.com/docs/unity/reference/current
+        
+        public void Initialize()
         {
 #if FB
             if (FB.IsInitialized)
@@ -41,10 +48,11 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         private void ConnectFacebook()
         {
             AccessToken token = AccessToken.CurrentAccessToken;
+            
             if (!FB.IsInitialized)
             {
-                Debug.LogError("[FacebookService] FB.IsInitialized is FALSE !");
-                InitializeFacebook(token);
+                Debug.LogError("[FacebookService] FB.IsInitialized not Initialized!");
+                InitializeFacebook();
                 return;
             }
 
@@ -64,23 +72,17 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
                     }
                     else
                     {
-                        // Fire a FB connect success Event;
+                        Debug.Log("[FacebookService] Token Refreshed");
                     }
                 });
             }
         }
 
-        private void InitializeFacebook(AccessToken accessToken = null)
+        private void InitializeFacebook()
         {
             Debug.Log("[FacebookService] Initializing fb]");
-            FB.Init(delegate
-            {
-                FB.ActivateApp();
-                if (!FB.IsLoggedIn || accessToken == null)
-                {
-                    OnFbInitialized();
-                }
-            });
+            SdkLoadingProgress.SetValue(1f);
+            FB.Init(OnFbInitialized);
         }
 
         private void OnFbInitialized()
@@ -88,41 +90,19 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             Debug.Log("[FacebookService] Fb Initialized]");
             
             // Fire a FB Initialized Event
-
-            if (!FbLoggedIn)
-            {
-                LoginToFacebook();
-            }
-            else
-            {
-                FB.Android.RetrieveLoginStatus((ILoginStatusResult result) =>
-                {
-                    if (!string.IsNullOrEmpty(result.Error)) {
-                        Debug.Log("Error: " + result.Error);
-                    } else if (result.Failed) {
-                        Debug.Log("Failure: Access Token could not be retrieved");
-                    }
-                    else
-                    {
-                        // Successfully logged user in
-                        // A popup notification will appear that says "Logged in as <User Name>"
-                        Debug.Log("Success: " + result.AccessToken.UserId);
-                    }
-                });
-            }
+            FacebookInitializedEvent.Invoke();
         }
-        
-        [Button]
+
         private void LoginToFacebook()
         {
-            List<string> scopes = new List<string>();
-            scopes.Add("public_profile");
-            scopes.Add("email");
-            
             if (FB.IsLoggedIn && !HasTokenExpired(AccessToken.CurrentAccessToken))
-            {
                 return;
-            }
+            
+            var scopes = new []
+            {
+                "public_profile",
+                "email"
+            };
             
             FB.LogInWithReadPermissions(scopes, delegate(ILoginResult result)
             {
@@ -130,19 +110,78 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
                 {
                     FbAccessToken.SetValue(result.AccessToken.TokenString);
                     FbLoggedIn.SetValue(FB.IsLoggedIn);
-                    Debug.Log("[FacebookService] Logged In Successfully" + $" :: Access Token: {result.AccessToken} :: Expire Time: {result.AccessToken.ExpirationTime}");
+                    Debug.Log("[FacebookService] Logged In Successfully");
+                    FacebookConnectEvent.Raise(true);
                     return;
+                }
+                Debug.LogError("[FacebookService] Login Failed " + result.Error);
+            });
+        }
+
+        private void RetrieveLogin()
+        {
+            FB.Android.RetrieveLoginStatus((ILoginStatusResult result) =>
+            {
+                if (!string.IsNullOrEmpty(result.Error))
+                {
+                    Debug.LogError("Error: " + result.Error);
+                }
+                else if (result.Failed)
+                {
+                    Debug.LogError("Failure: Access Token could not be retrieved");
                 }
                 else
                 {
-                    Debug.LogError("[FacebookService] Login Failed " + result.Error);
+                    // Successfully logged user in
+                    FbAccessToken.SetValue(result.AccessToken.TokenString);
+                    Debug.Log("Success: " + result.AccessToken);
+                    FacebookConnectEvent.Raise(true);
                 }
             });
         }
-        
+
         private bool HasTokenExpired(AccessToken token)
         {
             return token.ExpirationTime > DateTime.Now.AddDays(1);
+        }
+
+        [Button]
+        public void LogoutFacebook()
+        {
+            try
+            {
+                FB.LogOut();
+                
+                Debug.Log("[FacebookService] Logged Out Successfully");
+                
+                FbLoggedIn.SetValue(false);
+                FacebookConnectEvent.Raise(false);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("[FacebookService] Error Logging Out: " + ex.Message);
+            }
+        }
+
+        [Button]
+        public async Task LoginFacebook()
+        {
+            if (FB.IsLoggedIn || FbLoggedIn)
+            {
+                Debug.Log("[FacebookService] Already Logged In");
+                return;
+            }
+
+#if !UNITY_EDITOR
+            if (FbLoggedIn)
+                RetrieveLogin();
+            else
+                LoginToFacebook();
+#else
+            LoginToFacebook();
+#endif
+
+            await Task.CompletedTask;
         }
 #endif
     }

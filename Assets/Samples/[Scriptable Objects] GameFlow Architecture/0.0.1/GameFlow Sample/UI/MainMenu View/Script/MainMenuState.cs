@@ -17,6 +17,7 @@ public class MainMenuState : State
     [NonSerialized] private MainMenuView _mainMenuView;
     [SerializeField] private CloudSyncSystem CloudSyncSystem;
     [SerializeField] private UserProfileService UserProfileService;
+    [SerializeField] private FacebookService FacebookService;
     public override IEnumerator Execute()
     {
          base.Execute();
@@ -40,6 +41,17 @@ public class MainMenuState : State
     public async void LoginWithEmail(string email, string password)
     {
         await CloudSyncSystem.SigninWithEmail(email, password, OnConnectionWithEmail);
+    }
+
+    public async void ConnectFacebook()
+    {
+        // FacebookService.LoginFacebook();
+        await CloudSyncSystem.SigninWithFacebook();
+    }
+
+    public void DisconnectFacebook()
+    {
+        FacebookService.LogoutFacebook();
     }
 
     public async Task<StorageType> ResolveConflict()

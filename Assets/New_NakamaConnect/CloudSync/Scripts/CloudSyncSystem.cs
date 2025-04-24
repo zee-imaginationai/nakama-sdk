@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Nakama;
 using Nakama.TinyJson;
+using ProjectCore.Events;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
     {
         [SerializeField] private NakamaServer NakamaServer;
         [SerializeField] private UserProfileService UserProfileService;
+        [SerializeField] private FacebookService FacebookService;
         
         [SerializeField] private DBBool IsEmailLoggedIn;
 
@@ -176,6 +178,98 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             Email.SetValue(email);
             Password.SetValue(password);
             return true;
+        }
+        
+        #endregion
+        
+        #region FacebookSyncRegion
+
+        [SerializeField] private DBString FbAccessToken;
+        [SerializeField] private GameEventWithBool FacebookConnectEvent;
+        
+        [Button]
+        public async Task LinkWithFacebook(Action<bool, ApiResponseException> callback = null)
+        {
+            await FacebookService.LoginFacebook();
+            await NakamaServer.LinkWithFacebook(FbAccessToken.GetValue(), Callback);
+            return;
+            
+            Task Callback(bool success, ApiResponseException exception)
+            {
+                callback?.Invoke(success, exception);
+                if (!success) return Task.CompletedTask;
+                return OnSyncComplete();
+            }
+        }
+        
+        [Button]
+        public async Task UnlinkWithFacebook(Action<bool, ApiResponseException> callback = null)
+        {
+            await FacebookService.LoginFacebook();
+            await NakamaServer.UnlinkWithFacebook(FbAccessToken.GetValue(), Callback);
+            return;
+            
+            Task Callback(bool success, ApiResponseException exception)
+            {
+                callback?.Invoke(success, exception);
+                if (!success) return Task.CompletedTask;
+                
+                FacebookService.LogoutFacebook();
+                return OnSyncComplete();
+            }
+        }
+        
+        [Button]
+        public async Task SigninWithFacebook(Action<bool, ApiResponseException> callback = null)
+        {
+            FacebookService.LoginFacebook();
+            FacebookConnectEvent.Handler += OnFacebookConnectEvent;
+            
+            return;
+            
+            async Task Callback(bool success, ApiResponseException exception, ISession session)
+            {
+                callback?.Invoke(success, exception);
+                if (!success) return;
+                
+                await NakamaServer.UpdateSession(session);
+                await OnFbSyncComplete();
+            }
+        }
+
+        private async void OnFacebookConnectEvent(bool isConnected)
+        {
+            FacebookConnectEvent.Handler -= OnFacebookConnectEvent;
+
+            try
+            {
+                await NakamaServer.AuthenticateWithFacebook(FbAccessToken.GetValue(), Callback);
+                return;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            return;
+            
+            async Task Callback(bool success, ApiResponseException exception, ISession session)
+            {
+                // callback?.Invoke(success, exception);
+                if (!success) return;
+                
+                await NakamaServer.UpdateSession(session);
+                await OnFbSyncComplete();
+            }
+        }
+
+        private async Task SigninFacebook()
+        {
+            
+        }
+
+        private async Task OnFbSyncComplete()
+        {
+            
         }
         
         #endregion

@@ -18,17 +18,25 @@ namespace ProjectCore.SocialFeature.Cloud
         [SerializeField] private GameEvent NakamaServerConnected;
 
         [SerializeField] private UserProfileService UserProfileService;
+        [SerializeField] private CloudSyncSystem CloudSyncSystem;
 
         [SerializeField] private DBInt GameLevel;
+        [SerializeField] private DBBool IsFbSignedIn;
         
         private CancellationTokenSource _cancellationTokenSource;
 
-        public async Task Initialize(CancellationToken token)
+        public void Initialize()
         {
             NakamaServerConnected.Handler += OnNakamaServerConnected;
             NakamaServer.Initialize();
-            
-            await NakamaServer.AuthenticateWithDeviceID();
+        }
+        
+        public async Task AuthenticateNakama(CancellationToken token)
+        {
+            if (!IsFbSignedIn)
+                await NakamaServer.AuthenticateWithDeviceID();
+            else
+                await CloudSyncSystem.SigninWithFacebook();
         }
 
         private async void OnNakamaServerConnected()

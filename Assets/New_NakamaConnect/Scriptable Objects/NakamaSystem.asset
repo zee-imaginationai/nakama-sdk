@@ -16,7 +16,6 @@ MonoBehaviour:
   NakamaServerConnected: {fileID: 11400000, guid: 8430acb54c1fa29439e6df39da3927a5,
     type: 2}
   UserProfileService: {fileID: 11400000, guid: bb55b3d578b14c942a3336a1a66f0d67, type: 2}
+  CloudSyncSystem: {fileID: 11400000, guid: a793563412ed54842a7e6a905032af04, type: 2}
   GameLevel: {fileID: 11400000, guid: 592dc6a83eefa3f419642ff59c907124, type: 2}
-  IsEmailLoggedIn: {fileID: 11400000, guid: 0d1d285442f2b734ab296bb38619c360, type: 2}
-  Email: {fileID: 11400000, guid: c06695d98b5986f468e85168b7c4a971, type: 2}
-  Password: {fileID: 11400000, guid: f15c4f6e2fb2fa640910d2dea9e67059, type: 2}
+  IsFbSignedIn: {fileID: 11400000, guid: 29bb4135f1d9dc94783633ac6444da02, type: 2}

@@ -1,3 +1,4 @@
+using ProjectCore.Events;
 using ProjectCore.Variables;
 using TMPro;
 using UnityEngine;
@@ -13,14 +14,21 @@ public class CloudSyncPanel : MonoBehaviour
     [SerializeField] private Button RegisterButton;
     [SerializeField] private Button LoginButton;
     [SerializeField] private Button LogOutButton;
+
+    [SerializeField] private Button FbLoginButton;
     
     [SerializeField] private TMP_InputField EmailInputField;
     [SerializeField] private TMP_InputField PasswordInputField;
+    
     [SerializeField] private TextMeshProUGUI ErrorText;
+    [SerializeField] private TextMeshProUGUI FbLoginText;
     
     [SerializeField] private MainMenuState MainMenuState;
     
     [SerializeField] private Bool IsEmailLoggedIn;
+    [SerializeField] private DBBool IsFbLoggedIn;
+
+    [SerializeField] private GameEventWithBool FacebookConnectEvent;
 
     private string _email;
     private string _password;
@@ -31,9 +39,12 @@ public class CloudSyncPanel : MonoBehaviour
         LoginButton.onClick.AddListener(OnLoginButtonPressed);
         LogOutButton.onClick.AddListener(OnLogOutButtonPressed);
         CloseButton.onClick.AddListener(OnCloseButton);
+        FbLoginButton.onClick.AddListener(OnFbLoginButton);
         
         EmailInputField.onValueChanged.AddListener(OnEmailSubmit);
         PasswordInputField.onValueChanged.AddListener(OnPasswordSubmit);
+
+        FacebookConnectEvent.Handler += OnFacebookConnectEvent;
         
         SetErrorState(false);
     }
@@ -44,9 +55,12 @@ public class CloudSyncPanel : MonoBehaviour
         LoginButton.onClick.RemoveListener(OnLoginButtonPressed);
         LogOutButton.onClick.RemoveListener(OnLogOutButtonPressed);
         CloseButton.onClick.RemoveListener(OnCloseButton);
+        FbLoginButton.onClick.RemoveListener(OnFbLoginButton);
         
         EmailInputField.onValueChanged.RemoveListener(OnEmailSubmit);
         PasswordInputField.onValueChanged.RemoveListener(OnPasswordSubmit);
+        
+        FacebookConnectEvent.Handler -= OnFacebookConnectEvent;
         
         SetErrorState(false);
     }
@@ -66,8 +80,9 @@ public class CloudSyncPanel : MonoBehaviour
         LogOutButton.gameObject.SetActive(IsEmailLoggedIn);
         LoginButton.gameObject.SetActive(!IsEmailLoggedIn);
         RegisterButton.gameObject.SetActive(!IsEmailLoggedIn);
-        EmailInputField.gameObject.SetActive(!IsEmailLoggedIn);
-        PasswordInputField.gameObject.SetActive(!IsEmailLoggedIn);
+        // EmailInputField.gameObject.SetActive(!IsEmailLoggedIn);
+        // PasswordInputField.gameObject.SetActive(!IsEmailLoggedIn);
+        OnFacebookConnectEvent(IsFbLoggedIn);
     }
 
     public void Show()
@@ -77,6 +92,20 @@ public class CloudSyncPanel : MonoBehaviour
     }
 
     public void Hide() => SetAuthPanelState(false);
+
+    private void OnFacebookConnectEvent(bool isConnected)
+    {
+        FbLoginButton.image.color = isConnected ? Color.green : Color.red;
+        FbLoginText.text = isConnected ? "Disconnect" : "Connect";
+    }
+
+    private void OnFbLoginButton()
+    {
+        if (IsFbLoggedIn)
+            MainMenuState.DisconnectFacebook();
+        else
+            MainMenuState.ConnectFacebook();
+    }
     
     private void OnCloseButton() => SetAuthPanelState(false);
 

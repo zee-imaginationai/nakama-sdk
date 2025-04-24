@@ -187,6 +187,63 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
 
         #endregion
 
+        #region FacebookAuth
+
+        public async Task LinkWithFacebook(string token, Func<bool, ApiResponseException, Task> callback = null)
+        {
+            Print("[Nakama] Linking with Facebook");
+            try
+            {
+                await Client.LinkFacebookAsync(Session, token,
+                    retryConfiguration: SocialFeatureConfig.GetRetryConfiguration());
+                Print("[Nakama] Linked with Facebook");
+                await UpdateAccount();
+                callback?.Invoke(true, null);
+            }
+            catch (ApiResponseException e)
+            {
+                Print("[Nakama] Failed to link with Facebook: ", e.Message, LogType.Error);
+                callback?.Invoke(false, e);
+            }
+        }
+
+        public async Task UnlinkWithFacebook(string token, Func<bool, ApiResponseException, Task> callback = null)
+        {
+            Print("[Nakama] Unlinking with Facebook");
+            try
+            {
+                await ValidateSession();
+                await Client.UnlinkFacebookAsync(Session, token, SocialFeatureConfig.GetRetryConfiguration());
+                Print("[Nakama] Unlinked with Facebook");
+                callback?.Invoke(true, null);
+            }
+            catch (ApiResponseException e)
+            {
+                Print("[Nakama] Failed to unlink with Facebook: ", e.Message, LogType.Error);
+                callback?.Invoke(false, e);
+            }
+        }
+
+        public async Task AuthenticateWithFacebook(string token,
+            Func<bool, ApiResponseException, ISession, Task> callback = null)
+        {
+            Print("[Nakama] Authenticating with Facebook");
+            try
+            {
+                var session = await Client.AuthenticateFacebookAsync(token, create: true,
+                    retryConfiguration: SocialFeatureConfig.GetRetryConfiguration());
+                Print("[Nakama] Authenticated with Facebook");
+                callback?.Invoke(true, null, session);
+            }
+            catch (ApiResponseException e)
+            {
+                Print("[Nakama] Failed to authenticate with Facebook: ", e.Message, LogType.Error);
+                callback?.Invoke(false, e, null);
+            }
+        }
+
+        #endregion
+
         #region Helper Functions
 
         public async Task UpdateSession(ISession session)

@@ -20,7 +20,6 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         public async Task Initialize()
         {
 #if FB
-
             if (FB.IsInitialized)
             {
                 FB.ActivateApp();

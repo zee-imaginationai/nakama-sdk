@@ -6,20 +6,27 @@ using Nakama;
 using ProjectCore.Events;
 using ProjectCore.Variables;
 using Nakama.TinyJson;
-using ProjectCore.SocialFeature.Cloud.Internal;
+using ProjectCore.CloudService.Nakama.Internal;
+using ProjectCore.CloudService.Nakama.Internal.Authenticate;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace ProjectCore.SocialFeature.Cloud
+namespace ProjectCore.CloudService.Nakama
 {
+    [InlineEditor]
     [CreateAssetMenu(fileName = "NakamaSystem", menuName = "ProjectCore/SocialFeature/Cloud/NakamaSystem")]
     public class NakamaSystem : ScriptableObject
     {
         [SerializeField] private NakamaServer NakamaServer;
         [SerializeField] private GameEvent NakamaServerConnected;
 
+        [FormerlySerializedAs("Authentication")] [SerializeField] private Authentication FbAuthentication;
+        [SerializeField] private Authentication DeviceAuthentication;
         [SerializeField] private UserProfileService UserProfileService;
-        [SerializeField] private CloudSyncSystem CloudSyncSystem;
 
+        [SerializeField] private Float CloudServiceProgress;
+        
         [SerializeField] private DBInt GameLevel;
         [SerializeField] private DBBool IsFbSignedIn;
         
@@ -29,6 +36,7 @@ namespace ProjectCore.SocialFeature.Cloud
         {
             NakamaServerConnected.Handler += OnNakamaServerConnected;
             NakamaServer.Initialize();
+            CloudServiceProgress.SetValue(0);
         }
         
         public async Task AuthenticateNakama(CancellationToken token)
@@ -36,7 +44,14 @@ namespace ProjectCore.SocialFeature.Cloud
             if (!IsFbSignedIn)
                 await NakamaServer.AuthenticateWithDeviceID();
             else
-                await CloudSyncSystem.SigninWithFacebook();
+                await FbAuthentication.Authenticate(token, Callback);
+            return;
+            
+            void Callback(bool success, ApiResponseException exception, ISession session)
+            {
+                if (!success) return;
+                OnNakamaServerConnected();
+            }
         }
 
         private async void OnNakamaServerConnected()
@@ -81,19 +96,15 @@ namespace ProjectCore.SocialFeature.Cloud
             {
                 // Here no data is received from the server.
                 // Update data on server from Local storage.
-                await SaveUserData();
+                await UserProfileService.SaveUserData();
             }
-        }
-
-        private async Task SaveUserData()
-        {
-            var userProgressString = DBManager.GetJsonData();
-            await UserProfileService.SaveUserData(userProgressString);
+            
+            CloudServiceProgress.SetValue(1);
         }
     }
 }
 
-namespace ProjectCore.SocialFeature
+namespace ProjectCore.CloudService
 {
     [CreateAssetMenu(fileName = "UserProfile", menuName = "ProjectCore/SocialFeature/UserProfile")]
     public class UserProfile : ScriptableObject
@@ -105,8 +116,4 @@ namespace ProjectCore.SocialFeature
 
         public bool CanAppearOnline;
     }
-}
-
-namespace ProjectCore.SocialFeature
-{
 }

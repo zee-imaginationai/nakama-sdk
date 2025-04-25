@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
-using ProjectCore.SocialFeature.Cloud;
-using ProjectCore.Application;
+using System.Threading.Tasks;
+using ProjectCore.CloudService.Nakama;
 using ProjectCore.Events;
-using ProjectCore.SocialFeature.Cloud.Internal;
+using ProjectCore.CloudService.Nakama.Internal;
 using ProjectCore.StateMachine;
 using ProjectCore.Variables;
 using UnityEngine;
@@ -32,7 +32,7 @@ namespace ProjectCore.Application
 
         [NonSerialized] private AsyncOperation _sceneLoadingOperation;
         [NonSerialized] private bool socialKitInitialize = false;
-        [NonSerialized] private float TimeoutTime = 3;
+        [NonSerialized] private float TimeoutTime = 10;
 
         [SerializeField] private NakamaSystem NakamaSystem;
         [SerializeField] private FacebookService FacebookService;
@@ -73,7 +73,6 @@ namespace ProjectCore.Application
         {
             yield return new WaitForSeconds(5);
             _sceneLoadingOperation = SceneManager.LoadSceneAsync(SceneIndex, LoadSceneMode.Additive);
-
         }
         
         public override IEnumerator Tick()
@@ -90,6 +89,8 @@ namespace ProjectCore.Application
 
             Scene scene = SceneManager.GetSceneByBuildIndex(SceneIndex);
             SceneManager.SetActiveScene(scene);
+            
+            var task = NakamaSystem.AuthenticateNakama(TaskUtil.RefreshToken(ref _cancellationTokenSource));
 
             WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
             float timeStarted = Time.time;
@@ -98,11 +99,12 @@ namespace ProjectCore.Application
                 float timeElapsed = Time.time - timeStarted;
                 if (timeElapsed > TimeoutTime)
                 {
+                    _cancellationTokenSource.Cancel();
                     SdkLoadingProgress.SetValue(1f);
                     break;
                 }
 
-                if (SdkLoadingProgress >= 1.0f && socialKitInitialize)
+                if (SdkLoadingProgress >= 1.0f || IsTaskCompleted(task))
                 {
                     break;
                 }
@@ -112,25 +114,6 @@ namespace ProjectCore.Application
 
             yield return new WaitUntil(() => SdkLoadingProgress.GetValue() >= 1.0f);
             
-            var task = NakamaSystem.AuthenticateNakama(TaskUtil.RefreshToken(ref _cancellationTokenSource));
-            
-            timeStarted = Time.time;
-            while (true)
-            {
-                float timeElapsed = Time.time - timeStarted;
-                if (timeElapsed > 10)
-                {
-                    _cancellationTokenSource.Cancel();
-                    break;
-                }
-
-                if (task.IsCompleted || task.IsFaulted || task.IsCanceled)
-                {
-                    break;
-                }
-                yield return new WaitForEndOfFrame();
-            }
-            
             Debug.LogError($"Task : {task.Status}");
 
             //artificial delay can be removed
@@ -139,6 +122,11 @@ namespace ProjectCore.Application
             HideLoadingView.Invoke();
 
             applicationFlowController.Boot();
+        }
+        
+        private bool IsTaskCompleted(Task task)
+        {
+            return task.IsCompleted || task.IsFaulted || task.IsCanceled;
         }
     }
 }

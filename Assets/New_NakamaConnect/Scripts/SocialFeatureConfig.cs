@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using String = System.String;
 
-namespace ProjectCore.SocialFeature.Cloud.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
     [CreateAssetMenu(fileName = "SocialFeatureConfig", menuName = "ProjectCore/SocialFeature/SocialFeatureConfig")]
     [InlineEditor]

@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 using Nakama;
-using ProjectCore.SocialFeature.Cloud.Internal;
+using ProjectCore.CloudService.Nakama.Internal;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectCore.SocialFeature
+namespace ProjectCore.CloudService
 {
     [CreateAssetMenu(fileName = "UserProfileService", menuName = "ProjectCore/SocialFeature/UserProfileService")]
     [InlineEditor]
@@ -40,7 +40,7 @@ namespace ProjectCore.SocialFeature
         }
 
         [Button]
-        public async Task<object> GetUserData()
+        public async Task<IApiStorageObjects> GetUserData()
         {
             if (!await NakamaServer.ValidateSession()) return null;
             

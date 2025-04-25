@@ -9,8 +9,9 @@ using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectCore.SocialFeature.Cloud.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
+    [InlineEditor]
     [CreateAssetMenu(fileName = "CloudSyncSystem", menuName = "ProjectCore/SocialFeature/Cloud/CloudSyncSystem")]
     public class CloudSyncSystem : ScriptableObject
     {
@@ -19,6 +20,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         [SerializeField] private FacebookService FacebookService;
         
         [SerializeField] private DBBool IsEmailLoggedIn;
+        [SerializeField] private DBBool IsFbLoggedIn;
 
         [SerializeField] private DBString Email;
         [SerializeField] private DBString Password;
@@ -222,18 +224,14 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         [Button]
         public async Task SigninWithFacebook(Action<bool, ApiResponseException> callback = null)
         {
-            FacebookService.LoginFacebook();
-            FacebookConnectEvent.Handler += OnFacebookConnectEvent;
-            
-            return;
-            
-            async Task Callback(bool success, ApiResponseException exception, ISession session)
+            if(!IsFbLoggedIn.GetValue())
             {
-                callback?.Invoke(success, exception);
-                if (!success) return;
-                
-                await NakamaServer.UpdateSession(session);
-                await OnFbSyncComplete();
+                await FacebookService.LoginFacebook();
+                FacebookConnectEvent.Handler += OnFacebookConnectEvent;
+            }
+            else
+            {
+                await NakamaFbAuth(callback);
             }
         }
 
@@ -241,9 +239,15 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
         {
             FacebookConnectEvent.Handler -= OnFacebookConnectEvent;
 
+            await NakamaFbAuth();
+        }
+
+        private async Task NakamaFbAuth(Action<bool, ApiResponseException> callback = null)
+        {
             try
             {
                 await NakamaServer.AuthenticateWithFacebook(FbAccessToken.GetValue(), Callback);
+                
                 return;
             }
             catch (Exception e)
@@ -254,24 +258,41 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             
             async Task Callback(bool success, ApiResponseException exception, ISession session)
             {
-                // callback?.Invoke(success, exception);
+                callback?.Invoke(success, exception);
                 if (!success) return;
                 
                 await NakamaServer.UpdateSession(session);
-                await OnFbSyncComplete();
+                await OnFbAuthComplete();
             }
         }
 
-        private async Task SigninFacebook()
+        private async Task OnFbAuthComplete()
         {
+            var data = await UserProfileService.GetUserData();
             
-        }
-
-        private async Task OnFbSyncComplete()
-        {
+            Debug.LogError($"[CloudSyncSystem] UserHasData: {UserHasData(data)}");
             
+            if (UserHasData(data))
+            {
+                var userProgress = data.Objects.First()?.Value.FromJson<Dictionary<string, object>>();
+                
+                if(userProgress == null) return;
+                
+                DBManager.LoadJsonData(userProgress);
+            }
         }
         
+        #endregion
+
+        #region Helper Functions
+
+        private bool UserHasData(IApiStorageObjects obj)
+        {
+            if (obj == null) return false;
+            var data = obj.Objects.ToList();
+            return data.Count != 0;
+        }
+
         #endregion
     }
 

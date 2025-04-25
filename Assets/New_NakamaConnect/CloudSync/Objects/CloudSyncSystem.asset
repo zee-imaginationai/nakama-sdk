@@ -16,8 +16,11 @@ MonoBehaviour:
   UserProfileService: {fileID: 11400000, guid: bb55b3d578b14c942a3336a1a66f0d67, type: 2}
   FacebookService: {fileID: 11400000, guid: 52faece16af9ec24b8cd730f522f3486, type: 2}
   IsEmailLoggedIn: {fileID: 11400000, guid: 0d1d285442f2b734ab296bb38619c360, type: 2}
+  IsFbLoggedIn: {fileID: 11400000, guid: 29bb4135f1d9dc94783633ac6444da02, type: 2}
   Email: {fileID: 11400000, guid: c06695d98b5986f468e85168b7c4a971, type: 2}
   Password: {fileID: 11400000, guid: f15c4f6e2fb2fa640910d2dea9e67059, type: 2}
   ConflictString: {fileID: 11400000, guid: b45d6dc2af04db54a954cd1b22cd66c6, type: 2}
   MainMenuState: {fileID: 11400000, guid: 1b25061154ad11d48b506bb0b4afb57b, type: 2}
   FbAccessToken: {fileID: 11400000, guid: 6938f8153ac5642479f230ab17bc80c4, type: 2}
+  FacebookConnectEvent: {fileID: 11400000, guid: b56e762f7b93936498461e4bb05c33e5,
+    type: 2}

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Nakama;
 using ProjectCore.Events;
@@ -6,7 +7,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using String = ProjectCore.Variables.String;
 
-namespace ProjectCore.SocialFeature.Cloud.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
     [CreateAssetMenu(fileName = "NakamaServer", menuName = "ProjectCore/SocialFeature/Cloud/NakamaServer")]
     [InlineEditor]
@@ -71,7 +72,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
 
         #region DeviceIdAuth
 
-        public async Task<ISession> AuthenticateWithDeviceID()
+        public async Task<ISession> AuthenticateWithDeviceID(Func<bool, ApiResponseException, ISession, Task> callback = null)
         {
             Print("[Nakama] Authenticating with device ID");
             var deviceID = SocialFeatureConfig.GetDeviceUdid();
@@ -98,7 +99,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             }
         }
 
-        public async Task LinkWithDeviceID()
+        public async Task LinkWithDeviceID(Func<bool, ApiResponseException, Task> callback = null)
         {
             Print("[Nakama] Linking with device ID");
             var deviceID = SocialFeatureConfig.GetDeviceUdid();
@@ -107,16 +108,14 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             await UpdateAccount();
         }
 
-        public async Task UnlinkWithDeviceID(ISession session = null, Func<bool, ApiResponseException, Task> callback = null)
+        public async Task UnlinkWithDeviceID(Func<bool, ApiResponseException, Task> callback = null)
         {
             Print("[Nakama] Unlinking with device ID");
             var deviceID = SocialFeatureConfig.GetDeviceUdid();
             
-            session ??= Session;
-
             try
             {
-                await Client.UnlinkDeviceAsync(session, deviceID, SocialFeatureConfig.GetRetryConfiguration());
+                await Client.UnlinkDeviceAsync(Session, deviceID, SocialFeatureConfig.GetRetryConfiguration());
                 Print("[Nakama] Unlinked with device ID: ", deviceID);
                 callback?.Invoke(true, null);
             }
@@ -316,7 +315,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             {
                 Print("[Nakama] Session is Invalid!!", logType: LogType.Error);
 
-                Session = Nakama.Session.Restore(AuthToken, RefreshToken);
+                Session = global::Nakama.Session.Restore(AuthToken, RefreshToken);
                 if (Session == null)
                 {
                     Print("[Nakama] Failed to restore session", logType: LogType.Error);
@@ -394,7 +393,7 @@ namespace ProjectCore.SocialFeature.Cloud.Internal
             await Client.WriteStorageObjectsAsync(Session, apiWriteStorageObjects);
         }
 
-        public async Task<object> GetUserDataAsync(IApiReadStorageObjectId[] apiReadObjects)
+        public async Task<IApiStorageObjects> GetUserDataAsync(IApiReadStorageObjectId[] apiReadObjects)
         {
             var result = await Client.ReadStorageObjectsAsync(Session, apiReadObjects);
             return result;

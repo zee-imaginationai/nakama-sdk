@@ -72,7 +72,6 @@ public class CloudSyncPanel : MonoBehaviour
 
     private void OnLoginButtonPressed()
     {
-        MainMenuState.LoginWithEmail(_email, _password);
     }
 
     private void UpdatePanel()
@@ -125,6 +124,5 @@ public class CloudSyncPanel : MonoBehaviour
 
     private void OnRegisterButtonPressed()
     {
-        MainMenuState.SignupWithEmail(_email, _password);
     }
 }

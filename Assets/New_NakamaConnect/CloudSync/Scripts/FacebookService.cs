@@ -8,7 +8,7 @@ using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.SocialFeature.Internal
 {
     [InlineEditor]
     [CreateAssetMenu(fileName = "FacebookService", menuName = "ProjectCore/SocialFeature/Cloud/FacebookService")]

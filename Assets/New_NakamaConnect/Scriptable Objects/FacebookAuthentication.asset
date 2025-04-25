@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81227c9681ed4ed4b5149a41d79cfca9, type: 3}
   m_Name: FacebookAuthentication
   m_EditorClassIdentifier: 
-  NakamaServer: {fileID: 0}
-  UserProfileService: {fileID: 0}
-  FbAccessToken: {fileID: 0}
+  NakamaServer: {fileID: 11400000, guid: d73e96a58160e1e4b80fe3e8d993c663, type: 2}
+  UserProfileService: {fileID: 11400000, guid: bb55b3d578b14c942a3336a1a66f0d67, type: 2}
+  FbAccessToken: {fileID: 11400000, guid: 6938f8153ac5642479f230ab17bc80c4, type: 2}

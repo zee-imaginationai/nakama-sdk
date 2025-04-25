@@ -6,11 +6,9 @@ using Nakama;
 using ProjectCore.Events;
 using ProjectCore.Variables;
 using Nakama.TinyJson;
-using ProjectCore.CloudService.Nakama.Internal;
-using ProjectCore.CloudService.Nakama.Internal.Authenticate;
+using ProjectCore.SocialFeature.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ProjectCore.CloudService.Nakama
 {
@@ -20,12 +18,12 @@ namespace ProjectCore.CloudService.Nakama
     {
         [SerializeField] private NakamaServer NakamaServer;
         [SerializeField] private GameEvent NakamaServerConnected;
-
-        [FormerlySerializedAs("Authentication")] [SerializeField] private Authentication FbAuthentication;
-        [SerializeField] private Authentication DeviceAuthentication;
+        
         [SerializeField] private UserProfileService UserProfileService;
 
         [SerializeField] private Float CloudServiceProgress;
+
+        [SerializeField] private DBString FbAuthToken;
         
         [SerializeField] private DBInt GameLevel;
         [SerializeField] private DBBool IsFbSignedIn;
@@ -41,17 +39,11 @@ namespace ProjectCore.CloudService.Nakama
         
         public async Task AuthenticateNakama(CancellationToken token)
         {
-            if (!IsFbSignedIn)
-                await NakamaServer.AuthenticateWithDeviceID();
-            else
-                await FbAuthentication.Authenticate(token, Callback);
-            return;
-            
-            void Callback(bool success, ApiResponseException exception, ISession session)
-            {
-                if (!success) return;
-                OnNakamaServerConnected();
-            }
+            var strategy = IsFbSignedIn
+                ? AuthStrategyFactory.CreateFacebookStrategy(FbAuthToken)
+                : AuthStrategyFactory.CreateDeviceStrategy();
+
+            await NakamaServer.Authenticate(strategy);
         }
 
         private async void OnNakamaServerConnected()
@@ -101,19 +93,5 @@ namespace ProjectCore.CloudService.Nakama
             
             CloudServiceProgress.SetValue(1);
         }
-    }
-}
-
-namespace ProjectCore.CloudService
-{
-    [CreateAssetMenu(fileName = "UserProfile", menuName = "ProjectCore/SocialFeature/UserProfile")]
-    public class UserProfile : ScriptableObject
-    {
-        public string UserId;
-        public string Username;
-        public string DisplayName;
-        public int AvatarId;
-
-        public bool CanAppearOnline;
     }
 }

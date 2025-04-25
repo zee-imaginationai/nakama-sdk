@@ -5,7 +5,8 @@ using System.Collections;
 using System.Threading.Tasks;
 using Nakama;
 using ProjectCore.CloudService;
-using ProjectCore.CloudService.Nakama.Internal;
+using ProjectCore.CloudService.Nakama;
+using ProjectCore.SocialFeature.Internal;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MainMenuState", menuName = "ProjectCore/State Machine/States/MainMenu State")]
@@ -15,7 +16,7 @@ public class MainMenuState : State
 
     [SerializeField] private GameEvent GotoGameEvent;
     [NonSerialized] private MainMenuView _mainMenuView;
-    [SerializeField] private CloudSyncSystem CloudSyncSystem;
+    [SerializeField] private NakamaSystem NakamaSystem;
     [SerializeField] private UserProfileService UserProfileService;
     [SerializeField] private FacebookService FacebookService;
     public override IEnumerator Execute()
@@ -33,20 +34,10 @@ public class MainMenuState : State
         yield return base.Exit();
     }
     
-    public async void SignupWithEmail(string email, string password)
-    {
-        await CloudSyncSystem.SignupWithEmail(email, password, OnConnectionWithEmail);
-    }
-
-    public async void LoginWithEmail(string email, string password)
-    {
-        await CloudSyncSystem.SigninWithEmail(email, password, OnConnectionWithEmail);
-    }
-
     public async void ConnectFacebook()
     {
         // FacebookService.LoginFacebook();
-        await CloudSyncSystem.SigninWithFacebook();
+        // await NakamaSystem.SigninWithFacebook();
     }
 
     public void DisconnectFacebook()
@@ -74,7 +65,6 @@ public class MainMenuState : State
 
     public async void LogoutNakama()
     {
-        await CloudSyncSystem.SignOutFromEmail(OnLogout);
     }
 
     private void OnLogout(bool success, ApiResponseException exception)

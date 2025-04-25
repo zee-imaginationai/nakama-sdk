@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Nakama;
-using ProjectCore.CloudService.Nakama.Internal;
+using ProjectCore.SocialFeature.Internal;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;

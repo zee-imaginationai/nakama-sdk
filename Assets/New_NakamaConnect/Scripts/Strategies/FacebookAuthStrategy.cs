@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Nakama;
 
-namespace ProjectCore.SocialFeature.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
-    public class FacebookAuthStrategy : IAuthStrategy
+    public class FacebookAuthStrategy : INakamaAuthStrategy //IAuthStrategy<ISession, IClient>
     {
         private readonly string _token;
 
@@ -19,7 +19,7 @@ namespace ProjectCore.SocialFeature.Internal
         }
     }
 
-    public class FacebookLinkStrategy : ILinkStrategy
+    public class FacebookLinkStrategy : INakamaLinkStrategy
     {
         private readonly string _token;
         
@@ -34,7 +34,7 @@ namespace ProjectCore.SocialFeature.Internal
         }
     }
     
-    public class FacebookUnlinkStrategy : IUnlinkStrategy
+    public class FacebookUnlinkStrategy : INakamaUnlinkStrategy
     {
         private readonly string _token;
         

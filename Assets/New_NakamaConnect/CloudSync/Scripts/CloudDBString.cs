@@ -2,7 +2,7 @@ using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectCore.SocialFeature.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
     [InlineEditor]
     [CreateAssetMenu(menuName = "ProjectCore/SocialFeature/Variables/CloudCloudDBString", fileName = "v_", order = 0)]

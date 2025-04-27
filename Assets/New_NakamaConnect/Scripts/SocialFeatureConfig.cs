@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using String = System.String;
 
-namespace ProjectCore.SocialFeature.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
     [CreateAssetMenu(fileName = "SocialFeatureConfig", menuName = "ProjectCore/SocialFeature/SocialFeatureConfig")]
     [InlineEditor]
@@ -43,40 +43,42 @@ namespace ProjectCore.SocialFeature.Internal
             return UdidString.GetValue();
         }
 
-        public ServerData GetLiveServerData()
+        public OriginData GetOriginData()
         {
-            var data = new ServerData()
+            OriginData originData;
+            switch (GeneralSettings.Environment)
             {
-                Scheme = LIVE_SERVER_SCHEME,
-                Host = LIVE_SERVER_URL,
-                Port = LIVE_SERVER_PORT,
-                Key = LIVE_SERVER_KEY
-            };
-            return data;
-        }
+                case Environment.Live:
+                    originData = new OriginData()
+                    {
+                        Scheme = LIVE_SERVER_SCHEME,
+                        Host = LIVE_SERVER_URL,
+                        Port = LIVE_SERVER_PORT,
+                        Key = LIVE_SERVER_KEY
+                    };
+                    break;
+                case Environment.Dev:
+                    originData = new OriginData()
+                    {
+                        Scheme = DEV_SERVER_SCHEME,
+                        Host = DEV_SERVER_URL,
+                        Port = DEV_SERVER_PORT,
+                        Key = DEV_SERVER_KEY
+                    };
+                    break;
+                case Environment.Local:
+                default:
+                    originData = new OriginData()
+                    {
+                        Scheme = LOCAL_SERVER_SCHEME,
+                        Host = LOCAL_SERVER_URL,
+                        Port = LOCAL_SERVER_PORT,
+                        Key = LOCAL_SERVER_KEY
+                    };
+                    break;
+            }
 
-        public ServerData GetDevServerData()
-        {
-            var data = new ServerData()
-            {
-                Scheme = DEV_SERVER_SCHEME,
-                Host = DEV_SERVER_URL,
-                Port = DEV_SERVER_PORT,
-                Key = DEV_SERVER_KEY
-            };
-            return data;
-        }
-
-        public ServerData GetLocalServerData()
-        {
-            var data = new ServerData()
-            {
-                Scheme = LOCAL_SERVER_SCHEME,
-                Host = LOCAL_SERVER_URL,
-                Port = LOCAL_SERVER_PORT,
-                Key = LOCAL_SERVER_KEY
-            };
-            return data;
+            return originData;
         }
         
         public RetryConfiguration GetRetryConfiguration()
@@ -91,7 +93,7 @@ namespace ProjectCore.SocialFeature.Internal
     }
 
     [Serializable]
-    public class ServerData
+    public class OriginData
     {
         public string Scheme;
         public string Host;

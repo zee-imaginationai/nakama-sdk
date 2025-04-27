@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ProjectCore.CloudService
+namespace ProjectCore.CloudService.Nakama
 {
     [CreateAssetMenu(fileName = "UserProfile", menuName = "ProjectCore/SocialFeature/UserProfile")]
     public class UserProfile : ScriptableObject

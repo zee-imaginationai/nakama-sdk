@@ -1,14 +1,14 @@
 using System.Threading.Tasks;
 using Nakama;
 
-namespace ProjectCore.SocialFeature.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
-    public class EmailAuthStrategy : IAuthStrategy
+    public class EmailNakamaAuthStrategy : INakamaAuthStrategy
     {
         private readonly string _email;
         private readonly string _password;
 
-        public EmailAuthStrategy(string email, string password)
+        public EmailNakamaAuthStrategy(string email, string password)
         {
             _email = email;
             _password = password;

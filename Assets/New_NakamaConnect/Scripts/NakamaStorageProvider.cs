@@ -1,17 +1,27 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Nakama;
+using Nakama.TinyJson;
+using ProjectCore.CloudService.Internal;
 
-namespace ProjectCore.SocialFeature.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
-    // (Abstract interface for any backend)
-    public interface IStorageProvider
+    public class NakamaSerializationStrategy : ISerializationStrategy
     {
-        Task SaveDataAsync(string collection, string key, string value);
-        Task<string> LoadDataAsync(string collection, string key);
-        Task DeleteDataAsync(string collection, string key);
+        public string Serialize<T>(T data)
+        {
+            return data.ToJson();
+        }
+
+        public T Deserialize<T>(string serializedData)
+        {
+            return serializedData.FromJson<T>();
+        }
     }
     
+    // (Abstract interface for any backend)
+    // https://heroiclabs.com/docs/nakama/concepts/storage/collections
+
     public class NakamaStorageProvider : IStorageProvider
     {
         private readonly IClient _client;

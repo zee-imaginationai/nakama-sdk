@@ -4,9 +4,8 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Nakama;
-using ProjectCore.CloudService;
 using ProjectCore.CloudService.Nakama;
-using ProjectCore.SocialFeature.Internal;
+using ProjectCore.CloudService.Nakama.Internal;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MainMenuState", menuName = "ProjectCore/State Machine/States/MainMenu State")]

@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using ProjectCore.SocialFeature.Internal;
+using ProjectCore.CloudService.Nakama.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 

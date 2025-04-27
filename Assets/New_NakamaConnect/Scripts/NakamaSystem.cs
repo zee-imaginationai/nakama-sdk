@@ -6,7 +6,7 @@ using Nakama;
 using ProjectCore.Events;
 using ProjectCore.Variables;
 using Nakama.TinyJson;
-using ProjectCore.SocialFeature.Internal;
+using ProjectCore.CloudService.Nakama.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

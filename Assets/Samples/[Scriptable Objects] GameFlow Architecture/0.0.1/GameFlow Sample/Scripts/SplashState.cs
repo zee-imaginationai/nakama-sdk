@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ProjectCore.CloudService.Nakama;
 using ProjectCore.Events;
-using ProjectCore.SocialFeature.Internal;
+using ProjectCore.CloudService.Nakama.Internal;
 using ProjectCore.StateMachine;
 using ProjectCore.Variables;
 using UnityEngine;

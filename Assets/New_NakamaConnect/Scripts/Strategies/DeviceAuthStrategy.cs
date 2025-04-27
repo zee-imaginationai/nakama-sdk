@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Nakama;
 
-namespace ProjectCore.SocialFeature.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
-    public class DeviceAuthStrategy : IAuthStrategy
+    public class DeviceAuthStrategy : INakamaAuthStrategy
     {
         public async Task<ISession> Authenticate(IClient client, SocialFeatureConfig config)
         {
@@ -12,7 +12,7 @@ namespace ProjectCore.SocialFeature.Internal
         }
     }
     
-    public class DeviceLinkStrategy : ILinkStrategy
+    public class DeviceLinkStrategy : INakamaLinkStrategy
     {
         public async Task Link(ISession session, IClient client, SocialFeatureConfig config)
         {
@@ -21,7 +21,7 @@ namespace ProjectCore.SocialFeature.Internal
         }
     }
     
-    public class DeviceUnlinkStrategy : IUnlinkStrategy
+    public class DeviceUnlinkStrategy : INakamaUnlinkStrategy
     {
         public async Task Unlink(ISession session, IClient client, SocialFeatureConfig config)
         {

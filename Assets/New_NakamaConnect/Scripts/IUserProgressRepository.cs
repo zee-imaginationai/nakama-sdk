@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Nakama;
 
-namespace ProjectCore.SocialFeature.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
     public interface IUserProgressRepository
     {

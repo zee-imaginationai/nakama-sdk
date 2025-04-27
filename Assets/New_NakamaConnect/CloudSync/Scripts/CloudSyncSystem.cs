@@ -3,12 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Nakama;
 using Nakama.TinyJson;
-using ProjectCore.CloudService;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectCore.SocialFeature.Internal
+namespace ProjectCore.CloudService.Nakama.Internal
 {
     [InlineEditor]
     [CreateAssetMenu(fileName = "CloudSyncSystem", menuName = "ProjectCore/SocialFeature/Cloud/CloudSyncSystem")]

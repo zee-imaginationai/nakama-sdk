@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ProjectCore.SocialFeature.Internal
+namespace ProjectCore.CloudService.Internal
 {
     //(For data format flexibility)
     public interface ISerializationStrategy

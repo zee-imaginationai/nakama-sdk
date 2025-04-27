@@ -6,7 +6,7 @@ namespace ProjectCore.CloudService.Internal
     public interface ISerializationStrategy
     {
         string Serialize<T>(T data);
-        T Deserialize<T>(string serializedData);
+        T Deserialize<T>(string serializedData) where T : class;
     }
     
     public class JsonSerializationStrategy : ISerializationStrategy
@@ -16,7 +16,7 @@ namespace ProjectCore.CloudService.Internal
             return JsonUtility.ToJson(data);
         }
 
-        public T Deserialize<T>(string serializedData)
+        public T Deserialize<T>(string serializedData) where T : class
         {
             return JsonUtility.FromJson<T>(serializedData);
         }

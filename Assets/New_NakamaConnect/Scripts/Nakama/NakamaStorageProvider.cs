@@ -10,12 +10,14 @@ namespace ProjectCore.CloudService.Nakama.Internal
     {
         public string Serialize<T>(T data)
         {
+            if(data is string stringData)
+                return stringData;
             return data.ToJson();
         }
 
-        public T Deserialize<T>(string serializedData)
+        public T Deserialize<T>(string serializedData) where T : class
         {
-            return serializedData.FromJson<T>();
+            return serializedData?.FromJson<T>();
         }
     }
     

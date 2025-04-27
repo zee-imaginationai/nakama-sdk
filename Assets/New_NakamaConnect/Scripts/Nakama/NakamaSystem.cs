@@ -1,11 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Nakama;
 using ProjectCore.Events;
 using ProjectCore.Variables;
-using Nakama.TinyJson;
 using ProjectCore.CloudService.Nakama.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -13,13 +9,13 @@ using UnityEngine;
 namespace ProjectCore.CloudService.Nakama
 {
     [InlineEditor]
-    [CreateAssetMenu(fileName = "NakamaSystem", menuName = "ProjectCore/SocialFeature/Cloud/NakamaSystem")]
+    [CreateAssetMenu(fileName = "NakamaSystem", menuName = "ProjectCore/CloudService/Nakama/NakamaSystem")]
     public class NakamaSystem : ScriptableObject
     {
         [SerializeField] private NakamaServer NakamaServer;
         [SerializeField] private GameEvent NakamaServerConnected;
         
-        [SerializeField] private UserProfileService UserProfileService;
+        [SerializeField] private NakamaUserProgressService UserProgressService;
 
         [SerializeField] private Float CloudServiceProgress;
 
@@ -52,45 +48,29 @@ namespace ProjectCore.CloudService.Nakama
             
             // First Read Data in our Desired format. Which is User Progress.
             
-            var data = await UserProfileService.GetUserData();
+            var data = await UserProgressService.GetUserData();
 
+            // Check if there is any data received in the request.
+            
             if (data == null)
             {
+                // Here no data is received from the server.
                 Debug.LogError("[Nakama System] No Data Received");
-                return;
-            }
-            
-            var storageObjects = (IApiStorageObjects) data;
-            
-            // Check if there is any data received in the request.
-
-            var dataObject = storageObjects.Objects.ToList();
-            
-            if (dataObject.Count > 0)
-            {
-                // Here some data is received from the server.
-
-                var userProgressString = storageObjects.Objects.First().Value;
                 
-                Debug.LogError($"[Nakama] UserProgress : {userProgressString}");
-
-                // Now check if the data received in the request is latest or older than the local data.
-
-                var progressJson = userProgressString.FromJson<Dictionary<string, object>>();
-                
-                // here update the JSON in DBManager
-                
-                DBManager.LoadJsonData(progressJson);
-                
-                Debug.LogError("[Nakama] Loaded User Profile");
+                // Update data on server from Local storage.
+                await UserProgressService.SaveUserData();
             }
             else
             {
-                // Here no data is received from the server.
-                // Update data on server from Local storage.
-                await UserProfileService.SaveUserData();
+                // Here some data is received from the server.
+                Debug.LogError($"[Nakama] UserProgress : {data}");
+                
+                // Now check if the data received in the request is latest or older than the local data.
+                
+                // here update the JSON in DBManager
+                DBManager.LoadJsonData(data);
+                Debug.LogError("[Nakama] Loaded User Profile");
             }
-            
             CloudServiceProgress.SetValue(1);
         }
     }

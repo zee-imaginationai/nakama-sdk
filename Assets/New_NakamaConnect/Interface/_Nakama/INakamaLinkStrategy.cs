@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Nakama;
+using ProjectCore.CloudService.Internal;
 
 namespace ProjectCore.CloudService.Nakama.Internal
 {

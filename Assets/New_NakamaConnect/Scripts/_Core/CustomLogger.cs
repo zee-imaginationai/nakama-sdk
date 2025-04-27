@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.CloudService.Internal
 {
    [CreateAssetMenu(menuName = "Tools/Console Logger")]
     public class CustomLogger : ScriptableObject

@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Nakama;
+using ProjectCore.CloudService.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ProjectCore.CloudService.Nakama.Internal
 {
-    [CreateAssetMenu(fileName = "NakamaSessionManager", menuName = "ProjectCore/SocialFeature/Cloud/NakamaSessionManager")]
+    [CreateAssetMenu(fileName = "NakamaSessionManager", menuName = "ProjectCore/CloudService/Nakama/NakamaSessionManager")]
     [InlineEditor]
     public class NakamaSessionManager : SessionManager<IClient, ISession, ISocket, IApiAccount>
     {
@@ -44,6 +45,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
         {
             await base.InitializeSession(client, session);
             await _Socket.ConnectAsync(session, SocialFeatureConfig.CanAppearOnline(), 10);
+            StorageService.Initialize(client, session);
             await UpdateAccount();
         }
 

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.CloudService.Internal
 {
     public interface ILinkStrategy<in TSession, in TClient>
     {

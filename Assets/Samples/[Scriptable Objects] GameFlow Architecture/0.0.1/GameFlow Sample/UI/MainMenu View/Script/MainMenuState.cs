@@ -16,7 +16,7 @@ public class MainMenuState : State
     [SerializeField] private GameEvent GotoGameEvent;
     [NonSerialized] private MainMenuView _mainMenuView;
     [SerializeField] private NakamaSystem NakamaSystem;
-    [SerializeField] private UserProfileService UserProfileService;
+    [SerializeField] private NakamaUserProgressService UserProgressService;
     [SerializeField] private FacebookService FacebookService;
     public override IEnumerator Execute()
     {

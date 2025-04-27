@@ -14,7 +14,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
     public class CloudSyncSystem : ScriptableObject
     {
         [SerializeField] private NakamaServer NakamaServer;
-        [SerializeField] private UserProfileService UserProfileService;
+        [SerializeField] private NakamaUserProgressService UserProgressService;
         
         [SerializeField] private DBBool IsEmailLoggedIn;
 
@@ -35,7 +35,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
                 case StorageType.Local:
                 case StorageType.None:
                 default:
-                    await UserProfileService.SaveUserData();
+                    await UserProgressService.SaveUserData();
                     break;
             }
             MainMenuState.UpdateButton();
@@ -71,7 +71,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             };
         }
 
-        [Button]
+        /*[Button]
         private bool IsConnectedWithMultipleDevices()
         {
             var account = NakamaServer.Account;
@@ -86,7 +86,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             var account = NakamaServer.Account;
             return user.AppleId != null || user.GoogleId != null || user.GamecenterId != null || 
                    user.FacebookId != null || user.SteamId != null || user.FacebookInstantGameId != null || account.Email != null;
-        }
+        }*/
 
         private bool OnSignIn(bool success, string email, string password)
         {

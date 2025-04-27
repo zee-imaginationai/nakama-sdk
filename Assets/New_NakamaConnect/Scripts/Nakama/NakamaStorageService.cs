@@ -1,12 +1,13 @@
-﻿using ProjectCore.CloudService.Internal;
+﻿using Nakama;
+using ProjectCore.CloudService.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ProjectCore.CloudService.Nakama.Internal
 {
-    [CreateAssetMenu(fileName = "NakamaStorageService", menuName = "ProjectCore/SocialFeature/Cloud/NakamaStorageService")]
+    [CreateAssetMenu(fileName = "NakamaStorageService", menuName = "ProjectCore/CloudService/Nakama/NakamaStorageService")]
     [InlineEditor]
-    public class NakamaStorageService : StorageService
+    public class NakamaStorageService : StorageService<IClient, ISession>
     {
         protected override void CreateCloudStorageService()
         {

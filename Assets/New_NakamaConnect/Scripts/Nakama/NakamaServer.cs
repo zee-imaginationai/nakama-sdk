@@ -1,12 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using Nakama;
+using ProjectCore.CloudService.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ProjectCore.CloudService.Nakama.Internal
 {
-    [CreateAssetMenu(fileName = "NakamaServer", menuName = "ProjectCore/SocialFeature/Cloud/NakamaServer")]
+    [CreateAssetMenu(fileName = "NakamaServer", menuName = "ProjectCore/CloudService/Nakama/NakamaServer")]
     [InlineEditor]
     public class NakamaServer : Server<IClient, ISession, ISocket, IApiAccount>
     {

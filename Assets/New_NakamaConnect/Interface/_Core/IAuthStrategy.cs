@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
+using Nakama;
 
 namespace ProjectCore.CloudService.Internal
 {
-    public interface IAuthStrategy<TSession, in TClient>
+    public interface IAuthStrategy
     {
-        Task<TSession> Authenticate(TClient client, SocialFeatureConfig config);
+        Task<ISession> Authenticate(IClient client, SocialFeatureConfig config);
     }
 }

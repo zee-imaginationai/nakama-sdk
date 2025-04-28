@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace ProjectCore.CloudService.Internal
 {
-    public abstract class UserProgressService<TClient, TSession> : ScriptableObject
+    public abstract class UserProgressService : ScriptableObject
     {
-        [SerializeField] private StorageService<TClient, TSession> StorageService;
+        [SerializeField] private StorageService StorageService;
         
         private const string COLLECTION_NAME = "Save";
         private const string KEY_NAME = "UserProgress";

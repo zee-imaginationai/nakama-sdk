@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Nakama;
 using UnityEngine;
 
 namespace ProjectCore.CloudService.Internal
 {
-    public abstract class StorageService<TClient, TSession> : ScriptableObject
+    public abstract class StorageService : ScriptableObject
     {
         [SerializeField] private CustomLogger Logger;
         
-        protected TClient _Client;
-        protected TSession _Session;
+        protected IClient _Client;
+        protected ISession _Session;
         
         protected CloudStorageService _CloudStorageService;
 
-        public void Initialize(TClient client, TSession session)
+        public void Initialize(IClient client, ISession session)
         {
             _Client = client;
             _Session = session;
@@ -24,7 +25,7 @@ namespace ProjectCore.CloudService.Internal
         
         public async Task SaveData(string collection, string key, string data)
         {
-            Logger.Log($"Saving {collection} to {key}]", LogLevel.Info);
+            Logger.Log($"Saving {collection} to {key}]");
             await _CloudStorageService.Save(collection, key, data);
             Logger.Log($"Saved {collection} to {key}");
         }

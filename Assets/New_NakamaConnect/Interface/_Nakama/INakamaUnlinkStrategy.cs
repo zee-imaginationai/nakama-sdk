@@ -1,11 +1,8 @@
-﻿using System.Threading.Tasks;
-using Nakama;
-using ProjectCore.CloudService.Internal;
+﻿using ProjectCore.CloudService.Internal;
 
 namespace ProjectCore.CloudService.Nakama.Internal
 {
-    public interface INakamaUnlinkStrategy :  IUnlinkStrategy<ISession, IClient>
+    public interface INakamaUnlinkStrategy :  IUnlinkStrategy
     {
-        new Task Unlink(ISession session, IClient client, SocialFeatureConfig config);
     }
 }

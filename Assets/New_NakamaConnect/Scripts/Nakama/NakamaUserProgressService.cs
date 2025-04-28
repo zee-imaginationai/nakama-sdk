@@ -7,7 +7,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
 {
     [CreateAssetMenu(fileName = "NakamaUserProgressService", menuName = "ProjectCore/CloudService/Nakama/NakamaUserProgressService")]
     [InlineEditor]
-    public class NakamaUserProgressService : UserProgressService<IClient, ISession>
+    public class NakamaUserProgressService : UserProgressService
     {
         
     }

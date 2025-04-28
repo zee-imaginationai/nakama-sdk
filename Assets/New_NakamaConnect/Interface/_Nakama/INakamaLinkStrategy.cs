@@ -1,11 +1,8 @@
-﻿using System.Threading.Tasks;
-using Nakama;
-using ProjectCore.CloudService.Internal;
+﻿using ProjectCore.CloudService.Internal;
 
 namespace ProjectCore.CloudService.Nakama.Internal
 {
-    public interface INakamaLinkStrategy : ILinkStrategy<ISession, IClient>
+    public interface INakamaLinkStrategy : ILinkStrategy
     {
-        new Task Link(ISession session, IClient client, SocialFeatureConfig config);
     }
 }

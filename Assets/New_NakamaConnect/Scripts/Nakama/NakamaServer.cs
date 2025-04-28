@@ -4,7 +4,6 @@ using Nakama;
 using ProjectCore.CloudService.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using IClient = Nakama.IClient;
 
 namespace ProjectCore.CloudService.Nakama.Internal
 {
@@ -12,6 +11,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
     [InlineEditor]
     public class NakamaServer : Server
     {
+        [SerializeField] private ServerTimeService ServerTimeService;
         public override void Initialize()
         {
             base.Initialize();
@@ -34,6 +34,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
          public override async Task Authenticate(IAuthStrategy strategy, 
             Func<bool, Exception, ISession, Task> callback = null)
         {
+            Logger.Log($"[Nakama] Authenticating with {strategy.GetType().Name}");
             try
             {
                 ISession session = await strategy.Authenticate(_Client, Config);
@@ -41,7 +42,9 @@ namespace ProjectCore.CloudService.Nakama.Internal
                 await InitializeSession();
                 
                 Logger.Log($"[Nakama] Authenticated with {strategy.GetType().Name}");
-                ServerConnectedEvent.Invoke();
+                if(callback == null)
+                    ServerConnectedEvent.Invoke();
+                
                 callback?.Invoke(true, null, session);
             }
             catch (ApiResponseException ex)
@@ -52,7 +55,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             catch (Exception ex)
             {
                 Logger.Log($"[Nakama] Unexpected error: {ex.Message}", LogLevel.Error);
-                callback?.Invoke(false, null, null);
+                callback?.Invoke(false, ex, null);
             }
         }
 
@@ -114,8 +117,16 @@ namespace ProjectCore.CloudService.Nakama.Internal
         private async Task InitializeSession()
         {
             await _Socket.ConnectAsync(_Session, Config.CanAppearOnline(), 10);
-            StorageService.Initialize(_Client, _Session);
+
+            InitializeServices();
+            
             await UpdateAccount();
+        }
+
+        private void InitializeServices()
+        {
+            StorageService.Initialize(_Client, _Session);
+            ServerTimeService.Initialize(_Client, _Session);
         }
         
         public override async Task<bool> ValidateSession()

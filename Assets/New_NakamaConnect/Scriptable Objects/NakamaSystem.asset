@@ -15,9 +15,13 @@ MonoBehaviour:
   NakamaServer: {fileID: 11400000, guid: d73e96a58160e1e4b80fe3e8d993c663, type: 2}
   NakamaServerConnected: {fileID: 11400000, guid: 8430acb54c1fa29439e6df39da3927a5,
     type: 2}
+  FacebookConnectEvent: {fileID: 11400000, guid: b56e762f7b93936498461e4bb05c33e5,
+    type: 2}
   UserProgressService: {fileID: 11400000, guid: e3e3d8cce9c1ae4469a64166ef6271b3,
     type: 2}
-  CloudServiceProgress: {fileID: 0}
+  NakamaCloudSyncService: {fileID: 0}
+  CloudServiceProgress: {fileID: 11400000, guid: 220443ac247cae748a6b3b158b3bac4f,
+    type: 2}
   FbAuthToken: {fileID: 11400000, guid: 6938f8153ac5642479f230ab17bc80c4, type: 2}
   GameLevel: {fileID: 11400000, guid: 592dc6a83eefa3f419642ff59c907124, type: 2}
   IsFbSignedIn: {fileID: 11400000, guid: 29bb4135f1d9dc94783633ac6444da02, type: 2}

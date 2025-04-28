@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Nakama;
 using Nakama.TinyJson;
+using ProjectCore.CloudService.Internal;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -13,8 +14,8 @@ namespace ProjectCore.CloudService.Nakama.Internal
     [CreateAssetMenu(fileName = "CloudSyncSystem", menuName = "ProjectCore/SocialFeature/Cloud/CloudSyncSystem")]
     public class CloudSyncSystem : ScriptableObject
     {
-        [SerializeField] private NakamaServer NakamaServer;
-        [SerializeField] private NakamaUserProgressService UserProgressService;
+        [SerializeField] private Server NakamaServer;
+        [SerializeField] private UserProgressService UserProgressService;
         
         [SerializeField] private DBBool IsEmailLoggedIn;
 

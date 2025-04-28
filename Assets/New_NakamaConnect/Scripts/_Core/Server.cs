@@ -32,8 +32,8 @@ namespace ProjectCore.CloudService.Internal
         public abstract Task Authenticate(IAuthStrategy strategy, Func<bool, Exception, ISession, Task> callback = null);
         public abstract Task Link(ILinkStrategy strategy, Func<bool, Exception, Task> callback = null);
         public abstract Task Unlink(IUnlinkStrategy strategy, Func<bool, Exception, Task> callback = null);
-        
         public abstract Task<bool> ValidateSession();
+        
         protected abstract Task<bool> ValidateSocket();
         protected abstract Task<bool> RefreshSession();
         protected abstract void SaveSession();

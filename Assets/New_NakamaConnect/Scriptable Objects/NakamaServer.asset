@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f102976750024bc1a2dc8278be79d7ba, type: 3}
   m_Name: NakamaServer
   m_EditorClassIdentifier: 
-  SessionManager: {fileID: 11400000, guid: 312d9c5ac67ac1f4cb660232a721c4ab, type: 2}
-  SocialFeatureConfig: {fileID: 11400000, guid: eff7d0bb188063047ad906a94de806dd,
-    type: 2}
+  Config: {fileID: 11400000, guid: eff7d0bb188063047ad906a94de806dd, type: 2}
   Logger: {fileID: 11400000, guid: f92cfa247d2ca3443a4d806956d8cd35, type: 2}
   ServerConnectedEvent: {fileID: 11400000, guid: 8430acb54c1fa29439e6df39da3927a5,
     type: 2}
+  AuthToken: {fileID: 11400000, guid: 09439fb7954ea2e4d945e2d21748a2cd, type: 2}
+  RefreshToken: {fileID: 11400000, guid: 53022e27192243248a177653b5e5547a, type: 2}
+  StorageService: {fileID: 11400000, guid: 1354861bcb101c04086f9923f2c3552f, type: 2}
+  ServerTimeService: {fileID: 11400000, guid: 704212ec8479dd34ca8d4116681c249d, type: 2}

@@ -35,6 +35,7 @@ namespace ProjectCore.Application
         [NonSerialized] private float TimeoutTime = 10;
 
         [SerializeField] private NakamaSystem NakamaSystem;
+        [SerializeField] private Float CloudServiceProgress;
         [SerializeField] private FacebookService FacebookService;
         
         private ApplicationFlowController applicationFlowController;
@@ -101,10 +102,12 @@ namespace ProjectCore.Application
                 {
                     _cancellationTokenSource.Cancel();
                     SdkLoadingProgress.SetValue(1f);
+                    CloudServiceProgress.SetValue(1f);
                     break;
                 }
 
-                if (SdkLoadingProgress >= 1.0f || IsTaskCompleted(task))
+                if ((SdkLoadingProgress >= 1.0f && CloudServiceProgress >= 1.0f) 
+                    || IsTaskCompleted(task))
                 {
                     break;
                 }
@@ -112,7 +115,8 @@ namespace ProjectCore.Application
                 yield return waitForSeconds;
             }
 
-            yield return new WaitUntil(() => SdkLoadingProgress.GetValue() >= 1.0f);
+            yield return new WaitUntil(() => SdkLoadingProgress.GetValue() >= 1.0f 
+                                             && CloudServiceProgress.GetValue() >= 1.0f);
             
             Debug.LogError($"Task : {task.Status}");
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Nakama;
+using ProjectCore.CloudService.Internal;
 using ProjectCore.CloudService.Nakama;
 using ProjectCore.CloudService.Nakama.Internal;
 using UnityEngine;
@@ -20,7 +21,7 @@ public class MainMenuState : State
     [SerializeField] private FacebookService FacebookService;
     public override IEnumerator Execute()
     {
-         base.Execute();
+        yield return base.Execute();
         _mainMenuView = Instantiate(Resources.Load<MainMenuView>(PrefabName));
 
         yield return _mainMenuView.Show(true);
@@ -35,7 +36,7 @@ public class MainMenuState : State
     
     public async void ConnectFacebook()
     {
-        // FacebookService.LoginFacebook();
+        await FacebookService.LoginFacebook();
         // await NakamaSystem.SigninWithFacebook();
     }
 

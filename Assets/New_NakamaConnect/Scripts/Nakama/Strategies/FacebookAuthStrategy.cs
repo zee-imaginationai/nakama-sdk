@@ -4,7 +4,7 @@ using ProjectCore.CloudService.Internal;
 
 namespace ProjectCore.CloudService.Nakama.Internal
 {
-    public class FacebookAuthStrategy : INakamaAuthStrategy //IAuthStrategy<ISession, IClient>
+    public class FacebookAuthStrategy : IAuthStrategy //IAuthStrategy<ISession, IClient>
     {
         private readonly string _token;
 
@@ -20,7 +20,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
         }
     }
 
-    public class FacebookLinkStrategy : INakamaLinkStrategy
+    public class FacebookLinkStrategy : ILinkStrategy
     {
         private readonly string _token;
         
@@ -35,7 +35,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
         }
     }
     
-    public class FacebookUnlinkStrategy : INakamaUnlinkStrategy
+    public class FacebookUnlinkStrategy : IUnlinkStrategy
     {
         private readonly string _token;
         

@@ -4,7 +4,7 @@ using ProjectCore.CloudService.Internal;
 
 namespace ProjectCore.CloudService.Nakama.Internal
 {
-    public class DeviceAuthStrategy : INakamaAuthStrategy
+    public class DeviceAuthStrategy : IAuthStrategy
     {
         public async Task<ISession> Authenticate(IClient client, SocialFeatureConfig config)
         {
@@ -13,7 +13,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
         }
     }
     
-    public class DeviceLinkStrategy : INakamaLinkStrategy
+    public class DeviceLinkStrategy : ILinkStrategy
     {
         public async Task Link(ISession session, IClient client, SocialFeatureConfig config)
         {
@@ -22,7 +22,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
         }
     }
     
-    public class DeviceUnlinkStrategy : INakamaUnlinkStrategy
+    public class DeviceUnlinkStrategy : IUnlinkStrategy
     {
         public async Task Unlink(ISession session, IClient client, SocialFeatureConfig config)
         {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ProjectCore.CloudService.Internal
 {
-   [CreateAssetMenu(menuName = "Tools/Console Logger")]
+   [CreateAssetMenu(menuName = "Tools/CustomLogger", fileName = "CustomLogger")]
     public class CustomLogger : ScriptableObject
     {
         [Header("Settings")]

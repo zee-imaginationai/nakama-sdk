@@ -28,7 +28,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             if (_client == null || _session == null)
             {
                 Debug.LogError("ServerTimeService not initialized!");
-                return -1;
+                return DateTime.UtcNow.ToEpoch();
             }
 
             try

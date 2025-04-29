@@ -25,10 +25,10 @@ namespace ProjectCore.CloudService.Nakama.Internal
         [SerializeField] private bool ShowConflictResolutionPanel;
 
 
-        protected override Task SyncComplete()
+        protected override async Task SyncComplete()
         {
             MainMenuState.UpdateButton();
-            return base.SyncComplete();
+            await base.SyncComplete();
         }
 
         protected override bool EvaluateCondition()
@@ -43,8 +43,17 @@ namespace ProjectCore.CloudService.Nakama.Internal
 
         protected override async Task<StorageType> GetConflictStorageType()
         {
-            if (ShowConflictResolutionPanel)
+            if (!ShowConflictResolutionPanel) return await base.GetConflictStorageType();
+            
+            try
+            {
                 return await MainMenuState.ResolveConflict();
+            }
+            catch
+            {
+                Logger.Log("Failed to Open Conflict Resolution Panel", LogLevel.Error);
+            }
+            
             return await base.GetConflictStorageType();
         }
 

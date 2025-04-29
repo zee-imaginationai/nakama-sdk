@@ -2,21 +2,29 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ProjectCore.CloudService.Nakama.Internal;
 using ProjectCore.Variables;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ProjectCore.CloudService.Internal
 {
     public class CloudSyncService : ScriptableObject
     {
+        [ShowInInspector] private const string FORCE_SYNC_KEY = "force_sync";
+        
         [SerializeField] private UserProgressService UserProgressService;
         [SerializeField] private DBEpochTime LastSyncTime;
+        [SerializeField] private DBBool IsForceSync;
         [SerializeField] private ServerTimeService ServerTimeService;
 
+        [SerializeField] protected CustomLogger Logger;
+        
         protected Dictionary<string, object> _CloudData;
         
         public async Task SyncData()
         {
             // Get data from server
+            
+            Logger.Log("Syncing data...");
             
             _CloudData = await UserProgressService.GetUserData();
 
@@ -62,10 +70,7 @@ namespace ProjectCore.CloudService.Internal
 
         protected virtual bool EvaluateCondition()
         {
-            var lastSyncKey = LastSyncTime.GetKey();
-            var syncTimeFound = _CloudData.TryGetValue(lastSyncKey, out var lastCloudSyncTime);
-            
-            return syncTimeFound && (int)lastCloudSyncTime >= LastSyncTime.GetValue();
+            return EvaluateForceSync() || !EvaluateLastSyncTimeExpired();
         }
 
         protected virtual async Task SyncComplete()
@@ -73,11 +78,34 @@ namespace ProjectCore.CloudService.Internal
             var serverTime = await ServerTimeService.GetServerTimeAsync();
             LastSyncTime.SetValue(serverTime);
             await UserProgressService.SaveUserData();
+            ResetForceSync();
+            Logger.Log("Syncing Complete...");
         }
 
         protected virtual Task<StorageType> GetConflictStorageType()
         {
             return Task.FromResult(StorageType.Cloud);
+        }
+        
+        private bool EvaluateLastSyncTimeExpired()
+        {
+            var lastSyncKey = LastSyncTime.GetKey();
+            var syncTimeFound = _CloudData.TryGetValue(lastSyncKey, out var lastCloudSyncTime);
+            return syncTimeFound && (int)lastCloudSyncTime <= LastSyncTime.GetValue();
+        }
+        
+        private bool EvaluateForceSync()
+        {
+            var forceSyncFound = _CloudData.TryGetValue(FORCE_SYNC_KEY, out var value);
+            if (forceSyncFound)
+                IsForceSync.SetValue((bool)value);
+
+            return forceSyncFound && (bool)value;
+        }
+        
+        private void ResetForceSync()
+        {
+            IsForceSync.SetValue(false);
         }
     }
 

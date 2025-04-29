@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef607168c18d4f128839f068bcb1153a, type: 3}
-  m_Name: New Custom Logger
+  m_Name: CustomLogger
   m_EditorClassIdentifier: 
   _currentLogLevel: 1
   _logToUnityConsole: 1

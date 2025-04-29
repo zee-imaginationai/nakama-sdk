@@ -51,7 +51,7 @@ public class MainMenuState : State
         return storageType;
     }
 
-    public void UpdateButton() => _mainMenuView.UpdateButton();
+    public void UpdateButton() => _mainMenuView?.UpdateButton();
 
     private void OnConnectionWithEmail(bool success, ApiResponseException exception)
     {

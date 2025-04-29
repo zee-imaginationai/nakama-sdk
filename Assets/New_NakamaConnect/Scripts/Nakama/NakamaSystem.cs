@@ -64,7 +64,7 @@ namespace ProjectCore.CloudService.Nakama
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
                 // ignored
             }

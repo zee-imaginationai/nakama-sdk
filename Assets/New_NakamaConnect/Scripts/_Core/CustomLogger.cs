@@ -7,20 +7,20 @@ namespace ProjectCore.CloudService.Internal
     public class CustomLogger : ScriptableObject
     {
         [Header("Settings")]
-        [SerializeField] private LogLevel _currentLogLevel = LogLevel.Info;
-        [SerializeField] private bool _logToUnityConsole = true;
+        [SerializeField] private LogLevel CurrentLogLevel = LogLevel.Info;
+        [SerializeField] private bool LogToUnityConsole = true;
 
         [HideInInspector] public List<string> LogHistory = new List<string>();
         private const int MAX_HISTORY_ENTRIES = 100;
 
         public void Log(string message, LogLevel level = LogLevel.Info, UnityEngine.Object context = null)
         {
-            if (level < _currentLogLevel) return;
+            if (level < CurrentLogLevel) return;
 
             string formatted = FormatLog(message, level);
             AddToHistory(formatted);
 
-            if (_logToUnityConsole)
+            if (LogToUnityConsole)
             {
                 SendToUnityConsole(message, level, context);
             }
@@ -79,7 +79,7 @@ namespace ProjectCore.CloudService.Internal
 
         public void SetLogLevel(LogLevel newLevel)
         {
-            _currentLogLevel = newLevel;
+            CurrentLogLevel = newLevel;
             Log($"Log level changed to {newLevel}", LogLevel.Info);
         }
     }

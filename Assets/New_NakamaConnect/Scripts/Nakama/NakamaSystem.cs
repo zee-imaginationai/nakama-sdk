@@ -7,7 +7,6 @@ using ProjectCore.Variables;
 using ProjectCore.CloudService.Nakama.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Task = System.Threading.Tasks.Task;
 
 namespace ProjectCore.CloudService.Nakama

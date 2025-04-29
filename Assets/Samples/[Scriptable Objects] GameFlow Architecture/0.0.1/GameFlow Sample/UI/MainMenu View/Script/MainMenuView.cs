@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ProjectCore.SocialFeature.Cloud.Internal;
+using ProjectCore.CloudService.Internal;
+using ProjectCore.CloudService.Nakama.Internal;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,6 +24,7 @@ public class MainMenuView : UiPanelInAndOut
     [SerializeField] private MainMenuState MainMenuState;
     
     [SerializeField] private CloudDBString ConflictString;
+    [SerializeField] private UserProgressService UserProgressService;
 
     private void OnEnable()
     {
@@ -117,6 +119,7 @@ public class MainMenuView : UiPanelInAndOut
         SyncConflictText.text = text;
         SyncConflictButton.image.color = color;
         ConflictString.SetValue(text);
+        UserProgressService.SaveUserData();
     }
 
     private void OnEmailAuthButton()

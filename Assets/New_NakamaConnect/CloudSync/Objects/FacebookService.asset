@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FbAccessToken: {fileID: 11400000, guid: 6938f8153ac5642479f230ab17bc80c4, type: 2}
   FbLoggedIn: {fileID: 11400000, guid: 29bb4135f1d9dc94783633ac6444da02, type: 2}
+  SdkLoadingProgress: {fileID: 11400000, guid: ea56fb68d1233d04e8fbb4d3bace4cae, type: 2}
+  FacebookInitializedEvent: {fileID: 11400000, guid: c481de71bf7427c44b025965a013815f,
+    type: 2}
+  FacebookConnectEvent: {fileID: 11400000, guid: b56e762f7b93936498461e4bb05c33e5,
+    type: 2}

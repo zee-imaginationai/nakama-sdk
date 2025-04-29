@@ -4,8 +4,9 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Nakama;
-using ProjectCore.SocialFeature;
-using ProjectCore.SocialFeature.Cloud.Internal;
+using ProjectCore.CloudService.Internal;
+using ProjectCore.CloudService.Nakama;
+using ProjectCore.CloudService.Nakama.Internal;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MainMenuState", menuName = "ProjectCore/State Machine/States/MainMenu State")]
@@ -15,11 +16,12 @@ public class MainMenuState : State
 
     [SerializeField] private GameEvent GotoGameEvent;
     [NonSerialized] private MainMenuView _mainMenuView;
-    [SerializeField] private CloudSyncSystem CloudSyncSystem;
-    [SerializeField] private UserProfileService UserProfileService;
+    [SerializeField] private NakamaSystem NakamaSystem;
+    [SerializeField] private NakamaUserProgressService UserProgressService;
+    [SerializeField] private FacebookService FacebookService;
     public override IEnumerator Execute()
     {
-         base.Execute();
+        yield return base.Execute();
         _mainMenuView = Instantiate(Resources.Load<MainMenuView>(PrefabName));
 
         yield return _mainMenuView.Show(true);
@@ -32,14 +34,15 @@ public class MainMenuState : State
         yield return base.Exit();
     }
     
-    public async void SignupWithEmail(string email, string password)
+    public async void ConnectFacebook()
     {
-        await CloudSyncSystem.SignupWithEmail(email, password, OnConnectionWithEmail);
+        await FacebookService.LoginFacebook();
+        // await NakamaSystem.SigninWithFacebook();
     }
 
-    public async void LoginWithEmail(string email, string password)
+    public void DisconnectFacebook()
     {
-        await CloudSyncSystem.SigninWithEmail(email, password, OnConnectionWithEmail);
+        FacebookService.LogoutFacebook();
     }
 
     public async Task<StorageType> ResolveConflict()
@@ -48,7 +51,7 @@ public class MainMenuState : State
         return storageType;
     }
 
-    public void UpdateButton() => _mainMenuView.UpdateButton();
+    public void UpdateButton() => _mainMenuView?.UpdateButton();
 
     private void OnConnectionWithEmail(bool success, ApiResponseException exception)
     {
@@ -62,7 +65,6 @@ public class MainMenuState : State
 
     public async void LogoutNakama()
     {
-        await CloudSyncSystem.SignOutFromEmail(OnLogout);
     }
 
     private void OnLogout(bool success, ApiResponseException exception)

@@ -15,8 +15,15 @@ MonoBehaviour:
   NakamaServer: {fileID: 11400000, guid: d73e96a58160e1e4b80fe3e8d993c663, type: 2}
   NakamaServerConnected: {fileID: 11400000, guid: 8430acb54c1fa29439e6df39da3927a5,
     type: 2}
-  UserProfileService: {fileID: 11400000, guid: bb55b3d578b14c942a3336a1a66f0d67, type: 2}
+  FacebookConnectEvent: {fileID: 11400000, guid: b56e762f7b93936498461e4bb05c33e5,
+    type: 2}
+  UserProgressService: {fileID: 11400000, guid: e3e3d8cce9c1ae4469a64166ef6271b3,
+    type: 2}
+  NakamaCloudSyncService: {fileID: 11400000, guid: a793563412ed54842a7e6a905032af04,
+    type: 2}
+  CloudServiceProgress: {fileID: 11400000, guid: 220443ac247cae748a6b3b158b3bac4f,
+    type: 2}
+  FbAuthToken: {fileID: 11400000, guid: 6938f8153ac5642479f230ab17bc80c4, type: 2}
   GameLevel: {fileID: 11400000, guid: 592dc6a83eefa3f419642ff59c907124, type: 2}
-  IsEmailLoggedIn: {fileID: 11400000, guid: 0d1d285442f2b734ab296bb38619c360, type: 2}
-  Email: {fileID: 11400000, guid: c06695d98b5986f468e85168b7c4a971, type: 2}
-  Password: {fileID: 11400000, guid: f15c4f6e2fb2fa640910d2dea9e67059, type: 2}
+  IsFbSignedIn: {fileID: 11400000, guid: 29bb4135f1d9dc94783633ac6444da02, type: 2}
+  IsForceSync: {fileID: 11400000, guid: 2835a62d53e1a9440813c061d8dc0ab5, type: 2}

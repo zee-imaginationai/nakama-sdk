@@ -1,13 +1,13 @@
 using System;
 using System.Threading;
 using CustomUtilities.Tools;
-using Nakama;
 using ProjectCore.CloudService.Internal;
 using ProjectCore.Events;
 using ProjectCore.Variables;
 using ProjectCore.CloudService.Nakama.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Task = System.Threading.Tasks.Task;
 
 namespace ProjectCore.CloudService.Nakama
@@ -19,7 +19,7 @@ namespace ProjectCore.CloudService.Nakama
         [SerializeField] private ServerConfig ServerConfig;
         [SerializeField] private GameEventWithBool FacebookConnectEvent;
         
-        [SerializeField] private NakamaUserProgressService UserProgressService;
+        [SerializeField] private NakamaStorageService NakamaStorageService;
         [SerializeField] private NakamaCloudSyncService NakamaCloudSyncService;
         [SerializeField] private ServerTimeService ServerTimeService;
 
@@ -37,7 +37,7 @@ namespace ProjectCore.CloudService.Nakama
             FacebookConnectEvent.Handler += OnFacebookConnectEvent;
             CloudServiceProgress.SetValue(0);
             _logger = CreateInstance<CustomLogger>();
-            _nakamaServer = new NakamaServer(ServerConfig, _logger, ServerTimeService);
+            _nakamaServer = new NakamaServer(ServerConfig, _logger);
         }
         
         public async Task AuthenticateNakama(CancellationToken token)
@@ -73,6 +73,9 @@ namespace ProjectCore.CloudService.Nakama
             try
             {
                 // Sync Data
+                
+                InitializeServices();
+                
                 await NakamaCloudSyncService.SyncData();
                 
                 CloudServiceProgress.SetValue(1);
@@ -81,6 +84,12 @@ namespace ProjectCore.CloudService.Nakama
             {
                 CloudServiceProgress.SetValue(1);
             }
+        }
+        
+        private void InitializeServices()
+        {
+            NakamaStorageService.Initialize(_nakamaServer.Client, _nakamaServer.Session, _logger);
+            ServerTimeService.Initialize(_nakamaServer.Client, _nakamaServer.Session, _logger);
         }
     }
 }

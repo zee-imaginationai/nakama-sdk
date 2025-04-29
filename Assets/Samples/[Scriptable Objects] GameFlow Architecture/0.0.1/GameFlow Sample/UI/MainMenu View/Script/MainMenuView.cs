@@ -24,7 +24,7 @@ public class MainMenuView : UiPanelInAndOut
     [SerializeField] private MainMenuState MainMenuState;
     
     [SerializeField] private CloudDBString ConflictString;
-    [SerializeField] private UserProgressService UserProgressService;
+    [SerializeField] private NakamaStorageService UserProgressService;
 
     private void OnEnable()
     {
@@ -119,7 +119,7 @@ public class MainMenuView : UiPanelInAndOut
         SyncConflictText.text = text;
         SyncConflictButton.image.color = color;
         ConflictString.SetValue(text);
-        UserProgressService.SaveUserData();
+        _ = UserProgressService.SaveUserProgress();
     }
 
     private void OnEmailAuthButton()

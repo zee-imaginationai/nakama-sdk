@@ -10,10 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51a0af97c2314e97bcd2b9ee994f7ecb, type: 3}
-  m_Name: SocialFeatureConfig
+  m_Name: NakamaServerConfig
   m_EditorClassIdentifier: 
   UdidString: {fileID: 11400000, guid: 3521b928274325442b6697663fa041d0, type: 2}
   IsAppearOnline: {fileID: 11400000, guid: e59d1976fb4485645a8b0d3d1eedf746, type: 2}
+  NetworkData:
+  - Environment: 0
+    Scheme: https
+    Host: 
+    Port: 7350
+    Key: defaultkey
+  - Environment: 1
+    Scheme: http
+    Host: 167.86.67.197
+    Port: 7350
+    Key: defaultkey
+  - Environment: 2
+    Scheme: http
+    Host: 127.0.0.1
+    Port: 7350
+    Key: defaultkey
   GeneralSettings:
     Environment: 1
     EnableSocialKit: 1

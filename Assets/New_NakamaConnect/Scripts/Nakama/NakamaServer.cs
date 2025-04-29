@@ -10,12 +10,9 @@ namespace ProjectCore.CloudService.Nakama.Internal
     [InlineEditor]
     public class NakamaServer : Server
     {
-        private readonly ServerTimeService _serverTimeService;
-
-        public NakamaServer(ServerConfig config, CustomLogger logger, ServerTimeService serverTimeService) :
+        public NakamaServer(ServerConfig config, CustomLogger logger) :
             base(config, logger)
         {
-            _serverTimeService = serverTimeService;
             var data = _Config.GetNetworkData();
 
             Client = new Client(data.Scheme, data.Host, data.Port, data.Key)
@@ -116,17 +113,9 @@ namespace ProjectCore.CloudService.Nakama.Internal
         private async Task InitializeSession()
         {
             await _Socket.ConnectAsync(Session, _Config.CanAppearOnline(), 10);
-
-            InitializeServices();
-            
             await UpdateAccount();
         }
 
-        private void InitializeServices()
-        {
-            StorageService.Initialize(Client, Session);
-            _serverTimeService.Initialize(Client, Session);
-        }
         
         public override async Task<bool> ValidateSession()
         {

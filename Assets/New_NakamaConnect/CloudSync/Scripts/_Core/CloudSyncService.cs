@@ -12,7 +12,7 @@ namespace ProjectCore.CloudService.Internal
     {
         [ShowInInspector] private const string FORCE_SYNC_KEY = "force_sync";
         
-        [SerializeField] private UserProgressService UserProgressService;
+        [SerializeField] private NakamaStorageService UserProgressService;
         [SerializeField] private DBEpochTime LastSyncTime;
         [SerializeField] private DBBool IsForceSync;
         [SerializeField] private ServerTimeService ServerTimeService;
@@ -27,7 +27,7 @@ namespace ProjectCore.CloudService.Internal
             
             Logger.Log("Syncing data...");
             
-            _CloudData = await UserProgressService.GetUserData();
+            _CloudData = await UserProgressService.LoadUserProgress();
 
             var conflictData = await ResolveConflict();
             
@@ -78,7 +78,7 @@ namespace ProjectCore.CloudService.Internal
         {
             var serverTime = await ServerTimeService.GetServerTimeAsync();
             LastSyncTime.SetValue(serverTime);
-            await UserProgressService.SaveUserData();
+            await UserProgressService.SaveUserProgress();
             ResetForceSync();
             Logger.Log("Syncing Complete...");
         }

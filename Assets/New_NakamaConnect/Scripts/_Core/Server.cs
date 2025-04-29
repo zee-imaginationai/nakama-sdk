@@ -9,10 +9,7 @@ namespace ProjectCore.CloudService.Internal
     public abstract class Server
     {
         protected ServerConfig _Config;
-
         protected CustomLogger _Logger;
-
-        protected StorageService StorageService;
         
         protected ISocket _Socket;
         protected IApiAccount _Account;

@@ -36,9 +36,9 @@ namespace ProjectCore.CloudService.Nakama.Internal
             var timeComparison = base.EvaluateCondition();
             var conflictKey = ConflictString.GetKey();
             var conflictValueFound = _CloudData.TryGetValue(conflictKey, out var conflictValue);
-            var conflictCondition = conflictValueFound && string.Equals((string)conflictValue,
+            var conflictCondition = conflictValueFound && !string.Equals((string)conflictValue,
                 ConflictString.GetValue(), StringComparison.OrdinalIgnoreCase);
-            return timeComparison && conflictCondition;
+            return timeComparison || conflictCondition;
         }
 
         protected override async Task<StorageType> GetConflictStorageType()

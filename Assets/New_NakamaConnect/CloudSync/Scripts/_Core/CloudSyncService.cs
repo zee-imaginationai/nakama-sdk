@@ -65,7 +65,7 @@ namespace ProjectCore.CloudService.Internal
             var lastSyncKey = LastSyncTime.GetKey();
             var syncTimeFound = _CloudData.TryGetValue(lastSyncKey, out var lastCloudSyncTime);
             
-            return syncTimeFound && (long)lastCloudSyncTime > LastSyncTime.GetValue();
+            return syncTimeFound && (int)lastCloudSyncTime >= LastSyncTime.GetValue();
         }
 
         protected virtual async Task SyncComplete()
@@ -77,7 +77,7 @@ namespace ProjectCore.CloudService.Internal
 
         protected virtual Task<StorageType> GetConflictStorageType()
         {
-            return new Task<StorageType>(()=> StorageType.Cloud);
+            return Task.FromResult(StorageType.Cloud);
         }
     }
 

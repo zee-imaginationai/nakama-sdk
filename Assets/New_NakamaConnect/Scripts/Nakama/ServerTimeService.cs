@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using ExtensionMethods;
 using Nakama;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace ProjectCore.CloudService.Nakama.Internal
 {
@@ -33,33 +33,113 @@ namespace ProjectCore.CloudService.Nakama.Internal
 
             try
             {
-                // var response = await _client.RpcAsync(_session, "get_server_time");
-                string url = $"{_client.Scheme}://{_client.Host}:{_client.Port}/v2/healthcheck";
-                using var request = UnityWebRequest.Get(url);
-                request.SendWebRequest();
-
-                if (request.result != UnityWebRequest.Result.Success)
-                {
-                    throw new Exception($"HTTP error: {request.error}");
-                }
-
-                // Parse response (e.g., {"status":"healthy","server_time":1717000000000})
-                var json = JsonUtility.FromJson<HealthCheckResponse>(request.downloadHandler.text);
-                return json.server_time;
-                // return int.Parse(response.Payload); // Unix timestamp in milliseconds
+                var response = await _client.RpcAsync(_session, "get_server_time");
+                return int.Parse(response.Payload); // Unix timestamp in milliseconds
             }
             catch (Exception ex)
             {
                 Debug.LogError($"Failed to fetch server time: {ex.Message}");
-                return -1;
+                return DateTime.UtcNow.ToEpoch();
             }
         }
     }
     
-    [Serializable]
-    internal class HealthCheckResponse
+    /*
+     * Fetch Server Time Using Nakama RPC
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Nakama;
+    using UnityEngine;
+
+    public abstract class ServerTimeService : ScriptableObject
     {
-        public string status;
-        public int server_time;
+        [SerializeField] protected CustomLogger Logger;
+        
+        protected IClient _client;
+        protected ISession _session;
+        protected Server _server; // Reference to parent Server for session refresh
+
+        // For cancellation/timeout
+        private CancellationTokenSource _cts;
+        private const int RpcTimeoutSeconds = 10;
+        private const int MaxRetries = 2;
+
+        public virtual void Initialize(IClient client, ISession session, Server server)
+        {
+            _client = client;
+            _session = session;
+            _server = server;
+        }
+
+        public async Task<long> GetServerTimeAsync()
+        {
+            if (!IsServiceReady())
+            {
+                Logger?.LogError("ServerTimeService not initialized.");
+                throw new InvalidOperationException("Service not initialized.");
+            }
+
+            _cts = new CancellationTokenSource();
+            _cts.CancelAfter(TimeSpan.FromSeconds(RpcTimeoutSeconds));
+
+            int retryCount = 0;
+            while (retryCount < MaxRetries)
+            {
+                try
+                {
+                    var response = await _client.RpcAsync(
+                        _session, 
+                        "get_server_time", 
+                        cancellationToken: _cts.Token
+                    );
+
+                    if (long.TryParse(response.Payload, out long serverTime))
+                    {
+                        return serverTime;
+                    }
+                    else
+                    {
+                        Logger?.LogError($"Invalid server time payload: {response.Payload}");
+                        throw new FormatException("Invalid server time format.");
+                    }
+                }
+                catch (ApiResponseException ex) when (ex.StatusCode == 401) // Unauthorized
+                {
+                    Logger?.LogWarning("Session expired. Attempting refresh...");
+                    bool refreshed = await _server.RefreshSession();
+                    if (!refreshed) throw new Exception("Session refresh failed.");
+                    retryCount++;
+                }
+                catch (TaskCanceledException)
+                {
+                    Logger?.LogError("Server time request timed out.");
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    Logger?.LogError($"RPC failed: {ex.Message}");
+                    retryCount++;
+                    if (retryCount >= MaxRetries) throw;
+                    await Task.Delay(1000 * retryCount); // Exponential backoff
+                }
+            }
+
+            throw new Exception("Failed to fetch server time after retries.");
+        }
+
+        private bool IsServiceReady()
+        {
+            return _client != null && 
+                   _session != null && 
+                   !_session.IsExpired;
+        }
+
+        private void OnDisable()
+        {
+            _cts?.Cancel();
+            _cts?.Dispose();
+        }
     }
+     */
 }

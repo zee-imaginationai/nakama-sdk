@@ -75,8 +75,11 @@ namespace ProjectCore.CloudService.Nakama
             try
             {
                 // Nakama Server is Connected
+                
+                // Sync Data
+                await NakamaCloudSyncService.SyncData();
             
-                // First Read Data in our Desired format. Which is User Progress.
+                /*// First Read Data in our Desired format. Which is User Progress.
             
                 var data = await UserProgressService.GetUserData();
 
@@ -100,11 +103,12 @@ namespace ProjectCore.CloudService.Nakama
                     // here update the JSON in DBManager
                     DBManager.LoadJsonData(data);
                     Debug.LogError("[Nakama] Loaded User Profile");
-                }
+                }*/
                 CloudServiceProgress.SetValue(1);
             }
             catch (Exception e)
             {
+                CloudServiceProgress.SetValue(1);
                 // ignored
             }
         }

@@ -1,12 +1,14 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
+using CustomUtilities.Tools;
 using Nakama;
+using ProjectCore.CloudService.Internal;
 using ProjectCore.Events;
 using ProjectCore.Variables;
 using ProjectCore.CloudService.Nakama.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Task = System.Threading.Tasks.Task;
 
 namespace ProjectCore.CloudService.Nakama
 {
@@ -14,28 +16,28 @@ namespace ProjectCore.CloudService.Nakama
     [CreateAssetMenu(fileName = "NakamaSystem", menuName = "ProjectCore/CloudService/Nakama/NakamaSystem")]
     public class NakamaSystem : ScriptableObject
     {
-        [SerializeField] private NakamaServer NakamaServer;
-        [SerializeField] private GameEvent NakamaServerConnected;
+        [SerializeField] private ServerConfig ServerConfig;
         [SerializeField] private GameEventWithBool FacebookConnectEvent;
         
         [SerializeField] private NakamaUserProgressService UserProgressService;
         [SerializeField] private NakamaCloudSyncService NakamaCloudSyncService;
+        [SerializeField] private ServerTimeService ServerTimeService;
 
         [SerializeField] private Float CloudServiceProgress;
 
         [SerializeField] private DBString FbAuthToken;
-        
-        [SerializeField] private DBInt GameLevel;
         [SerializeField] private DBBool IsFbSignedIn;
         
         private CancellationTokenSource _cancellationTokenSource;
+        private NakamaServer _nakamaServer;
+        private CustomLogger _logger;
 
         public void Initialize()
         {
-            NakamaServerConnected.Handler += OnNakamaServerConnected;
             FacebookConnectEvent.Handler += OnFacebookConnectEvent;
-            NakamaServer.Initialize();
             CloudServiceProgress.SetValue(0);
+            _logger = CreateInstance<CustomLogger>();
+            _nakamaServer = new NakamaServer(ServerConfig, _logger, ServerTimeService);
         }
         
         public async Task AuthenticateNakama(CancellationToken token)
@@ -43,7 +45,7 @@ namespace ProjectCore.CloudService.Nakama
             var strategy = IsFbSignedIn
                 ? AuthStrategyFactory.CreateFacebookStrategy(FbAuthToken)
                 : AuthStrategyFactory.CreateDeviceStrategy();
-            await NakamaServer.Authenticate(strategy);
+            await _nakamaServer.Authenticate(strategy, OnAuthCompleted);
         }
 
         private async void OnFacebookConnectEvent(bool state)
@@ -53,63 +55,31 @@ namespace ProjectCore.CloudService.Nakama
                 var strategy = state
                     ? AuthStrategyFactory.CreateFacebookStrategy(FbAuthToken)
                     : AuthStrategyFactory.CreateDeviceStrategy();
-                await NakamaServer.Authenticate(strategy, OnAuthCompleted);
-                return;
-
-                async Task OnAuthCompleted(bool success, Exception exception, ISession session)
-                {
-                    if (success)
-                    {
-                        await NakamaCloudSyncService.SyncData();
-                    }
-                }
+                await _nakamaServer.Authenticate(strategy, OnAuthCompleted);
             }
             catch
             {
-                // ignored
+                _logger.Log("[Nakama] Failed to authenticate", LogLevel.Error);
             }
         }
 
-        private async void OnNakamaServerConnected()
+        private async Task OnAuthCompleted(bool success, Exception exception)
         {
+            if (!success)
+            {
+                CloudServiceProgress.SetValue(1);
+                return;
+            }
             try
             {
-                // Nakama Server is Connected
-                
                 // Sync Data
                 await NakamaCloudSyncService.SyncData();
-            
-                /*// First Read Data in our Desired format. Which is User Progress.
-            
-                var data = await UserProgressService.GetUserData();
-
-                // Check if there is any data received in the request.
-            
-                if (data == null)
-                {
-                    // Here no data is received from the server.
-                    Debug.LogError("[Nakama System] No Data Received");
                 
-                    // Update data on server from Local storage.
-                    await UserProgressService.SaveUserData();
-                }
-                else
-                {
-                    // Here some data is received from the server.
-                    Debug.LogError($"[Nakama] UserProgress : {data}");
-                
-                    // Now check if the data received in the request is latest or older than the local data.
-                
-                    // here update the JSON in DBManager
-                    DBManager.LoadJsonData(data);
-                    Debug.LogError("[Nakama] Loaded User Profile");
-                }*/
                 CloudServiceProgress.SetValue(1);
             }
-            catch (Exception e)
+            catch 
             {
                 CloudServiceProgress.SetValue(1);
-                // ignored
             }
         }
     }

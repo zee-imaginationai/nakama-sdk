@@ -13,7 +13,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             _token = token;
         }
 
-        public async Task<ISession> Authenticate(IClient client, SocialFeatureConfig config)
+        public async Task<ISession> Authenticate(IClient client, ServerConfig config)
         {
             return await client.AuthenticateFacebookAsync(_token, create: true, 
                 retryConfiguration: config.GetRetryConfiguration());
@@ -29,7 +29,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             _token = token;
         }
         
-        public async Task Link(ISession session, IClient client, SocialFeatureConfig config)
+        public async Task Link(ISession session, IClient client, ServerConfig config)
         {
             await client.LinkFacebookAsync(session, _token, retryConfiguration: config.GetRetryConfiguration());
         }
@@ -44,7 +44,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             _token = token;
         }
         
-        public async Task Unlink(ISession session, IClient client, SocialFeatureConfig config)
+        public async Task Unlink(ISession session, IClient client, ServerConfig config)
         {
             await client.UnlinkFacebookAsync(session, _token, retryConfiguration: config.GetRetryConfiguration());
         }

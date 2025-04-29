@@ -34,7 +34,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             try
             {
                 var response = await _client.RpcAsync(_session, "get_server_time");
-                return int.Parse(response.Payload); // Unix timestamp in milliseconds
+                return int.Parse(response.Payload); // Unix timestamp in seconds
             }
             catch (Exception ex)
             {

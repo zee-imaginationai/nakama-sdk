@@ -7,6 +7,9 @@ using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+using CustomUtilities.Tools;
+
+
 namespace ProjectCore.CloudService.Nakama.Internal
 {
     [InlineEditor]
@@ -51,7 +54,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             }
             catch
             {
-                Logger.Log("Failed to Open Conflict Resolution Panel", LogLevel.Error);
+                Logger.LogError("Failed to Open Conflict Resolution Panel");
             }
             
             return await base.GetConflictStorageType();

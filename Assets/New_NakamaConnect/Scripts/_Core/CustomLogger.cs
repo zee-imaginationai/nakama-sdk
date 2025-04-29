@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-namespace ProjectCore.CloudService.Internal
+namespace CustomUtilities.Tools
 {
    [CreateAssetMenu(menuName = "Tools/CustomLogger", fileName = "CustomLogger")]
     public class CustomLogger : ScriptableObject
@@ -13,17 +14,39 @@ namespace ProjectCore.CloudService.Internal
         [HideInInspector] public List<string> LogHistory = new List<string>();
         private const int MAX_HISTORY_ENTRIES = 100;
 
-        public void Log(string message, LogLevel level = LogLevel.Info, UnityEngine.Object context = null)
+        public void LogDebug(string message, Object context = null)
+        {
+            LogMessage(message, LogLevel.Debug, context);
+        }
+
+        public void Log(string message, UnityEngine.Object context = null)
+        {
+            LogMessage(message, LogLevel.Info, context);
+        }
+
+        public void LogWarning(string message, Object context = null)
+        {
+            LogMessage(message, LogLevel.Warning, context);
+        }
+
+        public void LogError(string message, Object context = null)
+        {
+            LogMessage(message, LogLevel.Error, context);
+        }
+
+        public void LogCritical(string message, Object context = null)
+        {
+            LogMessage(message, LogLevel.Critical, context);
+        }
+
+        private void LogMessage(string message, LogLevel level, Object context = null)
         {
             if (level < CurrentLogLevel) return;
 
-            string formatted = FormatLog(message, level);
-            AddToHistory(formatted);
-
-            if (LogToUnityConsole)
-            {
+            string logEntry = FormatLog(message, level);
+            AddToHistory(logEntry);
+            if (LogToUnityConsole) 
                 SendToUnityConsole(message, level, context);
-            }
         }
 
         private string FormatLog(string message, LogLevel level)
@@ -40,7 +63,7 @@ namespace ProjectCore.CloudService.Internal
             }
         }
 
-        private void SendToUnityConsole(string message, LogLevel level, UnityEngine.Object context)
+        private void SendToUnityConsole(string message, LogLevel level, Object context)
         {
     #if UNITY_EDITOR
             string richMessage = $"<b><color={GetLevelColor(level)}>[{level}]</color></b> {message}";
@@ -80,7 +103,7 @@ namespace ProjectCore.CloudService.Internal
         public void SetLogLevel(LogLevel newLevel)
         {
             CurrentLogLevel = newLevel;
-            Log($"Log level changed to {newLevel}", LogLevel.Info);
+            Log($"Log level changed to {newLevel}");
         }
     }
 

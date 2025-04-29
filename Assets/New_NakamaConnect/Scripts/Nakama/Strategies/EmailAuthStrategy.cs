@@ -15,7 +15,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             _password = password;
         }
 
-        public async Task<ISession> Authenticate(IClient client, SocialFeatureConfig config)
+        public async Task<ISession> Authenticate(IClient client, ServerConfig config)
         {
             return await client.AuthenticateEmailAsync(_email, _password, create: false, 
                 retryConfiguration: config.GetRetryConfiguration());
@@ -33,7 +33,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             _password = password;
         }
         
-        public async Task Link(ISession session, IClient client, SocialFeatureConfig config)
+        public async Task Link(ISession session, IClient client, ServerConfig config)
         {
             await client.LinkEmailAsync(session, _email, _password, config.GetRetryConfiguration());
         }
@@ -50,7 +50,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             _password = password;
         }
 
-        public async Task Unlink(ISession session, IClient client, SocialFeatureConfig config)
+        public async Task Unlink(ISession session, IClient client, ServerConfig config)
         {
             await client.UnlinkEmailAsync(session, _email, _password, config.GetRetryConfiguration());
         }   

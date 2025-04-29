@@ -5,6 +5,6 @@ namespace ProjectCore.CloudService.Internal
 {
     public interface ILinkStrategy
     {
-        Task Link(ISession session, IClient client, SocialFeatureConfig config);
+        Task Link(ISession session, IClient client, ServerConfig config);
     }
 }

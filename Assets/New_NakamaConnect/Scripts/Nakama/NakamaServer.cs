@@ -26,8 +26,8 @@ namespace ProjectCore.CloudService.Nakama.Internal
 
             _Socket = Client.NewSocket(true);
 
-            _Socket.Connected += () => { _Logger.Log("[Nakama] Connected to socket", LogLevel.Debug); };
-            _Socket.Closed += () => { _Logger.Log("[Nakama] Socket closed", LogLevel.Debug); };
+            _Socket.Connected += () => { _Logger.LogDebug("[Nakama] Connected to socket"); };
+            _Socket.Closed += () => { _Logger.LogDebug("[Nakama] Socket closed"); };
         }
 
         #region Authentication_Region
@@ -48,12 +48,12 @@ namespace ProjectCore.CloudService.Nakama.Internal
             }
             catch (ApiResponseException ex)
             {
-                _Logger.Log($"[Nakama] Failed to authenticate: {ex.Message}", LogLevel.Error);
+                _Logger.LogError($"[Nakama] Failed to authenticate: {ex.Message}");
                 callback?.Invoke(false, ex);
             }
             catch (Exception ex)
             {
-                _Logger.Log($"[Nakama] Unexpected error: {ex.Message}", LogLevel.Error);
+                _Logger.LogError($"[Nakama] Unexpected error: {ex.Message}");
                 callback?.Invoke(false, ex);
             }
         }
@@ -68,7 +68,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             }
             catch (ApiResponseException ex)
             {
-                _Logger.Log($"[Nakama] Failed to link device: {ex.Message}", LogLevel.Error);
+                _Logger.LogError($"[Nakama] Failed to link device: {ex.Message}");
                 callback?.Invoke(false, ex);
             }
         }
@@ -83,7 +83,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             }
             catch (ApiResponseException ex)
             {
-                _Logger.Log($"[Nakama] Failed to unlink device: {ex.Message}", LogLevel.Error);
+                _Logger.LogError($"[Nakama] Failed to unlink device: {ex.Message}");
                 callback?.Invoke(false, ex);
             }
         }
@@ -100,7 +100,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
                 return true;
             }
 
-            _Logger.Log("[Nakama] Socket is Invalid!!", LogLevel.Debug);
+            _Logger.LogDebug("[Nakama] Socket is Invalid!!");
             try
             {
                 await _Socket.ConnectAsync(Session, _Config.CanAppearOnline());
@@ -108,7 +108,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             }
             catch (ApiResponseException exception)
             {
-                _Logger.Log($"[Nakama] Socket Connection Failed: {exception.Message}", LogLevel.Error);
+                _Logger.LogError($"[Nakama] Socket Connection Failed: {exception.Message}");
                 return false;
             }
         }
@@ -136,12 +136,12 @@ namespace ProjectCore.CloudService.Nakama.Internal
                 return true;
             }
             
-            _Logger.Log("[Nakama] Session is Invalid!!", LogLevel.Error);
+            _Logger.LogError("[Nakama] Session is Invalid!!");
 
             Session = global::Nakama.Session.Restore(_Config.AuthToken, _Config.RefreshToken);
             if (Session == null)
             {
-                _Logger.Log("[Nakama] Failed to restore session", LogLevel.Critical);
+                _Logger.LogCritical("[Nakama] Failed to restore session");
                 return await RefreshSession();
             }
             var isValidSocket = await ValidateSocket();
@@ -165,12 +165,12 @@ namespace ProjectCore.CloudService.Nakama.Internal
                     return true;
                 }
 
-                _Logger.Log("[Nakama] Failed to refresh session", LogLevel.Critical);
+                _Logger.LogCritical("[Nakama] Failed to refresh session");
                 return false;
             }
             catch (ApiResponseException ex)
             {
-                _Logger.Log($"[Nakama] Failed to validate session: {ex.Message}", LogLevel.Critical);
+                _Logger.LogCritical($"[Nakama] Failed to validate session: {ex.Message}");
                 return false;
             }
         }
@@ -190,7 +190,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             }
             catch (ApiResponseException e)
             {
-                _Logger.Log($"[Nakama] Failed to get account ID: {e.Message}", LogLevel.Error);
+                _Logger.LogError($"[Nakama] Failed to get account ID: {e.Message}");
             }
         }
 
@@ -203,7 +203,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             }
             catch (ApiResponseException e)
             {
-                _Logger.Log($"[Nakama] Failed to delete account: {e.Message}", LogLevel.Error);
+                _Logger.LogError($"[Nakama] Failed to delete account: {e.Message}");
             }
             await KillSession();
         }
@@ -216,7 +216,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             }
             catch (ApiResponseException e)
             {
-                _Logger.Log($"[Nakama] Failed to kill session: {e.Message}", LogLevel.Error);
+                _Logger.LogError($"[Nakama] Failed to kill session: {e.Message}");
             }
         }
 

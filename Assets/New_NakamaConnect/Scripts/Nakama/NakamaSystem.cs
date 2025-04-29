@@ -59,7 +59,7 @@ namespace ProjectCore.CloudService.Nakama
             }
             catch
             {
-                _logger.Log("[Nakama] Failed to authenticate", LogLevel.Error);
+                _logger.LogError("[Nakama] Failed to authenticate");
             }
         }
 

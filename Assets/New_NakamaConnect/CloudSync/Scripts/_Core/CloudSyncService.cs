@@ -98,10 +98,11 @@ namespace ProjectCore.CloudService.Internal
         private bool EvaluateForceSync()
         {
             var forceSyncFound = _CloudData.TryGetValue(FORCE_SYNC_KEY, out var value);
-            if (forceSyncFound)
-                IsForceSync.SetValue((bool)value);
+            var isForceSync = forceSyncFound && (int)value > 0;
 
-            return forceSyncFound && (bool)value;
+            IsForceSync.SetValue(isForceSync);
+
+            return isForceSync;
         }
         
         private void ResetForceSync()

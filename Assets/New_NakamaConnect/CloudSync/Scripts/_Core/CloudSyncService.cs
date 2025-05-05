@@ -13,10 +13,12 @@ namespace ProjectCore.CloudService.Internal
         [ShowInInspector] private const string FORCE_SYNC_KEY = "force_sync";
         
         [SerializeField] private NakamaStorageService UserProgressService;
+        
         [SerializeField] private DBEpochTime LastSyncTime;
         [SerializeField] private DBBool IsForceSync;
+        
         [SerializeField] private ServerTimeService ServerTimeService;
-
+        
         [SerializeField] protected CustomLogger Logger;
         
         protected Dictionary<string, object> _CloudData;

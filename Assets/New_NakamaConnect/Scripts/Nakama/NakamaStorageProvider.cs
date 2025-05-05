@@ -21,7 +21,6 @@ namespace ProjectCore.CloudService.Nakama.Internal
         }
     }
     
-    // (Abstract interface for any backend)
     // https://heroiclabs.com/docs/nakama/concepts/storage/collections
 
     public class NakamaStorageProvider : IStorageProvider

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ProjectCore.Variables;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -9,7 +10,7 @@ namespace CustomUtilities.Tools
     {
         [Header("Settings")]
         [SerializeField] private LogLevel CurrentLogLevel = LogLevel.Info;
-        [SerializeField] private bool LogToUnityConsole = true;
+        [SerializeField] private DBBool LogToUnityConsole;
 
         [HideInInspector] public List<string> LogHistory = new List<string>();
         private const int MAX_HISTORY_ENTRIES = 100;

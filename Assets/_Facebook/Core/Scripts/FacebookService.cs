@@ -8,16 +8,16 @@ using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.Integrations.FacebookService
 {
     [InlineEditor]
-    [CreateAssetMenu(fileName = "FacebookService", menuName = "ProjectCore/SocialFeature/Cloud/FacebookService")]
+    [CreateAssetMenu(fileName = "FacebookService", menuName = "ProjectCore/Integrations/FacebookService")]
     public class FacebookService : ScriptableObject
     {
         [SerializeField] private DBString FbAccessToken;
         [SerializeField] private DBBool FbLoggedIn;
         
-        [SerializeField] private Float SdkLoadingProgress;
+        [SerializeField] private Float FbLoadingProgress;
 
         [SerializeField] private GameEvent FacebookInitializedEvent;
         [SerializeField] private GameEventWithBool FacebookConnectEvent;
@@ -81,7 +81,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
         private void InitializeFacebook()
         {
             Debug.Log("[FacebookService] Initializing fb]");
-            SdkLoadingProgress.SetValue(1f);
+            FbLoadingProgress.SetValue(1f);
             FB.Init(OnFbInitialized);
         }
 

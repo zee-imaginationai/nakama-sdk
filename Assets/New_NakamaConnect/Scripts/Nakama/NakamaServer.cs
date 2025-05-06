@@ -2,13 +2,13 @@ using System;
 using System.Threading.Tasks;
 using CustomUtilities.Tools;
 using Nakama;
-using ProjectCore.CloudService.Internal;
+using ProjectCore.Integrations.Internal;
 using Sirenix.OdinInspector;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.Integrations.NakamaServer
 {
     [InlineEditor]
-    public class NakamaServer : Server
+    internal class NakamaServer : Server
     {
         public NakamaServer(ServerConfig config, CustomLogger logger) :
             base(config, logger)
@@ -29,7 +29,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
 
         #region Authentication_Region
 
-        public override async Task Authenticate(IAuthStrategy authStrategy, 
+        internal override async Task Authenticate(IAuthStrategy authStrategy, 
             Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Authenticating with {authStrategy.GetType().Name}");
@@ -55,7 +55,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             }
         }
 
-        public override async Task Link(ILinkStrategy linkStrategy, Func<bool, Exception, Task> callback = null)
+        internal override async Task Link(ILinkStrategy linkStrategy, Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Unlinking device with {linkStrategy.GetType().Name}");
             try
@@ -70,7 +70,7 @@ namespace ProjectCore.CloudService.Nakama.Internal
             }
         }
 
-        public override async Task Unlink(IUnlinkStrategy unlinkStrategy, Func<bool, Exception, Task> callback = null)
+        internal override async Task Unlink(IUnlinkStrategy unlinkStrategy, Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Unlinking device with {unlinkStrategy.GetType().Name}");
             try
@@ -116,8 +116,8 @@ namespace ProjectCore.CloudService.Nakama.Internal
             await UpdateAccount();
         }
 
-        
-        public override async Task<bool> ValidateSession()
+
+        internal override async Task<bool> ValidateSession()
         {
             if (Session != null && !Session.IsExpired)
             {
@@ -210,8 +210,8 @@ namespace ProjectCore.CloudService.Nakama.Internal
         }
 
         #endregion
-        
-        public void OnDestroy()
+
+        internal override void ClearSession()
         {
             _Socket?.CloseAsync();
         }

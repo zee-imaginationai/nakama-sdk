@@ -1,6 +1,6 @@
-using ProjectCore.CloudService.Internal;
+using ProjectCore.Integrations.Internal;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.Integrations.NakamaServer.Internal
 {
     public static class AuthStrategyFactory
     {

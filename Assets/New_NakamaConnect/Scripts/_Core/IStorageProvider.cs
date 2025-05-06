@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace ProjectCore.CloudService.Internal
+namespace ProjectCore.Integrations.Internal
 {
     // (Abstract interface for any backend)
     public interface IStorageProvider

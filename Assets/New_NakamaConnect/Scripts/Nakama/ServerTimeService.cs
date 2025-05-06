@@ -6,7 +6,7 @@ using Nakama;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.Integrations.NakamaServer.Internal
 {
     [CreateAssetMenu(fileName = "ServerTimeService", menuName = "ProjectCore/CloudService/NakamaServerTimeService")]
     public class ServerTimeService : ScriptableObject

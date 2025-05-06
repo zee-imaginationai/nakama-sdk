@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using Nakama;
-using ProjectCore.CloudService.Internal;
+using ProjectCore.Integrations.Internal;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.Integrations.NakamaServer.Internal
 {
-    public class DeviceAuthStrategy : IAuthStrategy
+    internal class DeviceAuthStrategy : IAuthStrategy
     {
         public async Task<ISession> Authenticate(IClient client, ServerConfig config)
         {
@@ -12,8 +12,8 @@ namespace ProjectCore.CloudService.Nakama.Internal
             return await client.AuthenticateDeviceAsync(deviceId, retryConfiguration: config.GetRetryConfiguration());
         }
     }
-    
-    public class DeviceLinkStrategy : ILinkStrategy
+
+    internal class DeviceLinkStrategy : ILinkStrategy
     {
         public async Task Link(ISession session, IClient client, ServerConfig config)
         {
@@ -21,8 +21,8 @@ namespace ProjectCore.CloudService.Nakama.Internal
             await client.LinkDeviceAsync(session, deviceId, config.GetRetryConfiguration());
         }
     }
-    
-    public class DeviceUnlinkStrategy : IUnlinkStrategy
+
+    internal class DeviceUnlinkStrategy : IUnlinkStrategy
     {
         public async Task Unlink(ISession session, IClient client, ServerConfig config)
         {

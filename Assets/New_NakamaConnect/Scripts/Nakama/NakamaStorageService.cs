@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using CustomUtilities.Tools;
 using Nakama;
-using ProjectCore.CloudService.Internal;
+using ProjectCore.Integrations.Internal;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.Integrations.NakamaServer.Internal
 {
     [CreateAssetMenu(fileName = "NakamaStorageService", menuName = "ProjectCore/CloudService/Nakama/NakamaStorageService")]
     [InlineEditor]

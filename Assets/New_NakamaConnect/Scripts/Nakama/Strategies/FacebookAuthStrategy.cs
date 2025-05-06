@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Nakama;
-using ProjectCore.CloudService.Internal;
+using ProjectCore.Integrations.Internal;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.Integrations.NakamaServer.Internal
 {
     public class FacebookAuthStrategy : IAuthStrategy //IAuthStrategy<ISession, IClient>
     {

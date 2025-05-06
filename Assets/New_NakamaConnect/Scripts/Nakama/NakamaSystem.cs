@@ -1,15 +1,15 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using CustomUtilities.Tools;
-using ProjectCore.CloudService.Internal;
 using ProjectCore.Events;
+using ProjectCore.Integrations.Internal;
+using ProjectCore.Integrations.NakamaServer.Internal;
 using ProjectCore.Variables;
-using ProjectCore.CloudService.Nakama.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Task = System.Threading.Tasks.Task;
 
-namespace ProjectCore.CloudService.Nakama
+namespace ProjectCore.Integrations.NakamaServer
 {
     [InlineEditor]
     [CreateAssetMenu(fileName = "NakamaSystem", menuName = "ProjectCore/CloudService/Nakama/NakamaSystem")]
@@ -28,7 +28,7 @@ namespace ProjectCore.CloudService.Nakama
         [SerializeField] private DBBool IsFbSignedIn;
         
         private CancellationTokenSource _cancellationTokenSource;
-        private NakamaServer _nakamaServer;
+        private Server _nakamaServer;
         private CustomLogger _logger;
 
         public void Initialize()
@@ -89,6 +89,11 @@ namespace ProjectCore.CloudService.Nakama
         {
             NakamaStorageService.Initialize(_nakamaServer.Client, _nakamaServer.Session, _logger);
             ServerTimeService.Initialize(_nakamaServer.Client, _nakamaServer.Session, _logger);
+        }
+
+        private void OnDestroy()
+        {
+            _nakamaServer.ClearSession();
         }
     }
 }

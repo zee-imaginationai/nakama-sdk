@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CustomUtilities.Tools;
-using ProjectCore.CloudService.Nakama.Internal;
+using ProjectCore.Integrations.NakamaServer.Internal;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectCore.CloudService.Internal
+namespace ProjectCore.Integrations.Internal
 {
     public class CloudSyncService : ScriptableObject
     {

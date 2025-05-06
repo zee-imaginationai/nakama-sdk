@@ -1,4 +1,4 @@
-namespace ProjectCore.CloudService.Internal
+namespace ProjectCore.Integrations.Internal
 {
     public interface ISerializationStrategy
     {

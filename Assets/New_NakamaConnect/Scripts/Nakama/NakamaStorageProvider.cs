@@ -2,9 +2,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Nakama;
 using Nakama.TinyJson;
-using ProjectCore.CloudService.Internal;
+using ProjectCore.Integrations.Internal;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.Integrations.NakamaServer.Internal
 {
     public class NakamaSerializationStrategy : ISerializationStrategy
     {

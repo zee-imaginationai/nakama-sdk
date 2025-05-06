@@ -1,15 +1,15 @@
 using System.Threading.Tasks;
-using ProjectCore.CloudService.Internal;
 using Nakama;
+using ProjectCore.Integrations.Internal;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.Integrations.NakamaServer.Internal
 {
-    public class EmailAuthStrategy : IAuthStrategy
+    internal class EmailAuthStrategy : IAuthStrategy
     {
         private readonly string _email;
         private readonly string _password;
 
-        public EmailAuthStrategy(string email, string password)
+        internal EmailAuthStrategy(string email, string password)
         {
             _email = email;
             _password = password;
@@ -22,12 +22,12 @@ namespace ProjectCore.CloudService.Nakama.Internal
         }
     }
 
-    public class EmailLinkStrategy : ILinkStrategy
+    internal class EmailLinkStrategy : ILinkStrategy
     {
         private readonly string _email;
         private readonly string _password;
 
-        public EmailLinkStrategy(string email, string password)
+        internal EmailLinkStrategy(string email, string password)
         {
             _email = email;
             _password = password;
@@ -38,13 +38,13 @@ namespace ProjectCore.CloudService.Nakama.Internal
             await client.LinkEmailAsync(session, _email, _password, config.GetRetryConfiguration());
         }
     }
-    
-    public class EmailUnlinkStrategy : IUnlinkStrategy
+
+    internal class EmailUnlinkStrategy : IUnlinkStrategy
     {
         private readonly string _email;
         private readonly string _password;
 
-        public EmailUnlinkStrategy(string email, string password)
+        internal EmailUnlinkStrategy(string email, string password)
         {
             _email = email;
             _password = password;

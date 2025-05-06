@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Nakama;
 
-namespace ProjectCore.CloudService.Internal
+namespace ProjectCore.Integrations.Internal
 {
     public interface IAuthStrategy
     {

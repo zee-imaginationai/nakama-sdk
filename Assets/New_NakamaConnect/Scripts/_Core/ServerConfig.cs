@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 using Nakama;
-using ProjectCore.CloudService.Nakama.Internal;
+using ProjectCore.Integrations.NakamaServer.Internal;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using String = System.String;
 
-namespace ProjectCore.CloudService.Internal
+namespace ProjectCore.Integrations.Internal
 {
     [CreateAssetMenu(fileName = "SocialFeatureConfig", menuName = "ProjectCore/SocialFeature/SocialFeatureConfig")]
     [InlineEditor]

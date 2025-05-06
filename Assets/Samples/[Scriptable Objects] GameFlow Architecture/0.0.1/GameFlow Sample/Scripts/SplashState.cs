@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
-using ProjectCore.CloudService.Nakama;
+using ProjectCore.Integrations.NakamaServer;
 using ProjectCore.Events;
-using ProjectCore.CloudService.Nakama.Internal;
+using ProjectCore.Integrations.FacebookService;
+using ProjectCore.Integrations.NakamaServer.Internal;
 using ProjectCore.StateMachine;
 using ProjectCore.Variables;
 using UnityEngine;

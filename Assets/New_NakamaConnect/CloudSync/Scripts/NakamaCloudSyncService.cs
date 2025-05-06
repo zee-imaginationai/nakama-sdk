@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using ProjectCore.CloudService.Internal;
+using ProjectCore.Integrations.Internal;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectCore.CloudService.Nakama.Internal
+namespace ProjectCore.Integrations.NakamaServer.Internal
 {
     [InlineEditor]
     [CreateAssetMenu(fileName = "NakamaCloudSyncService", menuName = "ProjectCore/SocialFeature/Cloud/NakamaCloudSyncService")]

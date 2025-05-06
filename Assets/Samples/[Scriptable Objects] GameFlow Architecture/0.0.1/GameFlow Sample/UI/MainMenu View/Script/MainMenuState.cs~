@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Nakama;
-using ProjectCore.Integrations.FacebookService;
 using ProjectCore.Integrations.Internal;
 using ProjectCore.Integrations.NakamaServer;
 using ProjectCore.Integrations.NakamaServer.Internal;

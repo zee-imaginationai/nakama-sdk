@@ -9,7 +9,7 @@ using String = System.String;
 
 namespace ProjectCore.Integrations.Internal
 {
-    [CreateAssetMenu(fileName = "SocialFeatureConfig", menuName = "ProjectCore/Integrations/ServerConfig")]
+    [CreateAssetMenu(fileName = "ServerConfig", menuName = "ProjectCore/Integrations/ServerConfig")]
     [InlineEditor]
     public class ServerConfig : ScriptableObject
     {

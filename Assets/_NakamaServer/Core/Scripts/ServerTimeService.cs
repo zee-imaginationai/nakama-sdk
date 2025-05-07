@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ProjectCore.Integrations.NakamaServer.Internal
 {
-    [CreateAssetMenu(fileName = "ServerTimeService", menuName = "ProjectCore/Integrations/NakamaServerTimeService")]
+    [CreateAssetMenu(fileName = "ServerTimeService", menuName = "ProjectCore/Integrations/NakamaServer/ServerTimeService")]
     public class ServerTimeService : ScriptableObject
     {
         // Reference to Nakama client and session (set by Server after auth)

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace ProjectCore.Integrations.NakamaServer.Internal
 {
     [InlineEditor]
-    [CreateAssetMenu(fileName = "NakamaCloudSyncService", menuName = "ProjectCore/Intergrations/NakamaServer/NakamaCloudSyncService")]
+    [CreateAssetMenu(fileName = "NakamaCloudSyncService", menuName = "ProjectCore/Integrations/NakamaServer/NakamaCloudSyncService")]
     public class NakamaCloudSyncService : CloudSyncService
     {
         [SerializeField] private DBString ConflictString;

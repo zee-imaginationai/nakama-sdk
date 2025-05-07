@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace ProjectCore.Integrations.NakamaServer.Internal
 {
-    [CreateAssetMenu(fileName = "NakamaStorageService", menuName = "ProjectCore/CloudService/Nakama/NakamaStorageService")]
+    [CreateAssetMenu(fileName = "NakamaStorageService", menuName = "ProjectCore/Integrations/NakamaServer/NakamaStorageService")]
     [InlineEditor]
     public class NakamaStorageService : ScriptableObject
     {

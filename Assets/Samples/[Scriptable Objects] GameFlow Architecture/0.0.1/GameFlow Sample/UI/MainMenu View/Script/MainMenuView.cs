@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ProjectCore.Integrations.Internal;
 using ProjectCore.Integrations.NakamaServer.Internal;
+using ProjectCore.Variables;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +24,7 @@ public class MainMenuView : UiPanelInAndOut
     
     [SerializeField] private MainMenuState MainMenuState;
     
-    [SerializeField] private CloudDBString ConflictString;
+    [SerializeField] private DBString ConflictString;
     [SerializeField] private NakamaStorageService UserProgressService;
 
     private void OnEnable()

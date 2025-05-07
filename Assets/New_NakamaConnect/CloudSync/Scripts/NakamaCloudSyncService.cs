@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ProjectCore.Integrations.NakamaServer.Internal
 {
     [InlineEditor]
-    [CreateAssetMenu(fileName = "NakamaCloudSyncService", menuName = "ProjectCore/SocialFeature/Cloud/NakamaCloudSyncService")]
+    [CreateAssetMenu(fileName = "NakamaCloudSyncService", menuName = "ProjectCore/Intergrations/NakamaServer/NakamaCloudSyncService")]
     public class NakamaCloudSyncService : CloudSyncService
     {
         [SerializeField] private CloudDBString ConflictString;
@@ -34,10 +34,12 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
 
         protected override async Task<StorageType> GetConflictStorageType()
         {
-            if (!ShowConflictResolutionPanel) return await base.GetConflictStorageType();
+            if (!ShowConflictResolutionPanel) 
+                return await base.GetConflictStorageType();
             
             try
             {
+                Logger.Log("Resolving conflict storage type");
                 return await MainMenuState.ResolveConflict();
             }
             catch

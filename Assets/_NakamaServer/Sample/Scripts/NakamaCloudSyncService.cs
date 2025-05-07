@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using ProjectCore.Integrations.Internal;
+using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
     [CreateAssetMenu(fileName = "NakamaCloudSyncService", menuName = "ProjectCore/Intergrations/NakamaServer/NakamaCloudSyncService")]
     public class NakamaCloudSyncService : CloudSyncService
     {
-        [SerializeField] private CloudDBString ConflictString;
+        [SerializeField] private DBString ConflictString;
         
         [SerializeField] private MainMenuState MainMenuState;
         
@@ -24,12 +25,8 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
 
         protected override bool EvaluateCondition()
         {
-            var timeComparison = base.EvaluateCondition();
-            var conflictKey = ConflictString.GetKey();
-            var conflictValueFound = _CloudData.TryGetValue(conflictKey, out var conflictValue);
-            var conflictCondition = conflictValueFound && !string.Equals((string)conflictValue,
-                ConflictString.GetValue(), StringComparison.OrdinalIgnoreCase);
-            return timeComparison || conflictCondition;
+            var baseEvaluation = base.EvaluateCondition();
+            return baseEvaluation || EvaluateConflict();
         }
 
         protected override async Task<StorageType> GetConflictStorageType()
@@ -48,6 +45,15 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             }
             
             return await base.GetConflictStorageType();
+        }
+
+        private bool EvaluateConflict()
+        {
+            var conflictKey = ConflictString.GetKey();
+            var conflictValueFound = _CloudData.TryGetValue(conflictKey, out var conflictValue);
+            var conflictCondition = conflictValueFound && !string.Equals((string)conflictValue,
+                ConflictString.GetValue(), StringComparison.OrdinalIgnoreCase);
+            return conflictCondition;
         }
     }
 

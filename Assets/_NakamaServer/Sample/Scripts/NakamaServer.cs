@@ -5,7 +5,7 @@ using Nakama;
 using ProjectCore.Integrations.Internal;
 using Sirenix.OdinInspector;
 
-namespace ProjectCore.Integrations.NakamaServer
+namespace ProjectCore.Integrations.NakamaServer.Internal
 {
     [InlineEditor]
     internal class NakamaServer : Server
@@ -21,7 +21,7 @@ namespace ProjectCore.Integrations.NakamaServer
                 Timeout = _Config.GeneralSettings.RetryTimeOut
             };
 
-            _Socket = Client.NewSocket(true);
+            _Socket = Client.NewSocket(false);
 
             _Socket.Connected += () => { _Logger.LogDebug("[Nakama] Connected to socket"); };
             _Socket.Closed += () => { _Logger.LogDebug("[Nakama] Socket closed"); };

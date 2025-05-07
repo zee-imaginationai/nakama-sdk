@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44ee469419c64cd4a8e259aaa90fde2f, type: 3}
+  m_Script: {fileID: 11500000, guid: caab7fa2ea7bf4656ac16bab7ab7832c, type: 3}
   m_Name: v_DeviceID
   m_EditorClassIdentifier: 
-  Value: 5be6b6fae15de3fde371cf7216741e5338fc680f
+  Value: 
   DefaultValue: 
   ResetToDefaultOnPlay: 1
   Key: DeviceID
-  CanCloudSave: 0

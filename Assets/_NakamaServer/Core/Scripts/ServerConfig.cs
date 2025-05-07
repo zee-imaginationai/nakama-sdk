@@ -9,18 +9,17 @@ using String = System.String;
 
 namespace ProjectCore.Integrations.Internal
 {
-    [CreateAssetMenu(fileName = "SocialFeatureConfig", menuName = "ProjectCore/SocialFeature/SocialFeatureConfig")]
+    [CreateAssetMenu(fileName = "SocialFeatureConfig", menuName = "ProjectCore/Integrations/ServerConfig")]
     [InlineEditor]
     public class ServerConfig : ScriptableObject
     {
-        [SerializeField] private CloudDBString UdidString;
+        [SerializeField] private DBString UdidString;
         [SerializeField] private DBBool IsAppearOnline;
         
         [ListDrawerSettings(NumberOfItemsPerPage = 1, ShowPaging = true)]
         [SerializeField] private NetworkData[] NetworkData;
         
         public GeneralSettings GeneralSettings;
-        public ServicesSettings ServicesSettings;
 
         public string AuthToken { get; private set; }
         public string RefreshToken { get; private set; }
@@ -66,12 +65,6 @@ namespace ProjectCore.Integrations.Internal
         public string Host;
         public int Port;
         public string Key;
-    }
-
-    [Serializable]
-    public class ServicesSettings
-    {
-        public bool EnableUserProfile;
     }
 
     [Serializable]

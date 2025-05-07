@@ -36,7 +36,7 @@ namespace ProjectCore.Integrations.NakamaServer
             FacebookConnectEvent.Handler += OnFacebookConnectEvent;
             CloudServiceProgress.SetValue(0);
             _logger = CreateInstance<CustomLogger>();
-            _nakamaServer = new NakamaServer(ServerConfig, _logger);
+            _nakamaServer = new Internal.NakamaServer(ServerConfig, _logger);
         }
         
         public async Task AuthenticateNakama(CancellationToken token)

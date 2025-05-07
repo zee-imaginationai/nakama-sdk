@@ -12,7 +12,7 @@ using UnityEngine;
 namespace ProjectCore.Integrations.NakamaServer
 {
     [InlineEditor]
-    [CreateAssetMenu(fileName = "NakamaSystem", menuName = "ProjectCore/CloudService/Nakama/NakamaSystem")]
+    [CreateAssetMenu(fileName = "NakamaSystem", menuName = "ProjectCore/Integration/NakamaServer/NakamaSystem")]
     public class NakamaSystem : ScriptableObject
     {
         [SerializeField] private ServerConfig ServerConfig;

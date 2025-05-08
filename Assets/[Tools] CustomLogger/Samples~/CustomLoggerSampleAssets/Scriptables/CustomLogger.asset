@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef607168c18d4f128839f068bcb1153a, type: 3}
+  m_Script: {fileID: 11500000, guid: d1caa1fa087908f41ba7d5db389af308, type: 3}
   m_Name: CustomLogger
   m_EditorClassIdentifier: 
   CurrentLogLevel: 1
-  LogToUnityConsole: {fileID: 11400000, guid: f2cb9f44b3082004fb1a23ed9b68c4c5, type: 2}
+  LogToUnityConsole: {fileID: 11400000, guid: 91a03ca9538ad2f44a9cc2c9eae54f71, type: 2}
   LogHistory: []

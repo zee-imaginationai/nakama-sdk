@@ -3,7 +3,7 @@
     "com.madratzz.scriptableobject.architecture": "0.0.1",
     "com.madratzz.scriptableobject.event.variables": "0.0.1",
     "com.madratzz.scriptableobject.eventsystem.core": "0.0.1",
-    "com.madratzz.scriptableobject.variables.database": "0.0.3",
+    "com.madratzz.scriptableobject.variables.database": "0.0.4",
     "com.madratzz.scriptableobject.variables.extensions": "0.0.1",
     "com.madratzz.utilities.extensions": "0.0.1",
     "com.madratzz.utilities.unity.alwaysstartfromscenezero": "0.0.1",

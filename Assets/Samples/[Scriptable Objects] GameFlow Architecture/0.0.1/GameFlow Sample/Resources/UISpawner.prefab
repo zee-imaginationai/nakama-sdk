@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1958487978133747427
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2518391991626943532}
+  - component: {fileID: 1645516379767955386}
+  m_Layer: 0
+  m_Name: UISpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2518391991626943532
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958487978133747427}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1645516379767955386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958487978133747427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac19d7bedab8b41eb85cec44bcccee79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApplicationFlowController: {fileID: 0}
+  StateMachine: {fileID: 11400000, guid: c86b329c06f2d58459c44e4e04dbd022, type: 2}
+  StartCoinAnimation: {fileID: 0}
+  SettingsTransition: {fileID: 0}
+  ShowSettings: {fileID: 0}
+  ShowLevelComplete: {fileID: 11400000, guid: aed7f303aa3e4ba4c9d7ee62a8bc5fb1, type: 2}
+  LevelCompleteTransition: {fileID: 11400000, guid: 413ca567be22e1943b6d8011396eeba8, type: 2}
+  LevelFailTransition: {fileID: 11400000, guid: 9e4a5e10f4b2d154f97f76fd400f6a4f, type: 2}
+  ShowLevelFail: {fileID: 11400000, guid: a0dfa670371b8cb4ca8ef3f675789e38, type: 2}
+  ResumeGameViewTransition: {fileID: 0}
+  ResumeGameViewOnAppResumeTransition: {fileID: 0}
+  OpenViewTransition: {fileID: 11400000, guid: 0dcc9121e2889b1479bea543353cc5e7, type: 2}
+  ShowOpenView: {fileID: 11400000, guid: 4925f6443cb72724baf39a49565afb57, type: 2}

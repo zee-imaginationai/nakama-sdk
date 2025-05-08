@@ -101,7 +101,7 @@
       "source": "embedded",
       "dependencies": {
         "com.madratzz.scriptableobject.variables": "0.0.1",
-        "com.madratzz.scriptableobject.variables.database": "0.0.1"
+        "com.madratzz.scriptableobject.variables.database": "0.0.2"
       }
     },
     "com.unity.burst": {

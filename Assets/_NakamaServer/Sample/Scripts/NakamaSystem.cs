@@ -21,30 +21,34 @@ namespace ProjectCore.Integrations.NakamaServer
         [SerializeField] private NakamaStorageService NakamaStorageService;
         [SerializeField] private NakamaCloudSyncService NakamaCloudSyncService;
         [SerializeField] private ServerTimeService ServerTimeService;
+        [SerializeField] private CustomLogger Logger;
 
         [SerializeField] private Float CloudServiceProgress;
 
         [SerializeField] private DBString FbAuthToken;
         [SerializeField] private DBBool IsFbSignedIn;
         
-        private CancellationTokenSource _cancellationTokenSource;
         private Server _nakamaServer;
-        private CustomLogger _logger;
 
         public void Initialize()
         {
+#if FB
             FacebookConnectEvent.Handler += OnFacebookConnectEvent;
+#endif
             CloudServiceProgress.SetValue(0);
-            _logger = CreateInstance<CustomLogger>();
-            _nakamaServer = new Internal.NakamaServer(ServerConfig, _logger);
+            _nakamaServer = new Internal.NakamaServer(ServerConfig, Logger);
         }
         
         public async Task AuthenticateNakama(CancellationToken token)
         {
+#if FB
             var strategy = IsFbSignedIn
                 ? AuthStrategyFactory.CreateFacebookStrategy(FbAuthToken)
                 : AuthStrategyFactory.CreateDeviceStrategy();
-            await _nakamaServer.Authenticate(strategy, OnAuthCompleted);
+#else
+            var strategy = AuthStrategyFactory.CreateDeviceStrategy();
+#endif
+            await _nakamaServer.Authenticate(strategy, token, OnAuthCompleted);
         }
 
         private async void OnFacebookConnectEvent(bool state)
@@ -54,11 +58,11 @@ namespace ProjectCore.Integrations.NakamaServer
                 var strategy = state
                     ? AuthStrategyFactory.CreateFacebookStrategy(FbAuthToken)
                     : AuthStrategyFactory.CreateDeviceStrategy();
-                await _nakamaServer.Authenticate(strategy, OnAuthCompleted);
+                await _nakamaServer.Authenticate(strategy, callback: OnAuthCompleted);
             }
             catch
             {
-                _logger.LogError("[Nakama] Failed to authenticate");
+                Logger.LogError("[Nakama] Failed to authenticate");
             }
         }
 
@@ -87,8 +91,8 @@ namespace ProjectCore.Integrations.NakamaServer
         
         private void InitializeServices()
         {
-            NakamaStorageService.Initialize(_nakamaServer.Client, _nakamaServer.Session, _logger);
-            ServerTimeService.Initialize(_nakamaServer.Client, _nakamaServer.Session, _logger);
+            NakamaStorageService.Initialize(_nakamaServer.Client, _nakamaServer.Session, Logger);
+            ServerTimeService.Initialize(_nakamaServer.Client, _nakamaServer.Session, Logger);
         }
 
         private void OnDestroy()

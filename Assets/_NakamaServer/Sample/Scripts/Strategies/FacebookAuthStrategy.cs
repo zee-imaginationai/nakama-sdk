@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Nakama;
 using ProjectCore.Integrations.Internal;
@@ -13,10 +14,11 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             _token = token;
         }
 
-        public async Task<ISession> Authenticate(IClient client, ServerConfig config)
+        public async Task<ISession> Authenticate(IClient client, CancellationToken cancelToken,
+            ServerConfig config)
         {
             return await client.AuthenticateFacebookAsync(_token, create: true, 
-                retryConfiguration: config.GetRetryConfiguration());
+                retryConfiguration: config.GetRetryConfiguration(), canceller: cancelToken);
         }
     }
 
@@ -24,14 +26,16 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
     {
         private readonly string _token;
         
-        public FacebookLinkStrategy(string token, ISession session)
+        public FacebookLinkStrategy(string token)
         {
             _token = token;
         }
         
-        public async Task Link(ISession session, IClient client, ServerConfig config)
+        public async Task Link(ISession session, IClient client, 
+            CancellationToken cancelToken, ServerConfig config)
         {
-            await client.LinkFacebookAsync(session, _token, retryConfiguration: config.GetRetryConfiguration());
+            await client.LinkFacebookAsync(session, _token, 
+                retryConfiguration: config.GetRetryConfiguration(), canceller: cancelToken);
         }
     }
     
@@ -44,9 +48,11 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             _token = token;
         }
         
-        public async Task Unlink(ISession session, IClient client, ServerConfig config)
+        public async Task Unlink(ISession session, IClient client, 
+            CancellationToken cancelToken, ServerConfig config)
         {
-            await client.UnlinkFacebookAsync(session, _token, retryConfiguration: config.GetRetryConfiguration());
+            await client.UnlinkFacebookAsync(session, _token, 
+                retryConfiguration: config.GetRetryConfiguration(), canceller: cancelToken);
         }
     }
 }

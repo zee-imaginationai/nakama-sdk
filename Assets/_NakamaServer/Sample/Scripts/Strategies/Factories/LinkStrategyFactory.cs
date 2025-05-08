@@ -10,7 +10,7 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
         internal static ILinkStrategy CreateEmailLinkStrategy(string email, string password) 
             => new EmailLinkStrategy(email, password);
 
-        internal static ILinkStrategy CreateFacebookLinkStrategy(string token, ISession session) 
-            => new FacebookLinkStrategy(token, session);
+        internal static ILinkStrategy CreateFacebookLinkStrategy(string token) 
+            => new FacebookLinkStrategy(token);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CustomUtilities.Tools;
 using Nakama;
@@ -29,13 +30,13 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
 
         #region Authentication_Region
 
-        internal override async Task Authenticate(IAuthStrategy authStrategy, 
+        internal override async Task Authenticate(IAuthStrategy authStrategy, CancellationToken cancelToken, 
             Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Authenticating with {authStrategy.GetType().Name}");
             try
             {
-                ISession session = await authStrategy.Authenticate(Client, _Config);
+                ISession session = await authStrategy.Authenticate(Client, cancelToken, _Config);
                 Session = session;
                 await InitializeSession();
                 
@@ -55,12 +56,13 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             }
         }
 
-        internal override async Task Link(ILinkStrategy linkStrategy, Func<bool, Exception, Task> callback = null)
+        internal override async Task Link(ILinkStrategy linkStrategy, CancellationToken cancelToken, 
+            Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Unlinking device with {linkStrategy.GetType().Name}");
             try
             {
-                await linkStrategy.Link(Session, Client, _Config);
+                await linkStrategy.Link(Session, Client, cancelToken, _Config);
                 callback?.Invoke(true, null);
             }
             catch (ApiResponseException ex)
@@ -70,12 +72,13 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             }
         }
 
-        internal override async Task Unlink(IUnlinkStrategy unlinkStrategy, Func<bool, Exception, Task> callback = null)
+        internal override async Task Unlink(IUnlinkStrategy unlinkStrategy, CancellationToken cancelToken, 
+            Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Unlinking device with {unlinkStrategy.GetType().Name}");
             try
             {
-                await unlinkStrategy.Unlink(Session, Client, _Config);
+                await unlinkStrategy.Unlink(Session, Client, cancelToken, _Config);
                 callback?.Invoke(true, null);
             }
             catch (ApiResponseException ex)

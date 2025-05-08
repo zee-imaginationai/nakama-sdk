@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using CustomUtilities.Tools;
 using Nakama;
@@ -23,9 +24,12 @@ namespace ProjectCore.Integrations.Internal
             _Logger = logger;
         }
 
-        internal abstract Task Authenticate(IAuthStrategy authStrategy, Func<bool, Exception, Task> callback = null);
-        internal abstract Task Link(ILinkStrategy linkStrategy, Func<bool, Exception, Task> callback = null);
-        internal abstract Task Unlink(IUnlinkStrategy unlinkStrategy, Func<bool, Exception, Task> callback = null);
+        internal abstract Task Authenticate(IAuthStrategy authStrategy, 
+            CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null);
+        internal abstract Task Link(ILinkStrategy linkStrategy, 
+            CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null);
+        internal abstract Task Unlink(IUnlinkStrategy unlinkStrategy, 
+            CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null);
         internal abstract void ClearSession();
         internal abstract Task<bool> ValidateSession();
         

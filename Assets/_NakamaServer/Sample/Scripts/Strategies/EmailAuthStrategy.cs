@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Nakama;
 using ProjectCore.Integrations.Internal;
@@ -15,10 +16,11 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             _password = password;
         }
 
-        public async Task<ISession> Authenticate(IClient client, ServerConfig config)
+        public async Task<ISession> Authenticate(IClient client, CancellationToken cancelToken,
+            ServerConfig config)
         {
             return await client.AuthenticateEmailAsync(_email, _password, create: false, 
-                retryConfiguration: config.GetRetryConfiguration());
+                retryConfiguration: config.GetRetryConfiguration(), canceller: cancelToken);
         }
     }
 
@@ -33,9 +35,11 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             _password = password;
         }
         
-        public async Task Link(ISession session, IClient client, ServerConfig config)
+        public async Task Link(ISession session, IClient client, 
+            CancellationToken cancelToken, ServerConfig config)
         {
-            await client.LinkEmailAsync(session, _email, _password, config.GetRetryConfiguration());
+            await client.LinkEmailAsync(session, _email, _password,
+                config.GetRetryConfiguration(), cancelToken);
         }
     }
 
@@ -50,9 +54,11 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             _password = password;
         }
 
-        public async Task Unlink(ISession session, IClient client, ServerConfig config)
+        public async Task Unlink(ISession session, IClient client, 
+            CancellationToken cancelToken, ServerConfig config)
         {
-            await client.UnlinkEmailAsync(session, _email, _password, config.GetRetryConfiguration());
+            await client.UnlinkEmailAsync(session, _email, _password, 
+                config.GetRetryConfiguration(), cancelToken);
         }   
     }
 }

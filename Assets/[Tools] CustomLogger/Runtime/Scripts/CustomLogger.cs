@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ProjectCore.Variables;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace CustomUtilities.Tools
 {
@@ -20,7 +19,7 @@ namespace CustomUtilities.Tools
             LogMessage(message, LogLevel.Debug, context);
         }
 
-        public void Log(string message, UnityEngine.Object context = null)
+        public void Log(string message, Object context = null)
         {
             LogMessage(message, LogLevel.Info, context);
         }

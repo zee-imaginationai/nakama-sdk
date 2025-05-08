@@ -1,0 +1,17 @@
+{
+    "name": "com.madratzz.tools.customlogger",
+    "rootNamespace": "",
+    "references": [
+        "GUID:caee7793369714a699fc7a2677d74883",
+        "GUID:73d1da8ad54e6bd46b78559162409eb5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

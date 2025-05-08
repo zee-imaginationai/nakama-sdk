@@ -80,14 +80,14 @@ namespace ProjectCore.Integrations.FacebookService
 
         private void InitializeFacebook()
         {
-            Debug.Log("[FacebookService] Initializing fb]");
+            Debug.Log("[FacebookService] Initializing fb");
             FbLoadingProgress.SetValue(1f);
             FB.Init(OnFbInitialized);
         }
 
         private void OnFbInitialized()
         {
-            Debug.Log("[FacebookService] Fb Initialized]");
+            Debug.Log("[FacebookService] Fb Initialized");
             
             // Fire a FB Initialized Event
             FacebookInitializedEvent.Invoke();

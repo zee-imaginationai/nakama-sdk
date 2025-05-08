@@ -15,4 +15,5 @@ MonoBehaviour:
   Value: 0
   DefaultValue: 0
   ResetToDefaultOnPlay: 1
+  IsSyncEnabled: 1
   Key: LastSyncTime

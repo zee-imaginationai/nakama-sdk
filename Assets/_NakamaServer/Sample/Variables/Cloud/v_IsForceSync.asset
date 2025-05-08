@@ -15,4 +15,5 @@ MonoBehaviour:
   Value: 0
   DefaultValue: 0
   ResetToDefaultOnPlay: 1
+  SyncToCloud: 1
   Key: force_sync

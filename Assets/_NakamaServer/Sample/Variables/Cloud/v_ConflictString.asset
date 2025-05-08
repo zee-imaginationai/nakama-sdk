@@ -15,4 +15,5 @@ MonoBehaviour:
   Value: 
   DefaultValue: 
   ResetToDefaultOnPlay: 1
+  SyncToCloud: 1
   Key: ConflictString

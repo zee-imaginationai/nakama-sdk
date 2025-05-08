@@ -22,7 +22,7 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
                 Timeout = _Config.GeneralSettings.RetryTimeOut
             };
 
-            _Socket = Client.NewSocket(false);
+            _Socket = Client.NewSocket(true);
 
             _Socket.Connected += () => { _Logger.LogDebug("[Nakama] Connected to socket"); };
             _Socket.Closed += () => { _Logger.LogDebug("[Nakama] Socket closed"); };
@@ -30,8 +30,8 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
 
         #region Authentication_Region
 
-        internal override async Task Authenticate(IAuthStrategy authStrategy, CancellationToken cancelToken, 
-            Func<bool, Exception, Task> callback = null)
+        internal override async Task Authenticate(IAuthStrategy authStrategy, 
+            CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Authenticating with {authStrategy.GetType().Name}");
             try
@@ -56,8 +56,8 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             }
         }
 
-        internal override async Task Link(ILinkStrategy linkStrategy, CancellationToken cancelToken, 
-            Func<bool, Exception, Task> callback = null)
+        internal override async Task Link(ILinkStrategy linkStrategy, 
+            CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Unlinking device with {linkStrategy.GetType().Name}");
             try
@@ -72,8 +72,8 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             }
         }
 
-        internal override async Task Unlink(IUnlinkStrategy unlinkStrategy, CancellationToken cancelToken, 
-            Func<bool, Exception, Task> callback = null)
+        internal override async Task Unlink(IUnlinkStrategy unlinkStrategy, 
+            CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Unlinking device with {unlinkStrategy.GetType().Name}");
             try

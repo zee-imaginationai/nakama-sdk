@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501468bb441f8415ea07a09f72f13adc, type: 3}
   m_Name: v_CloudServiceProgress
   m_EditorClassIdentifier: 
-  Value: 0
+  Value: 1
   DefaultValue: 0
   ResetToDefaultOnPlay: 1

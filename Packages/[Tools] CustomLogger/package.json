@@ -1,5 +1,5 @@
 {
-  "name": "com.madratzz.tools.customlogger",
+  "name": "com.mrzee.tools.customlogger",
   "version": "0.0.1",
   "displayName": "[Tools] Custom Logger",
   "description": "A Custom Logger to replace the default Unity Logger",

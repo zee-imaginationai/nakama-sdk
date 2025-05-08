@@ -78,6 +78,15 @@
       "dependencies": {},
       "url": "http://167.86.67.197:4873"
     },
+    "com.madratzz.tools.customlogger": {
+      "version": "file:[Tools] CustomLogger",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.madratzz.scriptableobject.variables": "0.0.1",
+        "com.madratzz.scriptableobject.variables.database": "0.0.1"
+      }
+    },
     "com.madratzz.utilities.extensions": {
       "version": "0.0.1",
       "depth": 0,

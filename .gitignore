@@ -79,3 +79,5 @@ CF2-Data/Settings/CF2.config
 Assets/_ThirdPartyAssets/Asset Cleaner/
 
 Assets/_ThirdPartyAssets/Asset Cleaner.meta
+
+node_modules/

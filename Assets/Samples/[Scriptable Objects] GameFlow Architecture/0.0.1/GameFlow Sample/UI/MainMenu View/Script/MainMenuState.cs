@@ -34,9 +34,9 @@ public class MainMenuState : State
         yield return base.Exit();
     }
     
-    public async void ConnectFacebook()
+    public void ConnectFacebook()
     {
-        await FacebookService.LoginFacebook();
+        FacebookService.LoginFacebook();
         // await NakamaSystem.SigninWithFacebook();
     }
 

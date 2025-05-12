@@ -1,7 +1,6 @@
 using System;
 using ProjectCore.Events;
 #if FB
-using System.Threading.Tasks;
 using Facebook.Unity;
 #endif
 using ProjectCore.Variables;
@@ -160,7 +159,7 @@ namespace ProjectCore.Integrations.FacebookService
         }
 
         [Button]
-        public async Task LoginFacebook()
+        public void LoginFacebook()
         {
             if (FB.IsLoggedIn || FbLoggedIn)
             {
@@ -176,8 +175,6 @@ namespace ProjectCore.Integrations.FacebookService
 #else
             LoginToFacebook();
 #endif
-
-            await Task.CompletedTask;
         }
 #endif
     }

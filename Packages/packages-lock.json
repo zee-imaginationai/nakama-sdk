@@ -63,7 +63,7 @@
       "url": "http://167.86.67.197:4873"
     },
     "com.madratzz.scriptableobject.variables.database": {
-      "version": "0.0.3",
+      "version": "0.0.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {

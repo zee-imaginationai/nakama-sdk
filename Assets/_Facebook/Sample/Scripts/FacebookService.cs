@@ -19,8 +19,10 @@ namespace ProjectCore.Integrations.FacebookService
         
         [SerializeField] private Float FbLoadingProgress;
 
-        [SerializeField] private GameEvent FacebookInitializedEvent;
-        [SerializeField] private GameEventWithBool FacebookConnectEvent;
+        [SerializeField] private string[] Permissions;
+
+        [FoldoutGroup("Events"), SerializeField] private GameEvent FacebookInitializedEvent;
+        [FoldoutGroup("Events"), SerializeField] private GameEventWithBool FacebookConnectEvent;
         
         // link: https://developers.facebook.com/docs/unity/reference/current
         
@@ -97,14 +99,8 @@ namespace ProjectCore.Integrations.FacebookService
         {
             if (FB.IsLoggedIn && !HasTokenExpired(AccessToken.CurrentAccessToken))
                 return;
-            
-            var scopes = new []
-            {
-                "public_profile",
-                "email"
-            };
-            
-            FB.LogInWithReadPermissions(scopes, delegate(ILoginResult result)
+         
+            FB.LogInWithReadPermissions(Permissions, delegate(ILoginResult result)
             {
                 if (FB.IsLoggedIn)
                 {

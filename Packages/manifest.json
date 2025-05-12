@@ -56,7 +56,8 @@
       "url": "http://167.86.67.197:4873",
       "scopes": [
         "com.madratzz",
-        "com.kazmi"
+        "com.kazmi",
+        "com.zee"
       ]
     }
   ]

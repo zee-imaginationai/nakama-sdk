@@ -95,6 +95,16 @@
       "dependencies": {},
       "url": "http://167.86.67.197:4873"
     },
+    "com.mrzee.tools.customlogger": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.variables": "0.0.1",
+        "com.madratzz.scriptableobject.variables.database": "0.0.2"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
     "com.unity.burst": {
       "version": "1.8.19",
       "depth": 1,

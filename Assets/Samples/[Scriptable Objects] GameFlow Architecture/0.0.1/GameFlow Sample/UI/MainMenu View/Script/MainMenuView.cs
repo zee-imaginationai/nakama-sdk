@@ -120,7 +120,7 @@ public class MainMenuView : UiPanelInAndOut
         SyncConflictText.text = text;
         SyncConflictButton.image.color = color;
         ConflictString.SetValue(text);
-        _ = UserProgressService.SaveUserProgress();
+        UserProgressService.SaveUserProgress();
     }
 
     private void OnEmailAuthButton()

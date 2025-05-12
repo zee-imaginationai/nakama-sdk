@@ -18,6 +18,8 @@ MonoBehaviour:
   IsForceSync: {fileID: 11400000, guid: 2835a62d53e1a9440813c061d8dc0ab5, type: 2}
   ServerTimeService: {fileID: 11400000, guid: 704212ec8479dd34ca8d4116681c249d, type: 2}
   Logger: {fileID: 11400000, guid: f92cfa247d2ca3443a4d806956d8cd35, type: 2}
+  ProgressSaveCompleteEvent: {fileID: 11400000, guid: 90d920d5da1006b4fa1bb25169bda79d,
+    type: 2}
   ConflictString: {fileID: 11400000, guid: b45d6dc2af04db54a954cd1b22cd66c6, type: 2}
   MainMenuState: {fileID: 11400000, guid: 1b25061154ad11d48b506bb0b4afb57b, type: 2}
   ShowConflictResolutionPanel: 0

@@ -93,7 +93,7 @@ namespace ProjectCore.Application
             SceneManager.SetActiveScene(scene);
             
             var task = NakamaSystem.AuthenticateNakama(TaskUtil.RefreshToken(ref _cancellationTokenSource));
-
+            
             WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
             float timeStarted = Time.time;
             while(true)

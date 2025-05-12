@@ -95,6 +95,17 @@
       "dependencies": {},
       "url": "http://167.86.67.197:4873"
     },
+    "com.mrzee.scriptableobject.integrations.facebookservice": {
+      "version": "file:[Scriptable Object] Facebook Service",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.madratzz.scriptableobject.variables": "0.0.1",
+        "com.madratzz.scriptableobject.variables.database": "0.0.2",
+        "com.madratzz.scriptableobject.eventsystem.core": "0.0.1",
+        "com.madratzz.scriptableobject.eventsystem.extensions": "0.0.1"
+      }
+    },
     "com.mrzee.tools.customlogger": {
       "version": "0.0.1",
       "depth": 0,

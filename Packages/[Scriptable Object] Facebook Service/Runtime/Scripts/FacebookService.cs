@@ -18,7 +18,8 @@ namespace ProjectCore.Integrations.FacebookService
         
         [SerializeField] private Float FbLoadingProgress;
 
-        [SerializeField] private string[] Permissions;
+        [InfoBox("These are the permissions that will be requested on login.")]
+        [SerializeField] private string[] LoginPermissions;
 
         [FoldoutGroup("Events"), SerializeField] private GameEvent FacebookInitializedEvent;
         [FoldoutGroup("Events"), SerializeField] private GameEventWithBool FacebookConnectEvent;
@@ -99,7 +100,7 @@ namespace ProjectCore.Integrations.FacebookService
             if (FB.IsLoggedIn && !HasTokenExpired(AccessToken.CurrentAccessToken))
                 return;
          
-            FB.LogInWithReadPermissions(Permissions, delegate(ILoginResult result)
+            FB.LogInWithReadPermissions(LoginPermissions, delegate(ILoginResult result)
             {
                 if (FB.IsLoggedIn)
                 {

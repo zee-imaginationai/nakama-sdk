@@ -25,11 +25,6 @@ namespace ProjectCore.Integrations.Internal
         [SerializeField] private GameEvent ProgressSaveCompleteEvent;
         
         protected Dictionary<string, object> _CloudData;
-
-        public void Initialize()
-        {
-            ProgressSaveCompleteEvent.Handler += OnSaveComplete;
-        }
         
         public async Task SyncData()
         {
@@ -88,6 +83,7 @@ namespace ProjectCore.Integrations.Internal
         {
             var serverTime = await ServerTimeService.GetServerTimeAsync();
             LastSyncTime.SetValue(serverTime);
+            ProgressSaveCompleteEvent.Handler += OnSaveComplete;
             UserProgressService.SaveUserProgress();
         }
 
@@ -98,6 +94,7 @@ namespace ProjectCore.Integrations.Internal
 
         private void OnSaveComplete()
         {
+            ProgressSaveCompleteEvent.Handler -= OnSaveComplete;
             ResetForceSync();
             Logger.Log("Syncing Complete...");
         }

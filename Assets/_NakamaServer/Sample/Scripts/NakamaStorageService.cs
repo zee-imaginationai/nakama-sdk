@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using CustomUtilities.Tools;
 using Nakama;
@@ -30,25 +31,51 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             QueueChangedEvent.Handler += OnQueueChangedEvent;
         }
 
-        private void OnQueueChangedEvent()
+        private CancellationTokenSource _cts;
+        private bool _isProcessing;
+
+        private async void OnQueueChangedEvent()
         {
-            while (SaveQueue.Count > 0)
+            if (_isProcessing) return;
+            _isProcessing = true;
+    
+            try
             {
-                if (SaveQueue.Count > 5)
+                var timeoutToken = _cts.RefreshToken();
+        
+                while (SaveQueue.TryDequeue(out Task task))
                 {
-                    SaveQueue.DeQueue();
-                    continue;
+                    try
+                    {
+                        // Execute with timeout protection
+                        await task.WaitAsync(TimeSpan.FromSeconds(3), timeoutToken);
+                
+                        if (task.Status != TaskStatus.RanToCompletion)
+                        {
+                            _Logger.LogError($"[Save] Task failed with status: {task.Status}");
+                        }
+                    }
+                    catch (TimeoutException)
+                    {
+                        _Logger.LogCritical("[Save] Operation timed out");
+                        _cts.Cancel();
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        _Logger.LogCritical(ex.Message);
+                    }
+                    finally
+                    {
+                        task.Dispose();
+                    }
                 }
-                var task = SaveQueue.DeQueue();
-                task.Start();
-                task.Wait(3);
-                if (!task.IsCompletedSuccessfully)
-                {
-                    _Logger.LogCritical("[Nakama] Failed to save user data");
-                }
-                task.Dispose();
             }
-            ProgressSaveCompleteEvent.Invoke();
+            finally
+            {
+                _isProcessing = false;
+                ProgressSaveCompleteEvent.Invoke();
+            }
         }
 
         public override void SaveUserProgress()

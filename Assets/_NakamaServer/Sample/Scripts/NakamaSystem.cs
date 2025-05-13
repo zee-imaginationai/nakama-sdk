@@ -38,7 +38,6 @@ namespace ProjectCore.Integrations.NakamaServer
 #if FB
             FacebookConnectEvent.Handler += OnFacebookConnectEvent;
 #endif
-            NakamaCloudSyncService.Initialize();
             CloudServiceProgress.SetValue(0);
             _nakamaServer = new Internal.NakamaServer(ServerConfig, Logger);
         }

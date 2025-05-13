@@ -22,23 +22,23 @@ namespace ProjectCore.Integrations.Internal
         
         protected async Task SaveData(string collection, string key, string data)
         {
-            _Logger.Log($"Saving {collection} to {key}]");
+            _Logger.Log($"Saving {key} to {collection}");
             await _Provider.SaveDataAsync(collection, key, data);
-            _Logger.Log($"Saved {collection} to {key}");
+            _Logger.Log($"Saved {key} to {collection}");
         }
 
         protected async Task<Dictionary<string, object>> LoadData(string collection, string key)
         {
-            _Logger.Log($"Loading {collection} from {key}");
+            _Logger.Log($"Loading {key} from {collection}");
             var loadedString = await _Provider.LoadDataAsync(collection, key);
             return _Serializer.Deserialize<Dictionary<string, object>>(loadedString);
         }
 
         protected async Task DeleteData(string collection, string key)
         {
-            _Logger.Log($"Deleting {collection} from {key}");
+            _Logger.Log($"Deleting {key} from {collection}");
             await _Provider.DeleteDataAsync(collection, key);
-            _Logger.Log($"Deleted {collection}");
+            _Logger.Log($"Deleted {collection} from {key}");
         }
     }
 }

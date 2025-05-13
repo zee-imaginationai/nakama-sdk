@@ -2,7 +2,7 @@
   "name": "com.mrzee.scriptableobject.integrations.nakamaserver",
   "version": "0.0.1",
   "displayName": "[Scriptable Objects] Nakama Server",
-  "description": "A custom package for Nakama Server basic integration.\nUse facebook service for FB authentication.",
+  "description": "A custom package for Nakama Server basic integration.\nPlease add Nakama SDK from Asset Store before including this package in the project\nLINK: https://assetstore.unity.com/packages/tools/network/nakama-81338\nUse facebook service for FB authentication.",
   "unity": "2022.3",
   "unityRelease": "0f1",
   "keywords": [

@@ -1,0 +1,34 @@
+{
+  "name": "com.mrzee.scriptableobject.integrations.nakamaserver",
+  "version": "0.0.1",
+  "displayName": "[Scriptable Objects] Nakama Server",
+  "description": "A custom package for Nakama Server basic integration.\nUse facebook service for FB authentication.",
+  "unity": "2022.3",
+  "unityRelease": "0f1",
+  "keywords": [
+    "server",
+    "integration",
+    "service",
+    "scriptable object",
+    "cloud",
+    "nakama"
+  ],
+  "author": {
+    "name": "Zeeshah Butt",
+    "email": "hello@mrzee.net"
+  },
+  "samples": [
+    {
+      "displayName": "Nakama Server",
+      "description": "Contains samples for Nakama Server integration.",
+      "path": "Samples~/NakamaServer"
+    }
+  ],
+  "dependencies": {
+    "com.madratzz.scriptableobject.eventsystem.core": "0.0.1",
+    "com.madratzz.scriptableobject.variables": "0.0.1",
+    "com.madratzz.scriptableobject.variables.database": "0.0.4",
+    "com.mrzee.tools.customlogger": "0.0.1"
+  },
+  "gitHead": "818e1b6d7e28bb1683b115c7c93a9f80a373b6b3"
+}

@@ -36,13 +36,17 @@ public class MainMenuState : State
     
     public void ConnectFacebook()
     {
+#if FB
         FacebookService.LoginFacebook();
+#endif
         // await NakamaSystem.SigninWithFacebook();
     }
 
     public void DisconnectFacebook()
     {
+#if FB
         FacebookService.LogoutFacebook();
+#endif
     }
 
     public async Task<StorageType> ResolveConflict()

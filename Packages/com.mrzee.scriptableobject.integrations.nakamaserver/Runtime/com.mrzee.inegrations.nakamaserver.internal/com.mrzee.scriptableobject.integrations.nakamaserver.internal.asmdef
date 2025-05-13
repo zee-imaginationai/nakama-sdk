@@ -1,0 +1,25 @@
+{
+    "name": "com.mrzee.scriptableobject.integrations.nakamaserver.internal",
+    "rootNamespace": "ProjectCore",
+    "references": [
+        "GUID:45f09d31ac3ef1f49804ebf876381b76",
+        "GUID:392e4ff9c3fbfe949b5318b7c872984c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "NAKAMA_ENABLED"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.mrzee.scriptableobject.integrations.nakamaserver",
+            "expression": "0.0.1",
+            "define": "NAKAMA_ENABLED"
+        }
+    ],
+    "noEngineReferences": false
+}

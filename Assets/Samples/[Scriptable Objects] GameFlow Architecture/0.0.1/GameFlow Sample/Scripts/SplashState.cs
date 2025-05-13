@@ -2,16 +2,14 @@
 using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
+using ExtensionMethods;
 using ProjectCore.Integrations.NakamaServer;
 using ProjectCore.Events;
 using ProjectCore.Integrations.FacebookService;
-using ProjectCore.Integrations.NakamaServer.Internal;
 using ProjectCore.StateMachine;
 using ProjectCore.Variables;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-
 
 namespace ProjectCore.Application
 {
@@ -92,7 +90,7 @@ namespace ProjectCore.Application
             Scene scene = SceneManager.GetSceneByBuildIndex(SceneIndex);
             SceneManager.SetActiveScene(scene);
             
-            var task = NakamaSystem.AuthenticateNakama(TaskUtil.RefreshToken(ref _cancellationTokenSource));
+            var task = NakamaSystem.AuthenticateNakama(_cancellationTokenSource.RefreshToken());
             
             WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
             float timeStarted = Time.time;

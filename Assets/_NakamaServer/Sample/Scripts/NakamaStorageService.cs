@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using CustomUtilities.Tools;
+using ExtensionMethods;
 using Nakama;
+using ProjectCore.Events;
 using ProjectCore.Integrations.Internal;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
@@ -11,36 +15,77 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
 {
     [CreateAssetMenu(fileName = "NakamaStorageService", menuName = "ProjectCore/Integrations/NakamaServer/NakamaStorageService")]
     [InlineEditor]
-    public class NakamaStorageService : ScriptableObject
+    public class NakamaStorageService : StorageService
     {
-        private IStorageProvider _provider;
-        private ISerializationStrategy _serializer;
-        private CustomLogger _logger;
-        
         private const string COLLECTION_NAME = "Save";
         private const string KEY_NAME = "UserProgress";
+
+        [SerializeField] private Queue SaveQueue;
+        [SerializeField] private GameEvent QueueChangedEvent;
+        [SerializeField] private GameEvent ProgressSaveCompleteEvent;
         
-        public void Initialize(IClient client, ISession session, CustomLogger logger)
+        public override void Initialize(IClient client, ISession session, CustomLogger logger)
         {
-            _logger = logger;
-            _provider = new NakamaStorageProvider(client, session);
-            _serializer = new NakamaSerializationStrategy();
+            _Logger = logger;
+            _Provider = new NakamaStorageProvider(client, session);
+            _Serializer = new NakamaSerializationStrategy();
+            QueueChangedEvent.Handler += OnQueueChangedEvent;
         }
 
-        public async Task SaveUserProgress()
+        private CancellationTokenSource _cts;
+        private bool _isProcessing;
+
+        private async void OnQueueChangedEvent()
         {
+            if (_isProcessing) return;
+            _isProcessing = true;
+    
             try
             {
-                var data = DBManager.GetJsonData();
-                await SaveData(COLLECTION_NAME, KEY_NAME, data);
+                var timeoutToken = _cts.RefreshToken();
+        
+                while (SaveQueue.TryDequeue(out Task task))
+                {
+                    try
+                    {
+                        // Execute with timeout protection
+                        await task.WaitAsync(TimeSpan.FromSeconds(3), timeoutToken);
+                
+                        if (task.Status != TaskStatus.RanToCompletion)
+                        {
+                            _Logger.LogError($"[Save] Task failed with status: {task.Status}");
+                        }
+                    }
+                    catch (TimeoutException)
+                    {
+                        _Logger.LogCritical("[Save] Operation timed out");
+                        _cts.Cancel();
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        _Logger.LogCritical(ex.Message);
+                    }
+                    finally
+                    {
+                        task.Dispose();
+                    }
+                }
             }
-            catch
+            finally
             {
-                _logger.LogCritical("[Nakama] Failed to save user data");
+                _isProcessing = false;
+                ProgressSaveCompleteEvent.Invoke();
             }
         }
 
-        public async Task<Dictionary<string, object>> LoadUserProgress()
+        public override void SaveUserProgress()
+        {
+            var data = DBManager.GetJsonData();
+            SaveQueue.Enqueue(SaveData(COLLECTION_NAME, KEY_NAME, data));
+        }
+
+        public override async Task<Dictionary<string, object>> LoadUserProgress()
         {
             try
             {
@@ -48,12 +93,12 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             }
             catch
             {
-                _logger.LogCritical("[Nakama] Failed to load user data");
+                _Logger.LogCritical("[Nakama] Failed to load user data");
                 return new Dictionary<string, object>();
             }
         }
 
-        public async Task DeleteUserProgress()
+        public override async Task DeleteUserProgress()
         {
             try
             {
@@ -61,29 +106,8 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             }
             catch
             {
-                _logger.LogCritical("[Nakama] Failed to load user data");
+                _Logger.LogCritical("[Nakama] Failed to load user data");
             }
-        }
-        
-        private async Task SaveData(string collection, string key, string data)
-        {
-            _logger.Log($"Saving {collection} to {key}]");
-            await _provider.SaveDataAsync(collection, key, data);
-            _logger.Log($"Saved {collection} to {key}");
-        }
-
-        private async Task<Dictionary<string, object>> LoadData(string collection, string key)
-        {
-            _logger.Log($"Loading {collection} from {key}");
-            var loadedString = await _provider.LoadDataAsync(collection, key);
-            return _serializer.Deserialize<Dictionary<string, object>>(loadedString);
-        }
-
-        private async Task DeleteData(string collection, string key)
-        {
-            _logger.Log($"Deleting {collection} from {key}");
-            await _provider.DeleteDataAsync(collection, key);
-            _logger.Log($"Deleted {collection}");
         }
     }
 }

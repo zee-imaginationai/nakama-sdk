@@ -16,7 +16,6 @@ namespace ProjectCore.Integrations.NakamaServer
     public class NakamaSystem : ScriptableObject
     {
         [SerializeField] private ServerConfig ServerConfig;
-        [SerializeField] private GameEventWithBool FacebookConnectEvent;
         
         [SerializeField] private NakamaStorageService NakamaStorageService;
         [SerializeField] private NakamaCloudSyncService NakamaCloudSyncService;
@@ -25,8 +24,12 @@ namespace ProjectCore.Integrations.NakamaServer
 
         [SerializeField] private Float CloudServiceProgress;
 
+#if FB
         [SerializeField] private DBString FbAuthToken;
         [SerializeField] private DBBool IsFbSignedIn;
+        
+        [SerializeField] private GameEventWithBool FacebookConnectEvent;
+#endif
         
         private Server _nakamaServer;
 

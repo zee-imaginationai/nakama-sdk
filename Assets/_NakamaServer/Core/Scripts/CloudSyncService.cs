@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CustomUtilities.Tools;
+using ProjectCore.Events;
 using ProjectCore.Integrations.NakamaServer.Internal;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
@@ -12,7 +13,7 @@ namespace ProjectCore.Integrations.Internal
     {
         [ShowInInspector] private const string FORCE_SYNC_KEY = "force_sync";
         
-        [SerializeField] private NakamaStorageService UserProgressService;
+        [SerializeField] private StorageService UserProgressService;
         
         [SerializeField] private DBEpochTime LastSyncTime;
         [SerializeField] private DBBool IsForceSync;
@@ -20,6 +21,8 @@ namespace ProjectCore.Integrations.Internal
         [SerializeField] private ServerTimeService ServerTimeService;
         
         [SerializeField] protected CustomLogger Logger;
+
+        [SerializeField] private GameEvent ProgressSaveCompleteEvent;
         
         protected Dictionary<string, object> _CloudData;
         
@@ -80,14 +83,20 @@ namespace ProjectCore.Integrations.Internal
         {
             var serverTime = await ServerTimeService.GetServerTimeAsync();
             LastSyncTime.SetValue(serverTime);
-            await UserProgressService.SaveUserProgress();
-            ResetForceSync();
-            Logger.Log("Syncing Complete...");
+            ProgressSaveCompleteEvent.Handler += OnSaveComplete;
+            UserProgressService.SaveUserProgress();
         }
 
         protected virtual Task<StorageType> GetConflictStorageType()
         {
             return Task.FromResult(StorageType.Cloud);
+        }
+
+        private void OnSaveComplete()
+        {
+            ProgressSaveCompleteEvent.Handler -= OnSaveComplete;
+            ResetForceSync();
+            Logger.Log("Syncing Complete...");
         }
         
         private bool EvaluateLastSyncTimeExpired()

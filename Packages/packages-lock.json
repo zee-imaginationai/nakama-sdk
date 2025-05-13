@@ -79,7 +79,7 @@
       "url": "http://167.86.67.197:4873"
     },
     "com.madratzz.utilities.extensions": {
-      "version": "0.0.1",
+      "version": "0.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {

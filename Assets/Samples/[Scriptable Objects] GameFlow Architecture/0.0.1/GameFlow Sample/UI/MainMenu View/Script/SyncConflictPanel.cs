@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
+#if NAKAMA_ENABLED
 using ProjectCore.Integrations.Internal;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +10,7 @@ public class SyncConflictPanel : MonoBehaviour
     [SerializeField] private Button ChooseLocalProgressButton;
     [SerializeField] private Button ChooseCloudProgressButton;
     [SerializeField] private GameObject PanelObject;
-    
+#if NAKAMA_ENABLED
     private StorageType _storageType = StorageType.None;
 
     private void RegisterEvents()
@@ -55,4 +57,5 @@ public class SyncConflictPanel : MonoBehaviour
         SetSyncConflictPanelState(false);
         UnRegisterEvents();
     }
+#endif
 }

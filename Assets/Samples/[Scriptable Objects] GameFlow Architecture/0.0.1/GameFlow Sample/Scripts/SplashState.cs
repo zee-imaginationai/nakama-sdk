@@ -3,7 +3,9 @@ using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 using ExtensionMethods;
+#if NAKAMA_ENABLED
 using ProjectCore.Integrations.NakamaServer;
+#endif
 using ProjectCore.Events;
 using ProjectCore.Integrations.FacebookService;
 using ProjectCore.StateMachine;
@@ -33,7 +35,10 @@ namespace ProjectCore.Application
         [NonSerialized] private bool socialKitInitialize = false;
         [NonSerialized] private float TimeoutTime = 10;
 
+#if NAKAMA_ENABLED
         [SerializeField] private NakamaSystem NakamaSystem;
+#endif
+        
         [SerializeField] private Float CloudServiceProgress;
         [SerializeField] private FacebookService FacebookService;
         
@@ -50,7 +55,9 @@ namespace ProjectCore.Application
             socialKitInitialize = false;
 
             //TODO: Initialize GA and FB
+#if NAKAMA_ENABLED
             NakamaSystem.Initialize();
+#endif
             FacebookService.Initialize();
         }
 
@@ -90,7 +97,9 @@ namespace ProjectCore.Application
             Scene scene = SceneManager.GetSceneByBuildIndex(SceneIndex);
             SceneManager.SetActiveScene(scene);
             
+#if NAKAMA_ENABLED
             var task = NakamaSystem.AuthenticateNakama(_cancellationTokenSource.RefreshToken());
+#endif
             
             WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
             float timeStarted = Time.time;
@@ -105,8 +114,12 @@ namespace ProjectCore.Application
                     break;
                 }
 
-                if ((SdkLoadingProgress >= 1.0f && CloudServiceProgress >= 1.0f) 
+                if ((SdkLoadingProgress >= 1.0f && CloudServiceProgress >= 1.0f)
+#if NAKAMA_ENABLED
                     || IsTaskCompleted(task))
+#else
+                )
+#endif
                 {
                     break;
                 }
@@ -117,7 +130,9 @@ namespace ProjectCore.Application
             yield return new WaitUntil(() => SdkLoadingProgress.GetValue() >= 1.0f 
                                              && CloudServiceProgress.GetValue() >= 1.0f);
             
+#if NAKAMA_ENABLED
             Debug.LogError($"Task : {task.Status}");
+#endif
 
             //artificial delay can be removed
             yield return waitForSeconds;

@@ -3,11 +3,13 @@ using ProjectCore.StateMachine;
 using System;
 using System.Collections;
 using System.Threading.Tasks;
-using Nakama;
 using ProjectCore.Integrations.FacebookService;
+#if NAKAMA_ENABLED
+using Nakama;
 using ProjectCore.Integrations.Internal;
 using ProjectCore.Integrations.NakamaServer;
 using ProjectCore.Integrations.NakamaServer.Internal;
+#endif
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MainMenuState", menuName = "ProjectCore/State Machine/States/MainMenu State")]
@@ -17,7 +19,9 @@ public class MainMenuState : State
 
     [SerializeField] private GameEvent GotoGameEvent;
     [NonSerialized] private MainMenuView _mainMenuView;
+#if NAKAMA_ENABLED
     [SerializeField] private NakamaSystem NakamaSystem;
+#endif
     [SerializeField] private FacebookService FacebookService;
     public override IEnumerator Execute()
     {
@@ -49,38 +53,16 @@ public class MainMenuState : State
 #endif
     }
 
+#if NAKAMA_ENABLED
     public async Task<StorageType> ResolveConflict()
     {
         var storageType = await _mainMenuView.ShowSyncConflictPanel();
         return storageType;
     }
+#endif
 
     public void UpdateButton() => _mainMenuView?.UpdateButton();
-
-    private void OnConnectionWithEmail(bool success, ApiResponseException exception)
-    {
-        if(success)
-            _mainMenuView.ShowErrorText("Sign In Success");
-        else
-        {
-            _mainMenuView.ShowErrorText(exception.Message);
-        }
-    }
-
-    public async void LogoutNakama()
-    {
-    }
-
-    private void OnLogout(bool success, ApiResponseException exception)
-    {
-        if(success)
-            _mainMenuView.ShowErrorText("Log Out Success");
-        else
-        {
-            _mainMenuView.ShowErrorText(exception.Message);
-        }
-    }
-
+    
     public void GotoGame()
     {
         GotoGameEvent.Invoke();

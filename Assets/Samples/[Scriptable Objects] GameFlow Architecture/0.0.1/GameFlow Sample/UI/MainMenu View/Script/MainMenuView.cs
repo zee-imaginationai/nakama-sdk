@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+#if NAKAMA_ENABLED
 using ProjectCore.Integrations.Internal;
 using ProjectCore.Integrations.NakamaServer.Internal;
+#endif
 using ProjectCore.Variables;
 using TMPro;
 using UnityEngine;
@@ -19,13 +21,16 @@ public class MainMenuView : UiPanelInAndOut
     [SerializeField] private Button SyncConflictButton;
     [SerializeField] private TextMeshProUGUI SyncConflictText;
 
-    [SerializeField] private CloudSyncPanel CloudSyncPanel;
     [SerializeField] private SyncConflictPanel SyncConflictPanel;
     
     [SerializeField] private MainMenuState MainMenuState;
     
     [SerializeField] private DBString ConflictString;
+    
+#if NAKAMA_ENABLED
+    [SerializeField] private CloudSyncPanel CloudSyncPanel;
     [SerializeField] private NakamaStorageService UserProgressService;
+#endif
 
     private void OnEnable()
     {
@@ -34,8 +39,10 @@ public class MainMenuView : UiPanelInAndOut
         EmailAuthButton.onClick.AddListener(OnEmailAuthButton);
         SyncConflictButton.onClick.AddListener(OnSyncConflictButtonPressed);
 
+#if NAKAMA_ENABLED
         SyncConflictPanel.Hide();
         CloudSyncPanel.Hide();
+#endif
     }
 
     private void OnDisable()
@@ -45,12 +52,14 @@ public class MainMenuView : UiPanelInAndOut
         SyncConflictButton.onClick.RemoveListener(OnSyncConflictButtonPressed);
     }
     
+#if NAKAMA_ENABLED
     public async Task<StorageType> ShowSyncConflictPanel()
     {
         var storageType = await SyncConflictPanel.Show();
         SyncConflictPanel.Hide();
         return storageType;
     }
+#endif
 
     public override IEnumerator Show(bool isResumed)
     {
@@ -75,11 +84,6 @@ public class MainMenuView : UiPanelInAndOut
     private void OpenViewButtonPressed()
     {
         MainMenuState.GotoGame();
-    }
-
-    public void ShowErrorText(string errorText)
-    {
-        CloudSyncPanel.ShowErrorText(errorText);
     }
     
     private Dictionary<Color, string> _colorDictionary;
@@ -120,11 +124,17 @@ public class MainMenuView : UiPanelInAndOut
         SyncConflictText.text = text;
         SyncConflictButton.image.color = color;
         ConflictString.SetValue(text);
+#if NAKAMA_ENABLED
         UserProgressService.SaveUserProgress();
+#endif
+
     }
 
     private void OnEmailAuthButton()
     {
+#if NAKAMA_ENABLED
         CloudSyncPanel.Show();
+#endif
     }
+    
 }

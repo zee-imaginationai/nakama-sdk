@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81ac4c162ace4a178f06ba317b7aa3f6, type: 3}
+  m_Name: NakamaCloudSyncService
+  m_EditorClassIdentifier: 
+  UserProgressService: {fileID: 11400000, guid: 1354861bcb101c04086f9923f2c3552f,
+    type: 2}
+  LastSyncTime: {fileID: 11400000, guid: 77cc379fe65b9cd459b3816c7374b856, type: 2}
+  IsForceSync: {fileID: 11400000, guid: 2835a62d53e1a9440813c061d8dc0ab5, type: 2}
+  ServerTimeService: {fileID: 11400000, guid: 704212ec8479dd34ca8d4116681c249d, type: 2}
+  Logger: {fileID: 11400000, guid: f92cfa247d2ca3443a4d806956d8cd35, type: 2}
+  ProgressSaveCompleteEvent: {fileID: 11400000, guid: 90d920d5da1006b4fa1bb25169bda79d,
+    type: 2}
+  ConflictString: {fileID: 11400000, guid: b45d6dc2af04db54a954cd1b22cd66c6, type: 2}
+  MainMenuState: {fileID: 11400000, guid: 1b25061154ad11d48b506bb0b4afb57b, type: 2}
+  ShowConflictResolutionPanel: 0

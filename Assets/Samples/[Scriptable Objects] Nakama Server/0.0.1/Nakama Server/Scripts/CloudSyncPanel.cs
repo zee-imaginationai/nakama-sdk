@@ -1,0 +1,69 @@
+using ProjectCore.Events;
+using ProjectCore.Variables;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class CloudSyncPanel : MonoBehaviour
+{
+    [SerializeField] private Button CloseButton;
+
+    [SerializeField] private GameObject AuthPanelObject;
+
+    [SerializeField] private Button FbLoginButton;
+    
+    [SerializeField] private TextMeshProUGUI FbLoginText;
+    
+    [SerializeField] private MainMenuState MainMenuState;
+    
+    [SerializeField] private DBBool IsFbLoggedIn;
+
+    [SerializeField] private GameEventWithBool FacebookConnectEvent;
+
+    private void OnEnable()
+    {
+        CloseButton.onClick.AddListener(OnCloseButton);
+        FbLoginButton.onClick.AddListener(OnFbLoginButton);
+
+        FacebookConnectEvent.Handler += OnFacebookConnectEvent;
+    }
+
+    private void OnDisable()
+    {
+        CloseButton.onClick.RemoveListener(OnCloseButton);
+        FbLoginButton.onClick.RemoveListener(OnFbLoginButton);
+        
+        FacebookConnectEvent.Handler -= OnFacebookConnectEvent;
+    }
+
+    private void UpdatePanel()
+    {
+        OnFacebookConnectEvent(IsFbLoggedIn);
+    }
+
+    public void Show()
+    {
+        UpdatePanel();
+        SetAuthPanelState(true);
+    }
+
+    public void Hide() => SetAuthPanelState(false);
+
+    private void OnFacebookConnectEvent(bool isConnected)
+    {
+        FbLoginButton.image.color = isConnected ? Color.green : Color.red;
+        FbLoginText.text = isConnected ? "Disconnect" : "Connect";
+    }
+
+    private void OnFbLoginButton()
+    {
+        if (IsFbLoggedIn)
+            MainMenuState.DisconnectFacebook();
+        else
+            MainMenuState.ConnectFacebook();
+    }
+    
+    private void OnCloseButton() => SetAuthPanelState(false);
+
+    private void SetAuthPanelState(bool state) => AuthPanelObject.SetActive(state);
+}

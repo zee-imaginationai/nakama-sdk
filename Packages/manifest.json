@@ -9,6 +9,7 @@
     "com.madratzz.utilities.extensions": "0.0.2",
     "com.madratzz.utilities.unity.alwaysstartfromscenezero": "0.0.1",
     "com.mrzee.scriptableobject.integrations.facebookservice": "0.0.1",
+    "com.mrzee.scriptableobject.integrations.nakamaserver": "0.0.1",
     "com.mrzee.tools.customlogger": "0.0.1",
     "com.unity.collab-proxy": "2.7.1",
     "com.unity.ide.rider": "3.0.36",

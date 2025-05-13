@@ -30,7 +30,7 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
 
         #region Authentication_Region
 
-        internal override async Task Authenticate(IAuthStrategy authStrategy, 
+        public override async Task Authenticate(IAuthStrategy authStrategy, 
             CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Authenticating with {authStrategy.GetType().Name}");
@@ -56,7 +56,7 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             }
         }
 
-        internal override async Task Link(ILinkStrategy linkStrategy, 
+        public override async Task Link(ILinkStrategy linkStrategy, 
             CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Unlinking device with {linkStrategy.GetType().Name}");
@@ -72,7 +72,7 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             }
         }
 
-        internal override async Task Unlink(IUnlinkStrategy unlinkStrategy, 
+        public override async Task Unlink(IUnlinkStrategy unlinkStrategy, 
             CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null)
         {
             _Logger.Log($"[Nakama] Unlinking device with {unlinkStrategy.GetType().Name}");
@@ -120,7 +120,7 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
         }
 
 
-        internal override async Task<bool> ValidateSession()
+        public override async Task<bool> ValidateSession()
         {
             if (Session != null && !Session.IsExpired)
             {
@@ -214,7 +214,7 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
 
         #endregion
 
-        internal override void ClearSession()
+        public override void ClearSession()
         {
             _Socket?.CloseAsync();
         }

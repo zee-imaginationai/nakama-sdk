@@ -7,7 +7,7 @@ using Nakama;
 namespace ProjectCore.Integrations.Internal
 {
     // Server is explicitly intended to be used as a base class and should not be changed.
-    internal abstract class Server
+    public abstract class Server
     {
         protected ServerConfig _Config;
         protected CustomLogger _Logger;
@@ -15,8 +15,8 @@ namespace ProjectCore.Integrations.Internal
         protected ISocket _Socket;
         protected IApiAccount _Account;
 
-        internal IClient Client { get; set; }
-        internal ISession Session { get; set; }
+        public IClient Client { get; set; }
+        public ISession Session { get; set; }
 
         protected Server(ServerConfig config, CustomLogger logger)
         {
@@ -24,14 +24,14 @@ namespace ProjectCore.Integrations.Internal
             _Logger = logger;
         }
 
-        internal abstract Task Authenticate(IAuthStrategy authStrategy, 
+        public abstract Task Authenticate(IAuthStrategy authStrategy, 
             CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null);
-        internal abstract Task Link(ILinkStrategy linkStrategy, 
+        public abstract Task Link(ILinkStrategy linkStrategy, 
             CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null);
-        internal abstract Task Unlink(IUnlinkStrategy unlinkStrategy, 
+        public abstract Task Unlink(IUnlinkStrategy unlinkStrategy, 
             CancellationToken cancelToken = default, Func<bool, Exception, Task> callback = null);
-        internal abstract void ClearSession();
-        internal abstract Task<bool> ValidateSession();
+        public abstract void ClearSession();
+        public abstract Task<bool> ValidateSession();
         
         protected abstract Task<bool> RefreshSession();
         protected abstract void SaveSession();

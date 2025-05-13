@@ -1,0 +1,31 @@
+{
+  "name": "com.mrzee.scriptableobject.integrations.facebookservice",
+  "version": "0.0.1",
+  "displayName": "[Scriptable Objects] Facebook Service",
+  "description": "A custom Facebook Service for Unity over Facebook Unity SDK.\nPlease install Facebook Unity SDK and add \"FB\" in Scripting Define Symbols.\nYou can download Unity FB SDK from: https://developers.facebook.com/docs/unity/",
+  "unity": "2022.3",
+  "unityRelease": "0f1",
+  "keywords": [
+    "tools",
+    "custom",
+    "logger"
+  ],
+  "author": {
+    "name": "Zeeshah Butt",
+    "email": "hello@mrzee.net"
+  },
+  "samples": [
+    {
+      "displayName": "Facebook Service Assets",
+      "description": "Contains assets for Facebook Service",
+      "path": "Samples~/FacebookServiceAssets"
+    }
+  ],
+  "dependencies": {
+    "com.madratzz.scriptableobject.eventsystem.core": "0.0.1",
+    "com.madratzz.scriptableobject.eventsystem.extensions": "0.0.1",
+    "com.madratzz.scriptableobject.variables": "0.0.1",
+    "com.madratzz.scriptableobject.variables.database": "0.0.2"
+  },
+  "gitHead": "818e1b6d7e28bb1683b115c7c93a9f80a373b6b3"
+}

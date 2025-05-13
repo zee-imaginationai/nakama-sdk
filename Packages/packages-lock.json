@@ -1,5 +1,122 @@
 {
   "dependencies": {
+    "com.madratzz.scriptableobject.architecture": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.eventsystem.extensions": "0.0.1",
+        "com.madratzz.scriptableobject.statemachine.core": "0.0.1",
+        "com.madratzz.scriptableobject.time.machine": "0.0.1",
+        "com.madratzz.scriptableobject.variables": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.event.variables": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.eventsystem.core": "0.0.1",
+        "com.madratzz.scriptableobject.variables": "0.0.1",
+        "com.madratzz.scriptableobject.variables.database": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.eventsystem.core": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.eventsystem.extensions": {
+      "version": "0.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.eventsystem.core": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.statemachine.core": {
+      "version": "0.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.time.machine": {
+      "version": "0.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.eventsystem.core": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.variables": {
+      "version": "0.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.variables.database": {
+      "version": "0.0.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.variables": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.scriptableobject.variables.extensions": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.utilities.extensions": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.variables": "0.0.1",
+        "com.madratzz.scriptableobject.variables.database": "0.0.1"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.madratzz.utilities.unity.alwaysstartfromscenezero": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.mrzee.scriptableobject.integrations.facebookservice": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.eventsystem.core": "0.0.1",
+        "com.madratzz.scriptableobject.eventsystem.extensions": "0.0.1",
+        "com.madratzz.scriptableobject.variables": "0.0.1",
+        "com.madratzz.scriptableobject.variables.database": "0.0.2"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
+    "com.mrzee.tools.customlogger": {
+      "version": "0.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.madratzz.scriptableobject.variables": "0.0.1",
+        "com.madratzz.scriptableobject.variables.database": "0.0.2"
+      },
+      "url": "http://167.86.67.197:4873"
+    },
     "com.unity.burst": {
       "version": "1.8.19",
       "depth": 1,
@@ -25,7 +142,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.34",
+      "version": "3.0.36",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -52,6 +169,13 @@
     "com.unity.mathematics": {
       "version": "1.2.6",
       "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.mobile.android-logcat": {
+      "version": "1.4.5",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"

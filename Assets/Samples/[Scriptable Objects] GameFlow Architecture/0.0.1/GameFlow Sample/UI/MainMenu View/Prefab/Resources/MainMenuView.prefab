@@ -936,6 +936,7 @@ MonoBehaviour:
   ChooseLocalProgressButton: {fileID: 8400853533697672637}
   ChooseCloudProgressButton: {fileID: 4408525622036384137}
   PanelObject: {fileID: 3808593934828591224}
+  MainMenuState: {fileID: 11400000, guid: 1b25061154ad11d48b506bb0b4afb57b, type: 2}
 --- !u!1 &4406171904226708182
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,10 +1195,10 @@ MonoBehaviour:
   EmailAuthButton: {fileID: 8466008838325853245}
   SyncConflictButton: {fileID: 2891781182871536758}
   SyncConflictText: {fileID: 5830610221094848961}
-  CloudSyncPanel: {fileID: 5103630265695635930}
   SyncConflictPanel: {fileID: 6375252192013488837}
   MainMenuState: {fileID: 11400000, guid: 1b25061154ad11d48b506bb0b4afb57b, type: 2}
   ConflictString: {fileID: 11400000, guid: b45d6dc2af04db54a954cd1b22cd66c6, type: 2}
+  CloudSyncPanel: {fileID: 5103630265695635930}
   UserProgressService: {fileID: 11400000, guid: 1354861bcb101c04086f9923f2c3552f,
     type: 2}
 --- !u!1 &6278512000758049274

@@ -10,8 +10,12 @@ public class SyncConflictPanel : MonoBehaviour
     [SerializeField] private Button ChooseLocalProgressButton;
     [SerializeField] private Button ChooseCloudProgressButton;
     [SerializeField] private GameObject PanelObject;
+
+    [SerializeField] private MainMenuState MainMenuState;
+    
 #if NAKAMA_ENABLED
     private StorageType _storageType = StorageType.None;
+    private bool _canSync = true;
 
     private void RegisterEvents()
     {
@@ -25,8 +29,18 @@ public class SyncConflictPanel : MonoBehaviour
         ChooseCloudProgressButton.onClick.RemoveListener(OnChooseCloudProgressButtonPressed);
     }
     
-    private void OnChooseLocalProgressButtonPressed() => _storageType = StorageType.Local;
-    private void OnChooseCloudProgressButtonPressed() => _storageType = StorageType.Cloud;
+    private void OnChooseLocalProgressButtonPressed()
+    {
+        _storageType = StorageType.Local;
+        _canSync = false;
+        MainMenuState.DisconnectFacebook();
+    }
+
+    private void OnChooseCloudProgressButtonPressed()
+    {
+        _storageType = StorageType.Cloud;
+        _canSync = true;
+    }
 
     private async Task WaitUntilStorageChanged()
     {
@@ -41,7 +55,7 @@ public class SyncConflictPanel : MonoBehaviour
         PanelObject.SetActive(state);
     }
     
-    public async Task<StorageType> Show()
+    public async Task<(StorageType, bool)> Show()
     {
         RegisterEvents();
         SetSyncConflictPanelState(true);
@@ -49,7 +63,7 @@ public class SyncConflictPanel : MonoBehaviour
 
         await WaitUntilStorageChanged();
         
-        return _storageType;
+        return (_storageType, _canSync);
     }
     
     public void Hide()

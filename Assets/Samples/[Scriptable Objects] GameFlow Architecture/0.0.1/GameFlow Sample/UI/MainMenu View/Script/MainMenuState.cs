@@ -54,7 +54,7 @@ public class MainMenuState : State
     }
 
 #if NAKAMA_ENABLED
-    public async Task<StorageType> ResolveConflict()
+    public async Task<(StorageType, bool)> ResolveConflict()
     {
         var storageType = await _mainMenuView.ShowSyncConflictPanel();
         return storageType;

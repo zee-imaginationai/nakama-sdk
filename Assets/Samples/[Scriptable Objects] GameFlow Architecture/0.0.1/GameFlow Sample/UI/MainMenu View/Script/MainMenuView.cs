@@ -53,7 +53,7 @@ public class MainMenuView : UiPanelInAndOut
     }
     
 #if NAKAMA_ENABLED
-    public async Task<StorageType> ShowSyncConflictPanel()
+    public async Task<(StorageType, bool)> ShowSyncConflictPanel()
     {
         var storageType = await SyncConflictPanel.Show();
         SyncConflictPanel.Hide();

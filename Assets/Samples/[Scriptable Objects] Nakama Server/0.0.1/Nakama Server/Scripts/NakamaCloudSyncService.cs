@@ -29,7 +29,7 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             return baseEvaluation || EvaluateConflict();
         }
 
-        protected override async Task<StorageType> GetConflictStorageType()
+        protected override async Task<(StorageType, bool)> GetConflictStorageType()
         {
             if (!ShowConflictResolutionPanel) 
                 return await base.GetConflictStorageType();

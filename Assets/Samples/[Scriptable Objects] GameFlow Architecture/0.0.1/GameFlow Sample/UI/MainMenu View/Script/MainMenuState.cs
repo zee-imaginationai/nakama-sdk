@@ -38,20 +38,6 @@ public class MainMenuState : State
         yield return base.Exit();
     }
     
-    public void ConnectFacebook()
-    {
-#if FB
-        FacebookService.LoginFacebook();
-#endif
-        // await NakamaSystem.SigninWithFacebook();
-    }
-
-    public void DisconnectFacebook()
-    {
-#if FB
-        FacebookService.LogoutFacebook();
-#endif
-    }
 
 #if NAKAMA_ENABLED
     public async Task<(StorageType, bool)> ResolveConflict()

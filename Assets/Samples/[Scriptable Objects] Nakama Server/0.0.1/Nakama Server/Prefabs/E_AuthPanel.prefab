@@ -1802,17 +1802,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CloseButton: {fileID: 4456536995437702233}
   AuthPanelObject: {fileID: 5354811136685253994}
-  ErrorObject: {fileID: 1978067508202939074}
-  RegisterButton: {fileID: 6146127001735222584}
-  LoginButton: {fileID: 4256734541198419632}
-  LogOutButton: {fileID: 7570110010892522257}
   FbLoginButton: {fileID: 6235572395712844347}
-  EmailInputField: {fileID: 602676197682379614}
-  PasswordInputField: {fileID: 7915932695374669158}
-  ErrorText: {fileID: 3320831271343168846}
   FbLoginText: {fileID: 7119875522289458565}
-  MainMenuState: {fileID: 11400000, guid: 1b25061154ad11d48b506bb0b4afb57b, type: 2}
-  IsEmailLoggedIn: {fileID: 11400000, guid: 0d1d285442f2b734ab296bb38619c360, type: 2}
+  FacebookService: {fileID: 11400000, guid: 52faece16af9ec24b8cd730f522f3486, type: 2}
   IsFbLoggedIn: {fileID: 11400000, guid: 29bb4135f1d9dc94783633ac6444da02, type: 2}
   FacebookConnectEvent: {fileID: 11400000, guid: b56e762f7b93936498461e4bb05c33e5,
     type: 2}

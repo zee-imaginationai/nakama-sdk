@@ -21,14 +21,14 @@ public class MainMenuView : UiPanelInAndOut
     [SerializeField] private Button SyncConflictButton;
     [SerializeField] private TextMeshProUGUI SyncConflictText;
 
-    [SerializeField] private SyncConflictPanel SyncConflictPanel;
+    [SerializeField] private ConflictResolutionPanelView conflictResolutionPanelView;
     
     [SerializeField] private MainMenuState MainMenuState;
     
     [SerializeField] private DBString ConflictString;
     
 #if NAKAMA_ENABLED
-    [SerializeField] private CloudSyncPanel CloudSyncPanel;
+    [SerializeField] private AuthPanelView authPanelView;
     [SerializeField] private NakamaStorageService UserProgressService;
 #endif
 
@@ -40,8 +40,8 @@ public class MainMenuView : UiPanelInAndOut
         SyncConflictButton.onClick.AddListener(OnSyncConflictButtonPressed);
 
 #if NAKAMA_ENABLED
-        SyncConflictPanel.Hide();
-        CloudSyncPanel.Hide();
+        conflictResolutionPanelView.Hide();
+        authPanelView.Hide();
 #endif
     }
 
@@ -55,8 +55,8 @@ public class MainMenuView : UiPanelInAndOut
 #if NAKAMA_ENABLED
     public async Task<(StorageType, bool)> ShowSyncConflictPanel()
     {
-        var storageType = await SyncConflictPanel.Show();
-        SyncConflictPanel.Hide();
+        var storageType = await conflictResolutionPanelView.Show();
+        conflictResolutionPanelView.Hide();
         return storageType;
     }
 #endif
@@ -133,7 +133,7 @@ public class MainMenuView : UiPanelInAndOut
     private void OnEmailAuthButton()
     {
 #if NAKAMA_ENABLED
-        CloudSyncPanel.Show();
+        authPanelView.Show();
 #endif
     }
     

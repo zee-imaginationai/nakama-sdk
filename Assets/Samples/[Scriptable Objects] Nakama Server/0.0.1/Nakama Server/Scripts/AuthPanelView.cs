@@ -1,10 +1,15 @@
 using ProjectCore.Events;
+
+#if FB
+using ProjectCore.Integrations.FacebookService;
+#endif
+
 using ProjectCore.Variables;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CloudSyncPanel : MonoBehaviour
+public class AuthPanelView : MonoBehaviour
 {
     [SerializeField] private Button CloseButton;
 
@@ -14,7 +19,9 @@ public class CloudSyncPanel : MonoBehaviour
     
     [SerializeField] private TextMeshProUGUI FbLoginText;
     
-    [SerializeField] private MainMenuState MainMenuState;
+#if FB
+    [SerializeField] private FacebookService FacebookService;
+#endif
     
     [SerializeField] private DBBool IsFbLoggedIn;
 
@@ -57,10 +64,14 @@ public class CloudSyncPanel : MonoBehaviour
 
     private void OnFbLoginButton()
     {
+#if FB
         if (IsFbLoggedIn)
-            MainMenuState.DisconnectFacebook();
+            FacebookService.LogoutFacebook();
         else
-            MainMenuState.ConnectFacebook();
+            FacebookService.LoginFacebook();
+#else
+        Debug.LogError("FB is not connected");
+#endif
     }
     
     private void OnCloseButton() => SetAuthPanelState(false);

@@ -84,12 +84,7 @@ namespace ProjectCore.Integrations.NakamaServer
                 
                 InitializeServices();
                 
-                var canSyncData = await NakamaCloudSyncService.SyncData();
-
-                if (!canSyncData)
-                {
-                    return;
-                }
+                await NakamaCloudSyncService.SyncData();
                 
                 CloudServiceProgress.SetValue(1);
             }

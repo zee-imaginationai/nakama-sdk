@@ -11,5 +11,8 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
 
         internal static IAuthStrategy CreateFacebookStrategy(string token) 
             => new FacebookAuthStrategy(token);
+
+        internal static IAuthStrategy CreateGoogleStrategy(string token)
+            => new GoogleAuthStrategy(token);
     }
 }

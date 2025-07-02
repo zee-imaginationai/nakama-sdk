@@ -8,6 +8,7 @@ using ProjectCore.Integrations.NakamaServer.Internal;
 using ProjectCore.Variables;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using String = ProjectCore.Variables.String;
 
 namespace ProjectCore.Integrations.NakamaServer
 {
@@ -30,6 +31,11 @@ namespace ProjectCore.Integrations.NakamaServer
         
         [SerializeField] private GameEventWithBool FacebookConnectEvent;
 #endif
+
+        [SerializeField] private String GoogleAccessToken;
+        [SerializeField] private Bool GPGSLoggedIn;
+        
+        [SerializeField] private GameEventWithBool GPGSConnectEvent;
         
         private Server _nakamaServer;
 
@@ -38,6 +44,9 @@ namespace ProjectCore.Integrations.NakamaServer
 #if FB
             FacebookConnectEvent.Handler += OnFacebookConnectEvent;
 #endif
+
+            GPGSConnectEvent.Handler += OnGPGSConnectEvent;
+            
             CloudServiceProgress.SetValue(0);
             _nakamaServer = new Internal.NakamaServer(ServerConfig, Logger);
         }
@@ -52,6 +61,33 @@ namespace ProjectCore.Integrations.NakamaServer
             var strategy = AuthStrategyFactory.CreateDeviceStrategy();
 #endif
             await _nakamaServer.Authenticate(strategy, token, OnAuthCompleted);
+        }
+
+        private async void OnGPGSConnectEvent(bool state)
+        {
+            if (!state)
+            {
+                try
+                {
+                    _nakamaServer.ClearSession();
+                    await ((Internal.NakamaServer)_nakamaServer).KillSession();
+                    return;
+                }
+                catch
+                {
+                    Logger.LogError("[Nakama] Failed to logout");
+                    return;
+                }
+            }
+            try
+            {
+                var strategy = AuthStrategyFactory.CreateGoogleStrategy(GoogleAccessToken);
+                await _nakamaServer.Authenticate(strategy, callback: OnAuthCompleted);
+            }
+            catch
+            {
+                Logger.LogError("[Nakama] Failed to authenticate");
+            }
         }
 
 #if FB

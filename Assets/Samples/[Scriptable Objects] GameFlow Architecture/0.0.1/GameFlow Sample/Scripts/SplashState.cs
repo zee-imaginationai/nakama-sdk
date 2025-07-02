@@ -8,6 +8,7 @@ using ProjectCore.Integrations.NakamaServer;
 #endif
 using ProjectCore.Events;
 using ProjectCore.Integrations.FacebookService;
+using ProjectCore.Integrations.GooglePlayGames;
 using ProjectCore.StateMachine;
 using ProjectCore.Variables;
 using UnityEngine;
@@ -28,9 +29,9 @@ namespace ProjectCore.Application
         [SerializeField] private int SceneIndex;
         [SerializeField] private Float SceneLoadingProgress;
         [SerializeField] private Float SdkLoadingProgress;
+        [SerializeField] private Float GPGSLoadingProgress;
         [SerializeField] private GameEvent HideLoadingView;
-
-
+        
         [NonSerialized] private AsyncOperation _sceneLoadingOperation;
         [NonSerialized] private bool socialKitInitialize = false;
         [NonSerialized] private float TimeoutTime = 10;
@@ -41,6 +42,7 @@ namespace ProjectCore.Application
         
         [SerializeField] private Float CloudServiceProgress;
         [SerializeField] private FacebookService FacebookService;
+        [SerializeField] private GooglePlayGamesService GooglePlayGamesService;
         
         private ApplicationFlowController applicationFlowController;
         
@@ -59,6 +61,8 @@ namespace ProjectCore.Application
             NakamaSystem.Initialize();
 #endif
             FacebookService.Initialize();
+            
+            GooglePlayGamesService.Initialize();
         }
 
         public override IEnumerator Execute()
@@ -98,7 +102,7 @@ namespace ProjectCore.Application
             SceneManager.SetActiveScene(scene);
             
 #if NAKAMA_ENABLED
-            var task = NakamaSystem.AuthenticateNakama(_cancellationTokenSource.RefreshToken());
+            // var task = NakamaSystem.AuthenticateNakama(_cancellationTokenSource.RefreshToken());
 #endif
             
             WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
@@ -111,12 +115,13 @@ namespace ProjectCore.Application
                     _cancellationTokenSource.Cancel();
                     SdkLoadingProgress.SetValue(1f);
                     CloudServiceProgress.SetValue(1f);
+                    GPGSLoadingProgress.SetValue(1f);
                     break;
                 }
 
-                if ((SdkLoadingProgress >= 1.0f && CloudServiceProgress >= 1.0f)
+                if ((SdkLoadingProgress >= 1.0f && CloudServiceProgress >= 1.0f && GPGSLoadingProgress >= 1.0f))
 #if NAKAMA_ENABLED
-                    || IsTaskCompleted(task))
+                    // || IsTaskCompleted(task))
 #else
                 )
 #endif
@@ -128,10 +133,11 @@ namespace ProjectCore.Application
             }
 
             yield return new WaitUntil(() => SdkLoadingProgress.GetValue() >= 1.0f 
-                                             && CloudServiceProgress.GetValue() >= 1.0f);
+                                             && CloudServiceProgress.GetValue() >= 1.0f
+                                             && GPGSLoadingProgress.GetValue() >= 1.0f);
             
 #if NAKAMA_ENABLED
-            Debug.LogError($"Task : {task.Status}");
+            // Debug.LogError($"Task : {task.Status}");
 #endif
 
             //artificial delay can be removed

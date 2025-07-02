@@ -200,7 +200,7 @@ namespace ProjectCore.Integrations.NakamaServer.Internal
             await KillSession();
         }
         
-        private async Task KillSession()
+        public async Task KillSession()
         {
             try
             {

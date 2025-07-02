@@ -68,8 +68,8 @@ namespace CustomEditorUtilities
             // PlayerSettings.Android.keystorePass = BuilderConfig.KeystorePassword;
             // PlayerSettings.Android.keyaliasPass = BuilderConfig.KeyAliasPassword;
             
-            // PlayerSettings.Android.keystorePass = "sgs123";
-            // PlayerSettings.Android.keyaliasPass = "sgs123";
+            PlayerSettings.Android.keystorePass = "sgs123";
+            PlayerSettings.Android.keyaliasPass = "sgs123";
         }
 
         private static int GenerateVersionCode(string version)

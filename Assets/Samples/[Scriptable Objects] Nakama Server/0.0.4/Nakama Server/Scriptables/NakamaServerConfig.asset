@@ -27,14 +27,12 @@ MonoBehaviour:
     Key: defaultkey
   - Environment: 2
     Scheme: http
-    Host: 127.0.0.1
+    Host: 192.168.0.190
     Port: 7350
     Key: defaultkey
   GeneralSettings:
-    Environment: 1
+    Environment: 2
     EnableSocialKit: 1
     BaseRetryDelay: 1
     MaxRetries: 3
     RetryTimeOut: 5
-  ServicesSettings:
-    EnableUserProfile: 1

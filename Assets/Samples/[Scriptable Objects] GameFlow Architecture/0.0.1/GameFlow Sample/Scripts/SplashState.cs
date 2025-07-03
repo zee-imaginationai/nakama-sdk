@@ -112,7 +112,7 @@ namespace ProjectCore.Application
                 float timeElapsed = Time.time - timeStarted;
                 if (timeElapsed > TimeoutTime)
                 {
-                    _cancellationTokenSource.Cancel();
+                    _cancellationTokenSource?.Cancel();
                     SdkLoadingProgress.SetValue(1f);
                     CloudServiceProgress.SetValue(1f);
                     GPGSLoadingProgress.SetValue(1f);

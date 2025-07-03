@@ -78,7 +78,7 @@ public class ConflictResolutionPanelView : MonoBehaviour
 
     private void UpdateWarningText()
     {
-        WarningText.text = IsFbLoggedIn ? FB_LOGOUT_MESSAGE : FB_LOGIN_MESSAGE;
+        WarningText.text = IsFbLoggedIn ? FB_LOGIN_MESSAGE : FB_LOGOUT_MESSAGE;
     }
     
     private void SetSyncConflictPanelState(bool state)

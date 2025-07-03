@@ -22,4 +22,4 @@ MonoBehaviour:
     type: 2}
   ConflictString: {fileID: 11400000, guid: b45d6dc2af04db54a954cd1b22cd66c6, type: 2}
   MainMenuState: {fileID: 11400000, guid: 1b25061154ad11d48b506bb0b4afb57b, type: 2}
-  ShowConflictResolutionPanel: 0
+  ShowConflictResolutionPanel: 1

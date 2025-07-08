@@ -20,8 +20,9 @@ public class MainMenuView : UiPanelInAndOut
 
     [SerializeField] private Button SyncConflictButton;
     [SerializeField] private TextMeshProUGUI SyncConflictText;
-
+#if NAKAMA_ENABLED
     [SerializeField] private ConflictResolutionPanelView conflictResolutionPanelView;
+#endif
     
     [SerializeField] private MainMenuState MainMenuState;
     

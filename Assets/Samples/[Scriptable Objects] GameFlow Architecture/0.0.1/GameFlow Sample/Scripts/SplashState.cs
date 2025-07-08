@@ -119,7 +119,7 @@ namespace ProjectCore.Application
                     break;
                 }
 
-                if ((SdkLoadingProgress >= 1.0f && CloudServiceProgress >= 1.0f && GPGSLoadingProgress >= 1.0f))
+                if ((SdkLoadingProgress >= 1.0f && CloudServiceProgress >= 1.0f && GPGSLoadingProgress >= 1.0f)
 #if NAKAMA_ENABLED
                     // || IsTaskCompleted(task))
 #else

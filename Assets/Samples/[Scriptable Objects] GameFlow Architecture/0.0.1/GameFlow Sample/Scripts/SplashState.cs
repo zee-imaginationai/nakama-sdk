@@ -29,7 +29,6 @@ namespace ProjectCore.Application
         [SerializeField] private int SceneIndex;
         [SerializeField] private Float SceneLoadingProgress;
         [SerializeField] private Float SdkLoadingProgress;
-        [SerializeField] private Float GPGSLoadingProgress;
         [SerializeField] private GameEvent HideLoadingView;
         
         [NonSerialized] private AsyncOperation _sceneLoadingOperation;
@@ -42,7 +41,10 @@ namespace ProjectCore.Application
         
         [SerializeField] private Float CloudServiceProgress;
         [SerializeField] private FacebookService FacebookService;
+#if GPGS
         [SerializeField] private GooglePlayGamesService GooglePlayGamesService;
+        [SerializeField] private Float GPGSLoadingProgress;
+#endif
         
         private ApplicationFlowController applicationFlowController;
         
@@ -61,8 +63,9 @@ namespace ProjectCore.Application
             NakamaSystem.Initialize();
 #endif
             FacebookService.Initialize();
-            
+#if GPGS            
             GooglePlayGamesService.Initialize();
+#endif
         }
 
         public override IEnumerator Execute()
@@ -102,7 +105,7 @@ namespace ProjectCore.Application
             SceneManager.SetActiveScene(scene);
             
 #if NAKAMA_ENABLED
-            // var task = NakamaSystem.AuthenticateNakama(_cancellationTokenSource.RefreshToken());
+            var task = NakamaSystem.AuthenticateNakama(_cancellationTokenSource.RefreshToken());
 #endif
             
             WaitForSeconds waitForSeconds = new WaitForSeconds(0.1f);
@@ -119,9 +122,9 @@ namespace ProjectCore.Application
                     break;
                 }
 
-                if ((SdkLoadingProgress >= 1.0f && CloudServiceProgress >= 1.0f && GPGSLoadingProgress >= 1.0f)
+                if (SdkLoadingProgress >= 1.0f && ((CloudServiceProgress >= 1.0f && GPGSLoadingProgress >= 1.0f)
 #if NAKAMA_ENABLED
-                    // || IsTaskCompleted(task)
+                    || IsTaskCompleted(task))
 #endif
                     )
                 {
@@ -136,7 +139,7 @@ namespace ProjectCore.Application
                                              && GPGSLoadingProgress.GetValue() >= 1.0f);
             
 #if NAKAMA_ENABLED
-            // Debug.LogError($"Task : {task.Status}");
+            Debug.LogError($"Task : {task.Status}");
 #endif
 
             //artificial delay can be removed

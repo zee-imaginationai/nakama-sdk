@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1507a18f40d44ec1a9364b8928515617, type: 3}
-  m_Name: GPGSConfig
+  m_Script: {fileID: 11500000, guid: 759220bd2daea474f947b0a091640432, type: 3}
+  m_Name: v_RefreshToken
   m_EditorClassIdentifier: 
-  CanAutoAuthenticate: 1
-  ForceRefreshToken: 0
-  CanActivateOnInitialize: 1
+  Value: 
+  DefaultValue: 
+  ResetToDefaultOnPlay: 1

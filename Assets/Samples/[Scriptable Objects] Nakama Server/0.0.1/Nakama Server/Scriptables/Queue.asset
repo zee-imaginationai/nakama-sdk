@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1507a18f40d44ec1a9364b8928515617, type: 3}
-  m_Name: GPGSConfig
+  m_Script: {fileID: 11500000, guid: 7d4f0b0927d9415bbaf654b2faba4fbd, type: 3}
+  m_Name: Queue
   m_EditorClassIdentifier: 
-  CanAutoAuthenticate: 1
-  ForceRefreshToken: 0
-  CanActivateOnInitialize: 1
+  QueueChangedEvent: {fileID: 11400000, guid: c5e7c5dcc7ef2c349b1022d23b4b5cc4, type: 2}
